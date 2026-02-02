@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRAKFEST 2026 | Demolition Derby</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            background-color: #111111;
+            color: #ffffff;
+            font-family: 'Space Mono', monospace;
+            overflow-x: hidden;
+        }
+
+        .font-bebas {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 500;
+            /* Default weight for Oswald to match the look but lighter than Anton */
+        }
+
+        .font-tech {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .bg-carbon {
+            background-image: radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .yellow-glow {
+            box-shadow: 0 0 15px rgba(244, 206, 20, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #F4CE14;
+        }
+
+        /* Improved 3D Roll Button Styles - Supporting Auto-width */
+        .button_container {
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .b05_3d_roll {
+            perspective: 500px;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Spacer element to give the container its dimensions */
+        .b05_3d_roll .spacer {
+            visibility: hidden;
+            pointer-events: none;
+            white-space: nowrap;
+            padding: 0 40px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 16px;
+        }
+
+        .b05_3d_roll .roll-side {
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            padding: 0 40px;
+            pointer-events: none;
+            box-sizing: border-box;
+            font-family: 'Share Tech Mono', monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            white-space: nowrap;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        /* The "Back" side - becomes visible on hover (Rolling in from top) */
+        .b05_3d_roll .roll-side:nth-child(2) {
+            color: #ffffff;
+            background-color: #000000;
+            transform: rotateX(90deg);
+            transform-origin: 50% 50% -27px;
+        }
+
+        /* Default side (Facing user) */
+        .b05_3d_roll .roll-side:nth-child(3) {
+            color: #000000;
+            background-color: #F4CE14;
+            transform: rotateX(0deg);
+            transform-origin: 50% 50% -27px;
+        }
+
+        .b05_3d_roll:hover .roll-side:nth-child(2) {
+            color: #F4CE14;
+            transform: rotateX(0deg);
+        }
+
+        .b05_3d_roll:hover .roll-side:nth-child(3) {
+            background-color: #000000;
+            color: #ffffff;
+            transform: rotateX(-90deg);
+        }
+
+        /* Variant: Outline (White background) */
+        .b05_3d_roll.outline .roll-side:nth-child(3) {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* Variant: Engine Start (Red) */
+        .b05_3d_roll.engine .roll-side:nth-child(3) {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
+  }
+}
+</script>
+    <link rel="stylesheet" href="/index.css">
+</head>
+
+<body class="bg-carbon custom-scrollbar">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+
+</html>
