@@ -27,9 +27,18 @@ export interface ProgramStep {
   isCurrent?: boolean;
 }
 
+
 export interface MarketItem {
   id: string;
   name: string;
   price: string;
   image: string;
+}
+
+export interface StandingsDriver {
+  startNumber: number;
+  name: string;
+  car: string;
+  points: number;
+  category: 'do1.6L' | 'nad1.6L' | 'zeny';
 }
