@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
-import { Button } from './components/ui/button';
+import { Button } from './components/Button';
 
 export const RegistrationForm = () => {
     const [step, setStep] = useState(1);
@@ -83,7 +83,7 @@ export const RegistrationForm = () => {
                                 </div>
                             </div>
 
-                            <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:bg-black hover:text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
+                            <Button onClick={() => setStep(2)} className="w-full mt-8">
                                 POKRAČOVAT →
                             </Button>
                         </div>
@@ -152,10 +152,10 @@ export const RegistrationForm = () => {
                             </div>
 
                             <div className="flex gap-4 mt-8">
-                                <Button variant="outline" onClick={() => setStep(1)} className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white py-4 text-lg font-bold uppercase">
+                                <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
                                     ← ZPĚT
                                 </Button>
-                                <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:bg-black hover:text-white border-0 py-4 text-lg font-bold uppercase">
+                                <Button onClick={() => setStep(3)} className="flex-1">
                                     POKRAČOVAT →
                                 </Button>
                             </div>
@@ -210,10 +210,10 @@ export const RegistrationForm = () => {
                             </div>
 
                             <div className="flex gap-4 mt-8">
-                                <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white py-4 text-lg font-bold uppercase">
+                                <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
                                     ← ZPĚT
                                 </Button>
-                                <Button className="flex-1 bg-green-600 text-white hover:bg-green-700 border-0 py-4 text-lg font-bold uppercase">
+                                <Button className="flex-1 bg-green-600 text-white hover:bg-green-700 hover:text-white border-0 hover:shadow-[0_0_20px_rgba(22,163,74,0.5)]">
                                     🏁 ZAREGISTROVAT
                                 </Button>
                             </div>

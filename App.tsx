@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Button } from './components/Button';
 import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
@@ -10,48 +11,7 @@ import { Driver } from './types';
 
 // --- Components ---
 
-// --- Custom "Skew" Button from previous design ---
-const Button = ({
-  children,
-  variant = 'primary',
-  size = 'default',
-  className = '',
-  onClick
-}: {
-  children?: React.ReactNode;
-  variant?: 'primary' | 'outline' | 'ghost' | 'engine-start';
-  size?: 'default' | 'small';
-  className?: string;
-  onClick?: () => void;
-}) => {
-  const isOutline = variant === 'outline';
-  const isEngine = variant === 'engine-start';
 
-  // Base classes imitating our .btn .skew-btn from styles.css
-  const baseClasses = "relative inline-flex items-center justify-center font-tech font-bold uppercase tracking-wider transform -skew-x-[15deg] transition-all duration-300 cursor-pointer border";
-
-  const sizeClasses = size === 'small'
-    ? "px-6 py-2 text-base" // Zmenšeno z px-8 py-3 text-lg
-    : "px-10 py-4 text-xl";
-
-  let variantClasses = "";
-  if (isEngine) {
-    variantClasses = "bg-red-600 text-white border-red-600 hover:bg-white hover:text-red-600 hover:shadow-[0_0_20px_rgba(220,38,38,0.5)]";
-  } else if (isOutline) {
-    variantClasses = "bg-transparent text-[#F4CE14] border-[#F4CE14] hover:bg-[#F4CE14]/10 hover:shadow-[0_0_15px_rgba(244,206,20,0.3)]";
-  } else {
-    // Primary
-    variantClasses = "bg-[#F4CE14] text-black border-[#F4CE14] hover:bg-white hover:text-black hover:shadow-[0_0_20px_rgba(255,255,255,0.5)]";
-  }
-
-  return (
-    <button className={`${baseClasses} ${sizeClasses} ${variantClasses} ${className}`} onClick={onClick}>
-      <span className="block transform skew-x-[15deg]">
-        {children}
-      </span>
-    </button>
-  );
-};
 
 const SectionHeader = ({ title, subtitle, align = 'left' }: { title: string, subtitle?: string, align?: 'left' | 'center' | 'right' }) => (
   <div className={`mb-12 ${align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'}`}>
@@ -246,11 +206,11 @@ const About = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 mt-12">
-              <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 text-lg px-8 py-4 h-auto uppercase font-bold font-tech tracking-wider group relative overflow-hidden flex-1 sm:flex-none justify-center">
+              <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden w-full sm:w-auto justify-center">
                 <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
               </Button>
-              <Button variant="outline" className="text-lg px-8 py-4 h-auto uppercase font-tech tracking-wider border-white/20 hover:bg-white hover:text-black flex-1 sm:flex-none justify-center">
+              <Button variant="outline" className="border-white/20 hover:bg-white hover:text-black w-full sm:w-auto justify-center">
                 Chci závodit
               </Button>
             </div>
@@ -599,10 +559,10 @@ const EventGrid = () => {
 
                     {event.id === '1' ? (
                       <div className="flex flex-col sm:flex-row gap-4">
-                        <Button className="bg-transparent border border-white text-white hover:bg-white hover:text-black px-5 py-3 h-auto uppercase font-tech tracking-wider text-[18px]">
+                        <Button className="bg-transparent border border-white text-white hover:bg-white hover:text-black">
                           Více o akci
                         </Button>
-                        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 px-5 py-3 h-auto uppercase font-bold font-tech tracking-wider text-[18px] group relative overflow-hidden">
+                        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden">
                           <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                           <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
                         </Button>
@@ -711,11 +671,11 @@ const DriverRoster = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="container mx-auto px-6 mt-16 flex justify-center gap-6">
-        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 px-8 py-4 h-auto uppercase font-bebas tracking-wider text-lg transition-all duration-300">
+      <div className="container mx-auto px-6 mt-16 flex flex-col sm:flex-row justify-center gap-6">
+        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
           Zobrazit všechny jezdce
         </Button>
-        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black px-8 py-4 h-auto uppercase font-bebas tracking-wider text-lg transition-all duration-300">
+        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto">
           Chci taky závodit
         </Button>
       </div>
