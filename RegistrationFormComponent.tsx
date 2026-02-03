@@ -83,7 +83,7 @@ export const RegistrationForm = () => {
                                 </div>
                             </div>
 
-                            <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:bg-black hover:text-white border-0 py-4 text-lg font-bold uppercase">
+                            <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:bg-black hover:text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
                                 POKRAČOVAT →
                             </Button>
                         </div>
@@ -123,8 +123,8 @@ export const RegistrationForm = () => {
                                             key={cat.value}
                                             onClick={() => setSelectedCategory(cat.value)}
                                             className={`border-2 p-4 cursor-pointer transition-all text-center font-bold ${selectedCategory === cat.value
-                                                    ? 'border-[#F4CE14] bg-[#F4CE14]/10'
-                                                    : 'border-gray-200 hover:border-[#F4CE14]/50'
+                                                ? 'border-[#F4CE14] bg-[#F4CE14]/10'
+                                                : 'border-gray-200 hover:border-[#F4CE14]/50'
                                                 }`}
                                         >
                                             {cat.label}

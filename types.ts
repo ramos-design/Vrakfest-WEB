@@ -9,6 +9,8 @@ export interface Driver {
     wins: number;
     wrecks: number;
     experience: string;
+    races: number;
+    points: number;
   };
 }
 

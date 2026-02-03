@@ -31,7 +31,7 @@ const Button = ({
   const baseClasses = "relative inline-flex items-center justify-center font-tech font-bold uppercase tracking-wider transform -skew-x-[15deg] transition-all duration-300 cursor-pointer border";
 
   const sizeClasses = size === 'small'
-    ? "px-8 py-3 text-lg"
+    ? "px-6 py-2 text-base" // Zmenšeno z px-8 py-3 text-lg
     : "px-10 py-4 text-xl";
 
   let variantClasses = "";
@@ -53,13 +53,13 @@ const Button = ({
   );
 };
 
-const SectionHeader = ({ title, subtitle }: { title: string, subtitle?: string }) => (
-  <div className="mb-12 text-left">
+const SectionHeader = ({ title, subtitle, align = 'left' }: { title: string, subtitle?: string, align?: 'left' | 'center' | 'right' }) => (
+  <div className={`mb-12 ${align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'}`}>
     <h2 className="text-6xl md:text-8xl font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
       {title}
     </h2>
     {subtitle && <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">{subtitle}</p>}
-    <div className="w-24 h-1 bg-[#F4CE14] mt-4 relative">
+    <div className={`w-24 h-1 bg-[#F4CE14] mt-4 relative ${align === 'center' ? 'mx-auto' : align === 'right' ? 'ml-auto' : ''}`}>
       <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
     </div>
   </div>
@@ -76,14 +76,14 @@ const TechNavBar = () => {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/5 ${scrolled ? 'bg-[#111]/95 py-4 backdrop-blur-md shadow-2xl' : 'bg-transparent py-8'}`}>
+    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-white/5 ${scrolled ? 'bg-[#111]/95 py-3 backdrop-blur-md shadow-2xl' : 'bg-transparent py-6'}`}>
       {/* Container with Grid Layout: Left (Logo) | Center (Nav) | Right (CTA) */}
       <div className="w-[95%] mx-auto px-6 grid grid-cols-[1fr_auto_1fr] items-center relative gap-4">
 
         {/* Left: Navigation */}
-        <nav className="hidden lg:flex justify-self-start items-center gap-10">
+        <nav className="hidden lg:flex justify-self-start items-center gap-6">
           {['O VRAKFESTU', 'KALENDÁŘ', 'JEZDCI', 'PRAVIDLA', 'APLIKACE'].map(item => (
-            <a key={item} href={`#${item.toLowerCase().replace(' ', '')}`} className="font-bebas text-xl text-white hover:text-[#F4CE14] transition-all uppercase tracking-wide">
+            <a key={item} href={`#${item.toLowerCase().replace(' ', '')}`} className="font-bebas text-lg text-white hover:text-[#F4CE14] transition-all uppercase tracking-wide">
               {item}
             </a>
           ))}
@@ -94,7 +94,7 @@ const TechNavBar = () => {
           <img
             src="/video/LOGO-Y.png"
             alt="VRAKFEST Logo"
-            className={`w-auto transition-all duration-300 hover:grayscale-0 hover:scale-105 ${scrolled ? 'h-16' : 'h-24'}`}
+            className={`w-auto transition-all duration-300 hover:grayscale-0 hover:scale-105 ${scrolled ? 'h-14' : 'h-20'}`}
           />
         </div>
 
@@ -132,20 +132,20 @@ const Hero = () => {
       </video>
 
       <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
-        <h1 className="text-6xl md:text-[9rem] font-bebas font-semibold leading-[0.9] mb-12 animate-fadeIn uppercase tracking-tight flex flex-col items-center gap-10 text-center">
+        <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[9rem] font-bebas font-semibold leading-[0.9] mb-6 md:mb-10 animate-fadeIn uppercase tracking-tight flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
           <span className="text-white">ZÁVODY VRAKŮ</span>
           <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)]">A DEMOLIČNÍ DERBY</span>
         </h1>
 
-        <div className="w-full max-w-7xl mb-10">
+        <div className="w-full max-w-6xl mb-8">
           <div className="flex flex-col md:flex-row bg-gradient-to-r from-transparent via-black/60 to-transparent backdrop-blur-md border-y border-white/10 divide-y md:divide-y-0 md:divide-x divide-[#F4CE14]/30">
             {/* Stat Card 1 - Upcoming Event */}
-            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 NADCHÁZEJÍCÍ UDÁLOST
               </p>
 
-              <p className="font-bebas text-4xl md:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 text-center uppercase whitespace-nowrap">
+              <p className="font-bebas text-3xl md:text-4xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 text-center uppercase whitespace-nowrap">
                 {EVENTS[0].title}
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
@@ -154,36 +154,36 @@ const Hero = () => {
             </div>
 
             {/* Stat Card New - Days to Start */}
-            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 POČET DNÍ
               </p>
 
-              <p className="font-bebas text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
                 {Math.max(0, daysToStart)}
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">DO STARTU</p>
             </div>
 
             {/* Stat Card 2 - Registered Racers */}
-            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 PŘIHLÁŠENÝCH
               </p>
 
-              <p className="font-bebas text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-                87<span className="text-white/30 text-5xl ml-2">/ 90</span>
+              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+                87<span className="text-white/30 text-3xl md:text-5xl ml-2">/ 90</span>
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
             </div>
 
             {/* Stat Card 3 - Deadline */}
-            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 UZÁVĚRKA
               </p>
 
-              <p className="font-bebas text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
                 30.3.
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">PŘIHLÁŠEK</p>
@@ -191,7 +191,7 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-center gap-6 w-full mt-6">
+        <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full mt-6 scale-90 2xl:scale-100 origin-top">
           <Button className="w-full sm:w-auto">CHCI ZÁVODIT</Button>
           <Button variant="outline" className="w-full sm:w-auto">KOMPLETNÍ INFO</Button>
         </div>
@@ -649,37 +649,65 @@ const DriverRoster = () => {
         </div>
       </div>
 
-      <div className="flex gap-14 px-6 animate-scroll-x hover:pause">
-        {[...DRIVERS, ...DRIVERS].map((driver, i) => (
-          <div
-            key={`${driver.id}-${i}`}
-            className="min-w-[380px] h-[550px] relative group cursor-pointer border-2 border-white/5 hover:border-[#F4CE14] transition-all duration-700 bg-white/5 text-left shadow-2xl"
-            onClick={() => setSelectedDriver(driver)}
-          >
-            <img src={driver.image} alt={driver.name} className="w-full h-full object-cover grayscale opacity-60 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-1000 scale-100 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+      <div className="flex gap-6 px-6 animate-scroll-x hover:pause">
+        {[...DRIVERS, ...DRIVERS, ...DRIVERS].map((driver, i) => {
+          // Parse Name and Nickname (e.g. PETR "DEMOLIČ" NOVÁK)
+          let nickname = driver.category;
+          let displayName = driver.name;
 
-            <div className="absolute bottom-0 left-0 w-full p-10 transition-transform group-hover:-translate-y-3">
-              <p className="font-tech text-xs text-[#F4CE14] mb-3 tracking-[0.5em] uppercase font-bold">{driver.category}</p>
-              <h3 className="font-bebas text-5xl mb-8 leading-none uppercase tracking-tight font-bold">{driver.name}</h3>
+          const parts = driver.name.split('"');
+          if (parts.length >= 3) {
+            nickname = parts[1]; // The part inside quotes
+            displayName = (parts[0] + parts[2]).replace(/\s+/g, ' ').trim(); // Remove extra spaces
+          }
 
-              <div className="grid grid-cols-3 gap-6 border-t border-white/20 pt-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                <div className="text-left">
-                  <p className="font-tech text-[10px] text-gray-500 uppercase tracking-widest mb-1">WRECKS</p>
-                  <p className="font-tech text-xl text-white font-bold">{driver.stats.wrecks}</p>
-                </div>
-                <div className="text-left">
-                  <p className="font-tech text-[10px] text-gray-600 uppercase tracking-widest mb-1">WINS</p>
-                  <p className="font-tech text-xl text-[#F4CE14] font-bold">{driver.stats.wins}</p>
-                </div>
-                <div className="text-left">
-                  <p className="font-tech text-[10px] text-gray-600 uppercase tracking-widest mb-1">XP_RANK</p>
-                  <p className="font-tech text-xl text-white font-bold">{driver.stats.experience.split(' ')[0]}</p>
+          const shortCarName = driver.car.split(' ').slice(0, 2).join(' ');
+
+          return (
+            <div
+              key={`${driver.id}-${i}`}
+              className="min-w-[280px] w-[280px] aspect-[4/5] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
+              onClick={() => setSelectedDriver(driver)}
+            >
+              {/* Card Image Area */}
+              <div className="flex-1 relative overflow-hidden">
+                <img
+                  src={driver.image}
+                  alt={driver.name}
+                  className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-90"></div>
+
+                {/* Overlay Name */}
+                <div className="absolute bottom-4 left-4 right-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <p className="font-tech text-[#F4CE14] text-sm tracking-widest uppercase font-bold mb-2 drop-shadow-md">"{nickname}"</p>
+                  <h3 className="font-bebas text-4xl text-white leading-none uppercase tracking-tight font-bold">{displayName}</h3>
                 </div>
               </div>
+
+              {/* Stats Bar */}
+              <div className="p-4 grid grid-cols-3 gap-2 border-t border-white/10 bg-[#0a0a0a] group-hover:bg-[#F4CE14] transition-colors duration-300 group-hover:text-black">
+                <div className="text-center border-r border-white/10 group-hover:border-black/10">
+                  <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">ZÁVODŮ</p>
+                  <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.races}</p>
+                </div>
+                <div className="text-center border-r border-white/10 group-hover:border-black/10">
+                  <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">VÝHRY</p>
+                  <p className="font-bebas text-xl text-[#F4CE14] group-hover:text-black font-bold">{driver.stats.wins}</p>
+                </div>
+                <div className="text-center">
+                  <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">BODY</p>
+                  <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.points}</p>
+                </div>
+              </div>
+
+              {/* Car Model Strip (Slide Down) */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#F4CE14] text-black px-3 py-1 font-tech font-bold uppercase text-xs tracking-wider shadow-lg z-10 whitespace-nowrap">
+                {shortCarName}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Action Buttons */}
@@ -1206,7 +1234,7 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
-              <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:bg-black hover:text-white border-0 py-4 text-lg font-bold uppercase">
+              <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
                 POKRAČOVAT →
               </Button>
             </div>
@@ -1279,10 +1307,10 @@ const RegistrationForm = () => {
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(1)} className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white py-4 text-lg font-bold uppercase">
+                <Button variant="outline" onClick={() => setStep(1)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors py-4 text-lg font-bold uppercase">
                   ← ZPĚT
                 </Button>
-                <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:bg-black hover:text-white border-0 py-4 text-lg font-bold uppercase">
+                <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
                   POKRAČOVAT →
                 </Button>
               </div>
@@ -1337,10 +1365,10 @@ const RegistrationForm = () => {
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-2 border-black text-black hover:bg-black hover:text-white py-4 text-lg font-bold uppercase">
+                <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors py-4 text-lg font-bold uppercase">
                   ← ZPĚT
                 </Button>
-                <Button className="flex-1 bg-green-600 text-white hover:bg-green-700 border-0 py-4 text-lg font-bold uppercase">
+                <Button className="flex-1 bg-green-600 text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
                   🏁 ZAREGISTROVAT
                 </Button>
               </div>

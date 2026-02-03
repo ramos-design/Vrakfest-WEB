@@ -10,7 +10,7 @@ export const DRIVERS: Driver[] = [
     car: 'ŠKODA FELICIA TANK',
     category: 'VETERAN CLASH',
     image: 'https://picsum.photos/seed/driver1/400/500',
-    stats: { wins: 12, wrecks: 45, experience: '8 ROKŮ' }
+    stats: { wins: 12, wrecks: 45, experience: '8 ROKŮ', races: 84, points: 2450 }
   },
   {
     id: '2',
@@ -18,7 +18,7 @@ export const DRIVERS: Driver[] = [
     car: 'BMW E36 COMPACT',
     category: 'PRO SERIES',
     image: 'https://picsum.photos/seed/driver2/400/500',
-    stats: { wins: 24, wrecks: 89, experience: '12 ROKŮ' }
+    stats: { wins: 24, wrecks: 89, experience: '12 ROKŮ', races: 156, points: 5890 }
   },
   {
     id: '3',
@@ -26,7 +26,7 @@ export const DRIVERS: Driver[] = [
     car: 'VW GOLF MK3',
     category: 'STREET FIGHT',
     image: 'https://picsum.photos/seed/driver3/400/500',
-    stats: { wins: 5, wrecks: 12, experience: '2 ROKY' }
+    stats: { wins: 5, wrecks: 12, experience: '2 ROKY', races: 24, points: 650 }
   },
   {
     id: '4',
@@ -34,7 +34,7 @@ export const DRIVERS: Driver[] = [
     car: 'OPEL ASTRA G',
     category: 'PRO SERIES',
     image: 'https://picsum.photos/seed/driver4/400/500',
-    stats: { wins: 31, wrecks: 102, experience: '15 ROKŮ' }
+    stats: { wins: 31, wrecks: 102, experience: '15 ROKŮ', races: 210, points: 8400 }
   }
 ];
 
