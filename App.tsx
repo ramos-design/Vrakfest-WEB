@@ -117,86 +117,96 @@ const TechNavBar = () => {
   );
 };
 
-const Hero = () => (
-  <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-    <div className="absolute inset-0 bg-black/50 z-10"></div>
-    <video
-      autoPlay loop muted playsInline
-      className="absolute inset-0 w-full h-full object-cover"
-    >
-      <source src="/video/BRANKY%20VF-web.mp4" type="video/mp4" />
-    </video>
+const Hero = () => {
+  const targetDate = new Date('2026-04-04');
+  const daysToStart = Math.ceil((targetDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
-    <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
-      <h1 className="text-6xl md:text-[9rem] font-bebas font-semibold leading-[0.9] mb-12 animate-fadeIn uppercase tracking-tight flex flex-col items-center gap-10 text-center">
-        <span className="text-white">ZÁVODY VRAKŮ</span>
-        <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)]">A DEMOLIČNÍ DERBY</span>
-      </h1>
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      <div className="absolute inset-0 bg-black/50 z-10"></div>
+      <video
+        autoPlay loop muted playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/video/BRANKY%20VF-web.mp4" type="video/mp4" />
+      </video>
 
-      <div className="flex flex-wrap justify-center gap-6 w-full max-w-6xl mb-10 px-4">
-        {/* Stat Card 1 - Upcoming Event */}
-        <div className="relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-          <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
+        <h1 className="text-6xl md:text-[9rem] font-bebas font-semibold leading-[0.9] mb-12 animate-fadeIn uppercase tracking-tight flex flex-col items-center gap-10 text-center">
+          <span className="text-white">ZÁVODY VRAKŮ</span>
+          <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)]">A DEMOLIČNÍ DERBY</span>
+        </h1>
 
-          <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-sm group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
-            NADCHÁZEJÍCÍ UDÁLOST
-          </p>
+        <div className="w-full max-w-7xl mb-10">
+          <div className="flex flex-col md:flex-row bg-gradient-to-r from-transparent via-black/60 to-transparent backdrop-blur-md border-y border-white/10 divide-y md:divide-y-0 md:divide-x divide-[#F4CE14]/30">
+            {/* Stat Card 1 - Upcoming Event */}
+            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+                NADCHÁZEJÍCÍ UDÁLOST
+              </p>
 
-          <p className="font-bebas text-5xl md:text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 text-center uppercase whitespace-nowrap">
-            {EVENTS[0].title}
-          </p>
-          <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
-            {EVENTS[0].date} // {EVENTS[0].location}
-          </p>
+              <p className="font-bebas text-4xl md:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 text-center uppercase whitespace-nowrap">
+                {EVENTS[0].title}
+              </p>
+              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
+                {EVENTS[0].date} // {EVENTS[0].location}
+              </p>
+            </div>
+
+            {/* Stat Card New - Days to Start */}
+            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+                POČET DNÍ
+              </p>
+
+              <p className="font-bebas text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+                {Math.max(0, daysToStart)}
+              </p>
+              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">DO STARTU</p>
+            </div>
+
+            {/* Stat Card 2 - Registered Racers */}
+            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+                PŘIHLÁŠENÝCH
+              </p>
+
+              <p className="font-bebas text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+                87<span className="text-white/30 text-5xl ml-2">/ 90</span>
+              </p>
+              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
+            </div>
+
+            {/* Stat Card 3 - Deadline */}
+            <div className="flex-auto px-12 py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+                UZÁVĚRKA
+              </p>
+
+              <p className="font-bebas text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+                30.3.
+              </p>
+              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">PŘIHLÁŠEK</p>
+            </div>
+          </div>
         </div>
 
-        {/* Stat Card 2 - Registered Racers */}
-        <div className="relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-          <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-          <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-sm group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
-            PŘIHLÁŠENÝCH
-          </p>
-
-          <p className="font-bebas text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-            87<span className="text-white/30 text-6xl ml-2">/ 90</span>
-          </p>
-          <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
-        </div>
-
-        {/* Stat Card 3 - Deadline */}
-        <div className="relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-          <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-          <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-sm group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
-            UZÁVĚRKA
-          </p>
-
-          <p className="font-bebas text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-            30.3.
-          </p>
-          <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">PŘIHLÁŠEK</p>
+        <div className="flex flex-col sm:flex-row justify-center gap-6 w-full mt-6">
+          <Button className="w-full sm:w-auto">CHCI ZÁVODIT</Button>
+          <Button variant="outline" className="w-full sm:w-auto">KOMPLETNÍ INFO</Button>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-center gap-6 w-full mt-6">
-        <Button className="w-full sm:w-auto">CHCI ZÁVODIT</Button>
-        <Button variant="outline" className="w-full sm:w-auto">KOMPLETNÍ INFO</Button>
+      <div className="absolute bottom-10 left-10 z-20 hidden lg:block text-left">
+        <div className="flex flex-col gap-2 font-tech text-[10px] text-gray-500 opacity-50 uppercase tracking-widest">
+          <p>LAT: 50.0835° N</p>
+          <p>LON: 14.4341° E</p>
+          <p>ELEV: 235m</p>
+        </div>
       </div>
-    </div>
-
-    <div className="absolute bottom-10 left-10 z-20 hidden lg:block text-left">
-      <div className="flex flex-col gap-2 font-tech text-[10px] text-gray-500 opacity-50 uppercase tracking-widest">
-        <p>LAT: 50.0835° N</p>
-        <p>LON: 14.4341° E</p>
-        <p>ELEV: 235m</p>
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const About = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -331,38 +341,93 @@ const GalleryGrid = () => (
   </section>
 );
 
-const SponsorsTicker = () => (
-  <section className="py-24 bg-black relative overflow-hidden">
-    <div className="container mx-auto px-6 mb-16 text-center">
-      <h2 className="text-6xl md:text-8xl font-bebas font-semibold text-white tracking-tight leading-none uppercase mb-2">
-        PARTNEŘI AKCE
-      </h2>
-      <div className="w-24 h-1 bg-[#F4CE14] mx-auto mt-4 relative">
-        <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
+const SponsorsTicker = () => {
+  const [selectedSponsor, setSelectedSponsor] = useState<typeof SPONSORS[0] | null>(null);
+  const [displayedSponsor, setDisplayedSponsor] = useState<typeof SPONSORS[0] | null>(null);
+
+  useEffect(() => {
+    if (selectedSponsor) {
+      setDisplayedSponsor(selectedSponsor);
+    }
+  }, [selectedSponsor]);
+
+  return (
+    <section className="py-24 bg-black relative overflow-hidden">
+      <div className="container mx-auto px-6 mb-16 text-center">
+        <h2 className="text-6xl md:text-8xl font-bebas font-semibold text-white tracking-tight leading-none uppercase mb-2">
+          PARTNEŘI AKCE
+        </h2>
+        <div className="w-24 h-1 bg-[#F4CE14] mx-auto mt-4 relative">
+          <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
+        </div>
       </div>
-    </div>
 
-    <div className="bg-[#F4CE14] py-8 overflow-hidden whitespace-nowrap shadow-[0_0_60px_rgba(244,206,20,0.3)] z-20 relative transform -skew-y-2 mb-20">
-      <div className="inline-block animate-marquee">
-        {[...SPONSORS, ...SPONSORS].map((s, i) => (
-          <span key={i} className="font-bebas text-6xl text-black mx-20 font-semibold hover:scale-110 inline-block transition-transform cursor-default select-none tracking-tight uppercase">{s}</span>
-        ))}
+      <div className="bg-[#F4CE14] py-8 overflow-hidden whitespace-nowrap shadow-[0_0_60px_rgba(244,206,20,0.3)] z-20 relative transform -skew-y-2 mb-8 group">
+        <div className={`inline-block animate-marquee ${selectedSponsor ? 'pause-animation' : ''}`}>
+          {[...SPONSORS, ...SPONSORS].map((s, i) => (
+            <span
+              key={i}
+              onClick={() => setSelectedSponsor(s)}
+              className="font-bebas text-6xl text-black mx-20 font-semibold hover:scale-110 inline-block transition-transform cursor-pointer select-none tracking-tight uppercase hover:text-white"
+            >
+              {s.name}
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
 
+      {/* Sponsor Details Expansion */}
+      <div className={`transition-[max-height] duration-700 ease-in-out overflow-hidden ${selectedSponsor ? 'max-h-[800px]' : 'max-h-0'}`}>
+        <div className={`transition-opacity duration-300 ease-out ${selectedSponsor ? 'opacity-100' : 'opacity-0'}`}>
+          <div className="container mx-auto px-6 pt-12">
+            <div className="bg-[#111] border border-white/10 p-8 md:p-12 grid md:grid-cols-2 gap-12 items-center relative shadow-2xl">
+              <button
+                onClick={() => setSelectedSponsor(null)}
+                className="absolute top-0 right-0 bg-[#F4CE14] text-black w-12 h-12 flex items-center justify-center hover:bg-red-600 hover:text-white transition-colors"
+              >
+                <X size={24} />
+              </button>
 
+              <div className="text-left space-y-6">
+                <h3 className="font-bebas text-5xl md:text-7xl text-[#F4CE14] uppercase leading-none tracking-tight">
+                  {displayedSponsor?.name}
+                </h3>
+                <div className="w-16 h-1 bg-white/20"></div>
+                <p className="font-tech text-xl text-gray-300 leading-relaxed max-w-lg">
+                  {displayedSponsor?.description}
+                </p>
+                <div className="pt-4">
+                  <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black hover:border-white">
+                    NAVŠTÍVIT WEBOVÉ STRÁNKY
+                  </Button>
+                </div>
+              </div>
 
-    <style>{`
-      @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      .animate-marquee {
-        animation: marquee 35s linear infinite;
-      }
-    `}</style>
-  </section>
-);
+              <div className="relative group">
+                <div className="relative border-2 border-white/10 overflow-hidden shadow-2xl">
+                  {displayedSponsor && <img src={displayedSponsor.image} alt={displayedSponsor.name} className="w-full h-[300px] object-cover" />}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 35s linear infinite;
+        }
+        .pause-animation:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+    </section>
+  );
+};
 
 const Program = () => (
   <section id="program" className="py-32 bg-black relative">
@@ -924,7 +989,7 @@ const RulesAndSpecs = () => {
     <section id="rules" className="py-32 bg-[#0a0a0a] relative">
       <div className="absolute left-0 top-0 h-full w-px bg-white/5"></div>
       <div className="container mx-auto px-6 text-left">
-        <SectionHeader title="PRAVIDLA & SPECIFIKACE" subtitle="PRAVIDLA JSOU OD TOHO, ABY SE DODRŽOVALA." />
+        <SectionHeader title="PRAVIDLA & POVOLENÉ ÚPRAVY" subtitle="PRAVIDLA JSOU OD TOHO, ABY SE DODRŽOVALA." />
 
         <div className="space-y-24">
           {rulesData.map((section, categoryIdx) => {

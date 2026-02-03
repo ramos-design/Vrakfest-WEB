@@ -49,7 +49,7 @@ export const PROGRAM: ProgramStep[] = [
   { time: '09:30', title: 'START VRAKFEST RACE', description: 'Kvalifikační jízdy a eliminace.' },
   { time: '15:30', title: 'SEMIFINÁLE VRAKFEST RACE', description: 'To nejlepší z celého dne. Boj o postup.' },
   { time: '16:00', title: 'FINÁLE VRAKFEST RACE', description: 'Boj o titul Vrakfest Champion 2026.' },
-  { time: '17:30', title: 'DEMOLITION DERBY', description: 'Totální destrukce všech zbylých vraků.', isCurrent: true },
+  { time: '17:30', title: 'DEMOLITION DERBY', description: 'Totální destrukce všech zbylých vraků.' },
   { time: '18:00', title: 'VYHLÁŠENÍ VÝSLEDKŮ', description: 'Předání pohárů a ukončení akce.' }
 ];
 
@@ -61,7 +61,41 @@ export const MARKET_ITEMS: MarketItem[] = [
 ];
 
 export const SPONSORS = [
-  'MONSTER ENERGY', 'CASTROL EDGE', 'AKUMA BATTERIES', 'WURTH', 'KARCHER', 'SPARCO', 'PIRELLI'
+  {
+    name: 'MONSTER ENERGY',
+    description: 'Oficiální energetický partner Vrakfestu. Unleash the Beast! Monster Energy podporuje adrenalinové sporty po celém světě a Vrakfest není výjimkou.',
+    image: 'https://picsum.photos/seed/sponsor1/600/400'
+  },
+  {
+    name: 'CASTROL EDGE',
+    description: 'Špičkové motorové oleje pro maximální výkon i v těch nejnáročnějších podmínkách demoličního derby.',
+    image: 'https://picsum.photos/seed/sponsor2/600/400'
+  },
+  {
+    name: 'AKUMA BATTERIES',
+    description: 'Spolehlivá energie pro start každého vraku. Akuma Batteries vás nenechá ve štychu ani po nárazu.',
+    image: 'https://picsum.photos/seed/sponsor3/600/400'
+  },
+  {
+    name: 'WURTH',
+    description: 'Profesionální nářadí a spojovací materiál. Když potřebujete opravit vrak za 5 minut, Wurth je jasná volba.',
+    image: 'https://picsum.photos/seed/sponsor4/600/400'
+  },
+  {
+    name: 'KARCHER',
+    description: 'Čistící technika pro ty nejšpinavější stroje. Po závodě je Karcher nejlepší přítel mechanika.',
+    image: 'https://picsum.photos/seed/sponsor5/600/400'
+  },
+  {
+    name: 'SPARCO',
+    description: 'Bezpečnostní vybavení pro závodníky. Sedačky, pásy, helmy - bezpečnost je na prvním místě i ve vracích.',
+    image: 'https://picsum.photos/seed/sponsor6/600/400'
+  },
+  {
+    name: 'PIRELLI',
+    description: 'Pneumatiky, které drží stopu i v bahně. Výkon a kontrola pro každou zatáčku.',
+    image: 'https://picsum.photos/seed/sponsor7/600/400'
+  }
 ];
 
 export const STANDINGS: StandingsDriver[] = [
