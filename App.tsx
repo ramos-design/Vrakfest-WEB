@@ -26,6 +26,78 @@ const SectionHeader = ({ title, subtitle, align = 'left' }: { title: React.React
   </div>
 );
 
+const LockScreen = ({ onAuthenticate }: { onAuthenticate: () => void }) => {
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === '420') {
+      onAuthenticate();
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 2000);
+      setPassword(''); // Clear invalid password
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen flex flex-col">
+      {/* Hero Section */}
+      <section className="relative flex-1 flex items-center justify-center overflow-hidden pt-20">
+        <div className="absolute inset-0 bg-black/50 z-10"></div>
+        <video
+          autoPlay loop muted playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/video/BRANKY%20VF-web.mp4" type="video/mp4" />
+        </video>
+
+        <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
+          <img
+            src="/video/LOGO-Y.png"
+            alt="VRAKFEST Logo"
+            className="h-24 w-auto mb-10 animate-fadeIn"
+          />
+          <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[9rem] font-bebas font-semibold leading-[0.9] mb-12 animate-fadeIn uppercase tracking-tight flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
+            <span className="text-white">NOVÁ KAPITOLA PŘICHÁZÍ.</span>
+            <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)] no-underline">BUĎTE U TOHO S NÁMI!</span>
+          </h1>
+
+          {/* Interactive "JIŽ BRZY" Button / Login Input */}
+          <div className="min-h-[80px] flex items-center justify-center">
+            {!showPasswordInput ? (
+              <Button
+                onClick={() => setShowPasswordInput(true)}
+                className="bg-[#F4CE14] text-black hover:bg-white border-0 text-xl px-12 py-4 animate-fadeIn"
+              >
+                JIŽ BRZY
+              </Button>
+            ) : (
+              <form onSubmit={handleLogin} className="animate-fadeIn w-full max-w-sm">
+                <div className="relative">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="ZADEJ HESLO"
+                    className={`w-full bg-transparent border-b-4 ${error ? 'border-red-500 text-red-500 placeholder-red-500 animate-shake' : 'border-[#F4CE14] text-[#F4CE14] placeholder-[#F4CE14]/50'} px-4 py-2 font-bebas text-3xl md:text-4xl outline-none text-center tracking-widest transition-colors uppercase`}
+                    autoFocus
+                    onBlur={() => {
+                      if (password === '') setShowPasswordInput(false);
+                    }}
+                  />
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
 // --- Fixed Header with Grid Layout (1fr auto 1fr) ---
 const TechNavBar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -211,13 +283,15 @@ const About = () => {
                 <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
               </Button>
-              <Button variant="outline" size="medium" className="border-white/20 hover:bg-white hover:text-black w-full sm:w-auto justify-center">
+              <Button variant="outline" size="medium" className="btn-race w-full sm:w-auto justify-center">
                 Chci závodit
               </Button>
             </div>
           </div>
 
           <div className="sticky top-40 space-y-12">
+
+
             <div className="relative group">
               <div className="relative border-4 border-white/10 group-hover:border-[#F4CE14]/60 transition-all duration-700 overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]">
                 <img src="https://picsum.photos/seed/derby/900/600" alt="Action" className="w-full grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" />
@@ -245,10 +319,10 @@ const About = () => {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
+          </div >
+        </div >
+      </div >
+    </section >
   );
 };
 
@@ -634,7 +708,7 @@ const DriverRoster = () => {
           return (
             <div
               key={`${driver.id}-${i}`}
-              className="min-w-[280px] w-[280px] aspect-[4/5] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
+              className="min-w-[280px] w-[280px] aspect-[4/6] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
               onClick={() => setSelectedDriver(driver)}
             >
               {/* Card Image Area */}
@@ -670,7 +744,7 @@ const DriverRoster = () => {
               </div>
 
               {/* Car Model Strip (Slide Down) */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#F4CE14] text-black px-3 py-1 font-tech font-bold uppercase text-xs tracking-wider shadow-lg z-10 whitespace-nowrap">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#F4CE14] text-black px-3 py-1 font-tech font-bold uppercase text-sm tracking-wider shadow-lg z-10 whitespace-nowrap">
                 {shortCarName}
               </div>
             </div>
@@ -1493,7 +1567,11 @@ const Footer = () => (
   </footer>
 );
 
+
+
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -1511,8 +1589,12 @@ export default function App() {
     });
   }, []);
 
+  if (!isAuthenticated) {
+    return <LockScreen onAuthenticate={() => setIsAuthenticated(true)} />;
+  }
+
   return (
-    <div className="min-h-screen text-white bg-[#111] selection:bg-[#F4CE14] selection:text-black">
+    <div className="min-h-screen bg-[#111] text-white selection:bg-[#F4CE14] selection:text-black">
       <TechNavBar />
       <main>
         <Hero />
@@ -1526,7 +1608,6 @@ export default function App() {
         <RulesAndSpecs />
         <RegistrationForm />
         <MobileApp />
-
       </main>
       <Footer />
 
@@ -1540,6 +1621,16 @@ export default function App() {
         }
         html {
           scroll-behavior: smooth;
+        }
+        .btn-race {
+          border-color: white !important;
+          color: white !important;
+        }
+        .btn-race:hover {
+          background-color: white !important;
+          color: black !important;
+          border-color: white !important;
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
         }
       `}</style>
     </div>
