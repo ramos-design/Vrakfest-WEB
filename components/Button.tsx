@@ -9,7 +9,7 @@ export const Button = ({
 }: {
     children?: React.ReactNode;
     variant?: 'primary' | 'outline' | 'ghost' | 'engine-start';
-    size?: 'default' | 'small';
+    size?: 'default' | 'small' | 'medium';
     className?: string;
     onClick?: () => void;
 }) => {
@@ -19,9 +19,13 @@ export const Button = ({
     // Base classes imitating our .btn .skew-btn from styles.css
     const baseClasses = "relative inline-flex items-center justify-center font-tech font-bold uppercase tracking-wider transform -skew-x-[15deg] transition-all duration-300 cursor-pointer border";
 
-    const sizeClasses = size === 'small'
-        ? "px-6 py-2 text-base" // Zmenšeno z px-8 py-3 text-lg
-        : "px-10 py-4 text-xl";
+    const sizeClasses = (() => {
+        switch (size) {
+            case 'small': return "px-6 py-2 text-base";
+            case 'medium': return "px-8 py-3 text-[15px]";
+            default: return "px-10 py-4 text-xl";
+        }
+    })();
 
     let variantClasses = "";
     if (isEngine) {

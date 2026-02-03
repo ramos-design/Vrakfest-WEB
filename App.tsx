@@ -206,11 +206,11 @@ const About = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-6 mt-12">
-              <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden w-full sm:w-auto justify-center">
+              <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden w-full sm:w-auto justify-center">
                 <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
               </Button>
-              <Button variant="outline" className="border-white/20 hover:bg-white hover:text-black w-full sm:w-auto justify-center">
+              <Button variant="outline" size="medium" className="border-white/20 hover:bg-white hover:text-black w-full sm:w-auto justify-center">
                 Chci závodit
               </Button>
             </div>
@@ -357,7 +357,7 @@ const SponsorsTicker = () => {
                   {displayedSponsor?.description}
                 </p>
                 <div className="pt-4">
-                  <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black hover:border-white">
+                  <Button variant="outline" size="medium" className="border-white text-white hover:bg-white hover:text-black hover:border-white">
                     NAVŠTÍVIT WEBOVÉ STRÁNKY
                   </Button>
                 </div>
@@ -559,10 +559,10 @@ const EventGrid = () => {
 
                     {event.id === '1' ? (
                       <div className="flex flex-col sm:flex-row gap-4">
-                        <Button className="bg-transparent border border-white text-white hover:bg-white hover:text-black">
+                        <Button size="medium" className="bg-transparent border border-white text-white hover:bg-white hover:text-black">
                           Více o akci
                         </Button>
-                        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden">
+                        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden">
                           <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                           <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
                         </Button>
@@ -672,10 +672,10 @@ const DriverRoster = () => {
 
       {/* Action Buttons */}
       <div className="container mx-auto px-6 mt-16 flex flex-col sm:flex-row justify-center gap-6">
-        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
+        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
           Zobrazit všechny jezdce
         </Button>
-        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto">
+        <Button size="medium" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto">
           Chci taky závodit
         </Button>
       </div>
@@ -710,7 +710,7 @@ const DriverRoster = () => {
                 </div>
               </div>
 
-              <Button className="w-full">PROHLÉDNOUT TÝM</Button>
+              <Button size="medium" className="w-full">PROHLÉDNOUT TÝM</Button>
             </div>
           </div>
         </div>
