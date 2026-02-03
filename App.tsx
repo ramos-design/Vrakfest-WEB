@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './components/Button';
+import { Typewriter } from './components/Typewriter';
 import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
@@ -13,7 +14,7 @@ import { Driver } from './types';
 
 
 
-const SectionHeader = ({ title, subtitle, align = 'left' }: { title: string, subtitle?: string, align?: 'left' | 'center' | 'right' }) => (
+const SectionHeader = ({ title, subtitle, align = 'left' }: { title: React.ReactNode, subtitle?: React.ReactNode, align?: 'left' | 'center' | 'right' }) => (
   <div className={`mb-12 ${align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'}`}>
     <h2 className="text-6xl md:text-8xl font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
       {title}
@@ -43,7 +44,7 @@ const TechNavBar = () => {
         {/* Left: Navigation */}
         <nav className="hidden lg:flex justify-self-start items-center gap-6">
           {['O VRAKFESTU', 'KALENDÁŘ', 'JEZDCI', 'PRAVIDLA', 'APLIKACE'].map(item => (
-            <a key={item} href={`#${item.toLowerCase().replace(' ', '')}`} className="font-bebas text-lg text-white hover:text-[#F4CE14] transition-all uppercase tracking-wide">
+            <a key={item} href={`#${item.toLowerCase().replace(' ', '')}`} className="font-bebas text-lg text-white hover:text-[#F4CE14] transition-all uppercase tracking-wide no-underline hover:no-underline">
               {item}
             </a>
           ))}
@@ -94,7 +95,7 @@ const Hero = () => {
       <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
         <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[9rem] font-bebas font-semibold leading-[0.9] mb-6 md:mb-10 animate-fadeIn uppercase tracking-tight flex flex-col items-center gap-2 md:gap-4 lg:gap-6 text-center">
           <span className="text-white">ZÁVODY VRAKŮ</span>
-          <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)]">A DEMOLIČNÍ DERBY</span>
+          <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)] no-underline">A DEMOLIČNÍ DERBY</span>
         </h1>
 
         <div className="w-full max-w-6xl mb-8">
@@ -591,7 +592,14 @@ const DriverRoster = () => {
     <section id="riders" className="py-32 bg-black overflow-hidden relative">
       <div className="container mx-auto px-6 mb-16">
         <div className="flex items-start justify-between gap-8">
-          <SectionHeader title="STARTOVNÍ ROŠT" subtitle="ELITA ČESKÉHO DEMOLIČNÍHO DERBY." />
+          <SectionHeader
+            title="STARTOVNÍ ROŠT"
+            subtitle={
+              <span>
+                PŘIHLÁŠENÍ JEZDCI DO <Typewriter words={['AKTUÁLNÍHO ZÁVODU', 'VRAKFESTU 4.4. V OSTRAVĚ']} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+              </span>
+            }
+          />
 
           {/* Dynamic Driver Count Badge - Matches Hero Section Style */}
           <div className="relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
@@ -977,7 +985,11 @@ const RulesAndSpecs = () => {
     <section id="rules" className="py-32 bg-[#0a0a0a] relative">
       <div className="absolute left-0 top-0 h-full w-px bg-white/5"></div>
       <div className="container mx-auto px-6 text-left">
-        <SectionHeader title="PRAVIDLA & POVOLENÉ ÚPRAVY" subtitle="PRAVIDLA JSOU OD TOHO, ABY SE DODRŽOVALA." />
+        <SectionHeader
+          title={<>PRAVIDLA <span className="text-white">& POVOLENÉ ÚPRAVY</span></>}
+          subtitle="PRAVIDLA JSOU OD TOHO, ABY SE DODRŽOVALA."
+          align="center"
+        />
 
         <div className="space-y-24">
           {rulesData.map((section, categoryIdx) => {
