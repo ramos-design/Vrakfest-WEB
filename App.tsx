@@ -6,25 +6,43 @@ import { LockScreen } from './components/LockScreen';
 import { TechNavBar } from './components/TechNavBar';
 import { Footer } from './components/Footer';
 import { ThemeController } from './components/ThemeController';
+import { TransitionOverlay } from './components/TransitionOverlay';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  if (!isAuthenticated) {
-    return <LockScreen onAuthenticate={() => setIsAuthenticated(true)} />;
-  }
+  const handleAuthenticate = () => {
+    // Start transition
+    setIsTransitioning(true);
+    // Show web after yellow panel covers everything (around 0.6s into the 3s animation)
+    setTimeout(() => {
+      setIsAuthenticated(true);
+    }, 600);
+    // End transition after animation finishes
+    setTimeout(() => {
+      setIsTransitioning(false);
+    }, 3000);
+  };
 
   return (
-    <BrowserRouter>
-      <ThemeController />
-      <div className="min-h-screen bg-[#111] text-white selection:bg-[#F4CE14] selection:text-black font-body">
-        <TechNavBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/dsgn" element={<DesignSystem />} />
-        </Routes>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <>
+      {isTransitioning && <TransitionOverlay />}
+      {!isAuthenticated ? (
+        <LockScreen onAuthenticate={handleAuthenticate} />
+      ) : (
+        <BrowserRouter>
+          <ThemeController />
+          <div className="min-h-screen bg-[#111] text-white selection:bg-[#F4CE14] selection:text-black font-body">
+            <TechNavBar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/dsgn" element={<DesignSystem />} />
+            </Routes>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      )}
+    </>
   );
 }

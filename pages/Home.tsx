@@ -6,12 +6,13 @@ import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
   ChevronDown, ChevronRight, CheckCircle, Info,
-  Search, ExternalLink, Settings, Cpu, ArrowRight
+  Search, ExternalLink, Settings, Cpu, ArrowRight, User
 } from 'lucide-react';
 import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS } from '../constants';
 import { Driver } from '../types';
 
 // --- Components ---
+import { InstagramFeed } from '../components/InstagramFeed';
 
 
 
@@ -113,7 +114,7 @@ const Hero = () => {
         {/* Buttons: Cleaned vertical stacking and narrowed width on mobile */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full mt-6 scale-90 2xl:scale-100 origin-top">
           <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0">CHCI ZÁVODIT</Button>
-          <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0">KOMPLETNÍ INFO</Button>
+          <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 !border-white !text-white hover:!bg-white hover:!text-black hover:!shadow-none">BODOVÉ POŘADÍ</Button>
         </div>
       </div>
 
@@ -129,20 +130,93 @@ const Hero = () => {
 };
 
 const About = () => {
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [countersStarted, setCountersStarted] = useState(false);
+  const [counts, setCounts] = useState({ visitors: 0, racers: 0, cars: 0, adrenaline: 0 });
   const scrollRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
-  const thumbnails = [
-    "https://picsum.photos/seed/yt1/300/200",
-    "https://picsum.photos/seed/yt2/300/200",
-    "https://picsum.photos/seed/yt3/300/200",
-    "https://picsum.photos/seed/yt4/300/200",
-    "https://picsum.photos/seed/yt5/300/200",
+  // Animate counters when visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !countersStarted) {
+          setCountersStarted(true);
+
+          // Animate visitors counter
+          animateCounter(0, 12000, 2000, (val) =>
+            setCounts(prev => ({ ...prev, visitors: val }))
+          );
+
+          // Animate racers counter
+          animateCounter(0, 90, 2000, (val) =>
+            setCounts(prev => ({ ...prev, racers: val }))
+          );
+
+          // Animate cars counter
+          animateCounter(0, 500, 2000, (val) =>
+            setCounts(prev => ({ ...prev, cars: val }))
+          );
+
+          // Animate adrenaline counter
+          animateCounter(0, 100, 2000, (val) =>
+            setCounts(prev => ({ ...prev, adrenaline: val }))
+          );
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) {
+      observer.observe(statsRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [countersStarted]);
+
+  const animateCounter = (start: number, end: number, duration: number, callback: (val: number) => void) => {
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const current = Math.floor(start + (end - start) * easeOutQuart);
+
+      callback(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  };
+
+  const youtubeVideos = [
+    { id: '1mtAOEGe9Rw', title: 'VrakFest Video 1' },
+    { id: 'UiuVOYyp0XA', title: 'VrakFest Video 2' },
+    { id: 'QCvG3Hso_UE', title: 'VrakFest Video 3' },
+    { id: 'JMHHKZepvOE', title: 'VrakFest Video 4' },
+    { id: '_2TrwB0pmaA', title: 'VrakFest Video 5' },
+    { id: 'ZDFaYvdV_Pc', title: 'VrakFest Video 6' },
+    { id: 'rmW-I_AbfDc', title: 'VrakFest Video 7' },
+    { id: '1N1gVG62-9o', title: 'VrakFest Video 8' },
   ];
 
   return (
     <section id="ovrakfestu" className="py-16 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
-      <div className="hidden lg:block absolute top-0 right-0 p-12 text-white/5 font-bebas text-[20vw] pointer-events-none select-none leading-none uppercase tracking-tight font-semibold italic">
-        DESTRUCTION
+      {/* Tire Track Background */}
+      <div className="hidden lg:block absolute top-0 right-0 w-full h-full pointer-events-none select-none opacity-15 overflow-hidden">
+        <img
+          src="/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
+          alt=""
+          className="absolute -top-10 -right-10 w-[140%] h-auto rotate-[8deg] origin-top-right"
+          style={{ mixBlendMode: 'screen', filter: 'brightness(1.5) contrast(1.2)' }}
+        />
       </div>
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-24 items-start w-full max-w-full">
@@ -159,24 +233,72 @@ const About = () => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 gap-4 md:gap-8 mb-0 md:mb-16 w-full max-w-full">
-              <div className="bg-white/5 p-5 md:p-8 border-l-4 border-[#F4CE14] group hover:bg-[#F4CE14]/10 transition-all text-left shadow-lg overflow-hidden w-full">
-                <p className="font-bebas text-4xl md:text-5xl text-[#F4CE14] mb-2 uppercase tracking-tight font-bold truncate">25 000+</p>
-                <p className="font-tech text-xs text-gray-500 tracking-widest uppercase truncate">NÁVŠTĚVNÍKŮ</p>
+            <div ref={statsRef} className="grid grid-cols-2 gap-4 md:gap-8 mb-0 md:mb-16 w-full max-w-full">
+              <div
+                className="bg-white/5 p-5 md:p-8 border-l-4 border-[#F4CE14] group hover:bg-[#F4CE14]/10 transition-all text-left shadow-lg overflow-hidden w-full"
+                style={{
+                  opacity: countersStarted ? 1 : 0,
+                  transform: countersStarted ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+                  transitionDelay: '0ms'
+                }}
+              >
+                <p className="font-bebas text-4xl md:text-5xl text-[#F4CE14] mb-2 uppercase tracking-tight font-bold truncate">
+                  {counts.visitors.toLocaleString('cs-CZ')}+
+                </p>
+                <p className="font-tech text-xs text-gray-500 tracking-widest uppercase truncate">NÁVŠTĚVNÍKŮ ROČNĚ</p>
               </div>
-              <div className="bg-white/5 p-5 md:p-8 border-l-4 border-[#F4CE14] group hover:bg-[#F4CE14]/10 transition-all text-left shadow-lg overflow-hidden w-full">
-                <p className="font-bebas text-4xl md:text-5xl text-[#F4CE14] mb-2 uppercase tracking-tight font-bold truncate">4 892</p>
-                <p className="font-tech text-xs text-gray-500 tracking-widest uppercase truncate">ZNIČENÝCH AUT</p>
+              <div
+                className="bg-white/5 p-5 md:p-8 border-l-4 border-[#F4CE14] group hover:bg-[#F4CE14]/10 transition-all text-left shadow-lg overflow-hidden w-full"
+                style={{
+                  opacity: countersStarted ? 1 : 0,
+                  transform: countersStarted ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+                  transitionDelay: '100ms'
+                }}
+              >
+                <p className="font-bebas text-4xl md:text-5xl text-[#F4CE14] mb-2 uppercase tracking-tight font-bold truncate">
+                  {counts.racers}+
+                </p>
+                <p className="font-tech text-xs text-gray-500 tracking-widest uppercase truncate">JEZDCŮ NA KAŽDÉ AKCI</p>
+              </div>
+              <div
+                className="bg-white/5 p-5 md:p-8 border-l-4 border-[#F4CE14] group hover:bg-[#F4CE14]/10 transition-all text-left shadow-lg overflow-hidden w-full"
+                style={{
+                  opacity: countersStarted ? 1 : 0,
+                  transform: countersStarted ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+                  transitionDelay: '200ms'
+                }}
+              >
+                <p className="font-bebas text-4xl md:text-5xl text-[#F4CE14] mb-2 uppercase tracking-tight font-bold truncate">
+                  {counts.cars}+
+                </p>
+                <p className="font-tech text-xs text-gray-500 tracking-widest uppercase truncate">ZLIKVIDOVANÝCH AUT</p>
+              </div>
+              <div
+                className="bg-white/5 p-5 md:p-8 border-l-4 border-[#F4CE14] group hover:bg-[#F4CE14]/10 transition-all text-left shadow-lg overflow-hidden w-full"
+                style={{
+                  opacity: countersStarted ? 1 : 0,
+                  transform: countersStarted ? 'translateY(0)' : 'translateY(30px)',
+                  transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+                  transitionDelay: '300ms'
+                }}
+              >
+                <p className="font-bebas text-4xl md:text-5xl text-[#F4CE14] mb-2 uppercase tracking-tight font-bold truncate">
+                  {counts.adrenaline}%
+                </p>
+                <p className="font-tech text-xs text-gray-500 tracking-widest uppercase truncate">ADRENALINU A ZÁBAVY</p>
               </div>
             </div>
 
             {/* Buttons - Desktop Only */}
-            <div className="hidden lg:flex flex-col sm:flex-row justify-center sm:justify-start gap-4 md:gap-6 w-full mt-8 md:mt-12 origin-top">
-              <Button size="medium" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center text-base py-4">
+            <div className="hidden lg:flex flex-col sm:flex-row justify-center sm:justify-start gap-4 md:gap-6 w-full -mt-2 md:mt-0 origin-top">
+              <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center">
                 <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
               </Button>
-              <Button variant="outline" size="medium" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center text-base py-4">
+              <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center">
                 Chci závodit
               </Button>
             </div>
@@ -185,13 +307,35 @@ const About = () => {
           {/* Right Column - Media */}
           <div className="w-full max-w-full mt-4 lg:mt-0 lg:sticky lg:top-40 space-y-8 lg:space-y-12">
             <div className="relative group w-full">
-              <div className="relative border-4 border-white/10 group-hover:border-[#F4CE14]/60 transition-all duration-700 overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)] w-full">
-                <img src="https://picsum.photos/seed/derby/900/600" alt="Action" className="w-full h-auto object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" />
-                <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors duration-700"></div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 md:w-28 md:h-28 bg-[#F4CE14] rounded-full flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-all shadow-[0_0_50px_rgba(244,206,20,0.6)] border-b-8 border-yellow-700">
-                    <Play className="text-black ml-1" fill="currentColor" size={32} />
-                  </div>
+              <div className="relative border-4 border-white/10 group-hover:border-[#F4CE14]/60 transition-all duration-700 overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)] w-full" style={{ paddingBottom: '60%' }}>
+                <div className="absolute inset-0">
+                  {!isVideoPlaying ? (
+                    <>
+                      <img
+                        src="https://img.youtube.com/vi/agKclmFnbTk/maxresdefault.jpg"
+                        alt="VrakFest Video"
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
+                      />
+                      <div className="absolute inset-0 bg-black/50 group-hover:bg-transparent transition-colors duration-700"></div>
+                      <div
+                        className="absolute inset-0 flex items-center justify-center cursor-pointer"
+                        onClick={() => setIsVideoPlaying(true)}
+                      >
+                        <div className="w-20 h-20 md:w-28 md:h-28 bg-[#F4CE14] rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-[0_0_50px_rgba(244,206,20,0.6)] border-b-8 border-yellow-700">
+                          <Play className="text-black ml-1" fill="currentColor" size={32} />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <iframe
+                      className="w-full h-full"
+                      src="https://www.youtube.com/embed/agKclmFnbTk?autoplay=1&controls=1&modestbranding=1&rel=0"
+                      title="VrakFest Video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  )}
                 </div>
               </div>
             </div>
@@ -199,9 +343,17 @@ const About = () => {
             <div className="space-y-6 pt-4 w-full overflow-hidden">
               <p className="font-tech text-xs text-gray-500 mb-4 tracking-[0.4em] uppercase">YOUTUBE RECAPS</p>
               <div ref={scrollRef} className="flex gap-4 overflow-x-auto pb-4 custom-scrollbar cursor-grab active:cursor-grabbing items-center w-full">
-                {thumbnails.map((src, i) => (
-                  <div key={i} className="min-w-[200px] sm:min-w-[240px] aspect-video bg-black border border-white/10 relative group overflow-hidden shadow-xl flex-shrink-0">
-                    <img src={src} className="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
+                {youtubeVideos.map((video, i) => (
+                  <div
+                    key={i}
+                    onClick={() => setSelectedVideo(video.id)}
+                    className="w-[180px] sm:w-[200px] aspect-video bg-black border border-white/10 relative group overflow-hidden shadow-xl flex-shrink-0 cursor-pointer"
+                  >
+                    <img
+                      src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                      alt={video.title}
+                      className="w-full h-full object-cover opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
+                    />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <div className="w-10 h-10 bg-[#F4CE14] rounded-full flex items-center justify-center shadow-lg">
                         <Play className="text-black fill-black ml-1" size={16} />
@@ -211,15 +363,43 @@ const About = () => {
                 ))}
               </div>
             </div>
+
+            {/* Video Modal Popup */}
+            {selectedVideo && (
+              <div
+                className="fixed inset-0 bg-black/90 z-[100] flex items-center justify-center p-4"
+                onClick={() => setSelectedVideo(null)}
+              >
+                <div
+                  className="relative w-full max-w-5xl aspect-video"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => setSelectedVideo(null)}
+                    className="absolute -top-12 right-0 text-white hover:text-[#F4CE14] transition-colors"
+                  >
+                    <X size={32} />
+                  </button>
+                  <iframe
+                    className="w-full h-full border-4 border-[#F4CE14]"
+                    src={`https://www.youtube.com/embed/${selectedVideo}?autoplay=1&controls=1&modestbranding=1&rel=0`}
+                    title="VrakFest Video"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Buttons - Mobile Only (at the bottom) */}
-          <div className="flex lg:hidden flex-col sm:flex-row justify-center gap-4 w-full mt-8">
-            <Button size="medium" className="w-full sm:w-auto bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center text-base py-4 font-bold">
+          <div className="flex lg:hidden flex-col sm:flex-row justify-center gap-4 w-full mt-0">
+            <Button className="w-full sm:w-auto bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center">
               <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
               <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
             </Button>
-            <Button variant="outline" size="medium" className="w-full sm:w-auto btn-race justify-center text-base py-4 font-bold">
+            <Button variant="outline" className="w-full sm:w-auto btn-race justify-center">
               Chci závodit
             </Button>
           </div>
@@ -229,55 +409,125 @@ const About = () => {
   );
 };
 
-const GalleryGrid = () => (
-  <section className="pb-32 bg-[#0a0a0a] relative">
-    <div className="container mx-auto px-6">
-      <div className="grid md:grid-cols-3 gap-8">
-        {/* Box 1 */}
-        <div className="flex flex-col gap-6 group">
-          <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
-            <img src="https://picsum.photos/seed/family/600/400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" alt="Rodina" />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-          </div>
-          <div className="text-left">
-            <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase leading-tight tracking-tight group-hover:text-[#F4CE14] transition-colors font-bold mb-4">Den plný adrenalinu pro celou rodinu!</h3>
-            <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
-            </p>
-          </div>
-        </div>
+const GalleryGrid = () => {
+  const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-        {/* Box 2 */}
-        <div className="flex flex-col gap-6 group">
-          <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
-            <img src="https://picsum.photos/seed/race/600/400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" alt="Závod" />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-          </div>
-          <div className="text-left">
-            <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase leading-tight tracking-tight group-hover:text-[#F4CE14] transition-colors font-bold mb-4">Přijď si zazávodit, zabourat a vyhrát 10000 Kč! a víc!</h3>
-            <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.
-            </p>
-          </div>
-        </div>
+  useEffect(() => {
+    const observers = cardRefs.current.map((card, index) => {
+      if (!card) return null;
 
-        {/* Box 3 */}
-        <div className="flex flex-col gap-6 group">
-          <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
-            <img src="https://picsum.photos/seed/fun/600/400" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" alt="Zábava" />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Add card to visible when scrolling in
+              setTimeout(() => {
+                setVisibleCards((prev) => {
+                  if (!prev.includes(index)) {
+                    return [...prev, index];
+                  }
+                  return prev;
+                });
+              }, index * 200);
+            } else {
+              // Remove card from visible when scrolling out
+              setVisibleCards((prev) => prev.filter((i) => i !== index));
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+
+      observer.observe(card);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach((observer) => observer?.disconnect());
+    };
+  }, []);
+
+  return (
+    <section className="pb-32 bg-[#0a0a0a] relative">
+      <div className="container mx-auto px-6">
+        <div className="grid md:grid-cols-3 gap-8">
+          {/* Box 1 */}
+          <div
+            ref={(el) => (cardRefs.current[0] = el)}
+            className={`flex flex-col gap-6 group transition-all duration-1000 ${visibleCards.includes(0) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+          >
+            <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
+              <img
+                src="/media/DSC_4209.jpg"
+                className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(0) ? 'grayscale-0' : 'grayscale'
+                  } group-hover:grayscale-0`}
+                alt="Rodina"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+            </div>
+            <div className="text-left">
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(0) ? 'text-[#F4CE14]' : 'text-white'
+                } group-hover:text-[#F4CE14]`}>Den plný adrenalinu pro celou rodinu!</h3>
+              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+              </p>
+            </div>
           </div>
-          <div className="text-left">
-            <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase leading-tight tracking-tight group-hover:text-[#F4CE14] transition-colors font-bold mb-4">Užijte si srandu se starými vraky.</h3>
-            <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-            </p>
+
+          {/* Box 2 */}
+          <div
+            ref={(el) => (cardRefs.current[1] = el)}
+            className={`flex flex-col gap-6 group md:mt-24 transition-all duration-1000 ${visibleCards.includes(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+          >
+            <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
+              <img
+                src="/media/DSC_0871.jpg"
+                className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(1) ? 'grayscale-0' : 'grayscale'
+                  } group-hover:grayscale-0`}
+                alt="Závod"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+            </div>
+            <div className="text-left">
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(1) ? 'text-[#F4CE14]' : 'text-white'
+                } group-hover:text-[#F4CE14]`}>Přijď si zazávodit, zabourat a vyhrát 10000 Kč! a víc!</h3>
+              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.
+              </p>
+            </div>
+          </div>
+
+          {/* Box 3 */}
+          <div
+            ref={(el) => (cardRefs.current[2] = el)}
+            className={`flex flex-col gap-6 group md:mt-48 transition-all duration-1000 ${visibleCards.includes(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+              }`}
+          >
+            <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
+              <img
+                src="/media/DSC_0655.jpg"
+                className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(2) ? 'grayscale-0' : 'grayscale'
+                  } group-hover:grayscale-0`}
+                alt="Zábava"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+            </div>
+            <div className="text-left">
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(2) ? 'text-[#F4CE14]' : 'text-white'
+                } group-hover:text-[#F4CE14]`}>Užijte si srandu se starými vraky.</h3>
+              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const SponsorsTicker = () => {
   const [selectedSponsor, setSelectedSponsor] = useState<typeof SPONSORS[0] | null>(null);
@@ -336,7 +586,7 @@ const SponsorsTicker = () => {
                   {displayedSponsor?.description}
                 </p>
                 <div className="pt-4">
-                  <Button variant="outline" size="medium" className="border-white text-white hover:!bg-white hover:!text-black hover:!border-white transition-colors duration-300">
+                  <Button variant="outline" className="border-white text-white hover:!bg-white hover:!text-black hover:!border-white transition-colors duration-300">
                     NAVŠTÍVIT WEBOVÉ STRÁNKY
                   </Button>
                 </div>
@@ -368,98 +618,218 @@ const SponsorsTicker = () => {
   );
 };
 
-const Program = () => (
-  <section id="program" className="py-32 bg-black relative">
-    <div className="container mx-auto px-6">
-      <SectionHeader title="PROGRAM" subtitle="ČASOVÝ HARMONOGRAM AKCE" />
+const Program = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [feesStarted, setFeesStarted] = useState(false);
+  const [feeCounts, setFeeCounts] = useState({ adult: 0, child: 0, registration: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const feesRef = useRef<HTMLDivElement>(null);
 
-      <div className="grid lg:grid-cols-2 gap-16 items-start">
-        {/* Left Column: Fees & Info */}
-        <div className="text-left space-y-12 animate-fadeIn">
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const offset = windowHeight * 0.6; // Trigger point
 
-          {/* Vstupné */}
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">VSTUPNÉ</h3>
+        // Calculate progress in pixels relative to the container top
+        const progress = offset - rect.top;
+        setScrollProgress(Math.max(0, progress));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Animate fee counters when visible
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !feesStarted) {
+          setFeesStarted(true);
+
+          // Animate adult ticket price
+          animateFeeCounter(0, 200, 1500, (val) =>
+            setFeeCounts(prev => ({ ...prev, adult: val }))
+          );
+
+          // Animate child ticket price
+          animateFeeCounter(0, 100, 1500, (val) =>
+            setFeeCounts(prev => ({ ...prev, child: val }))
+          );
+
+          // Animate registration fee
+          animateFeeCounter(0, 2000, 1500, (val) =>
+            setFeeCounts(prev => ({ ...prev, registration: val }))
+          );
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (feesRef.current) {
+      observer.observe(feesRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [feesStarted]);
+
+  const animateFeeCounter = (start: number, end: number, duration: number, callback: (val: number) => void) => {
+    const startTime = performance.now();
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const current = Math.floor(start + (end - start) * easeOutQuart);
+
+      callback(current);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  };
+
+  return (
+    <section id="program" className="py-32 bg-black relative">
+      <div className="container mx-auto px-6">
+        <SectionHeader title="PROGRAM" subtitle="ČASOVÝ HARMONOGRAM AKCE" />
+
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left Column: Harmonogram & Warning */}
+          <div className="relative space-y-12">
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">HARMONOGRAM</h3>
+              </div>
+
+              <div className="relative pl-8 md:pl-12" ref={containerRef}>
+                {/* Visual Timeline Rail */}
+                <div className="absolute left-[3px] md:left-[5px] top-4 bottom-4 w-[3px] bg-white/10 rounded-full"></div>
+
+                {/* Active Progress Line */}
+                <div
+                  className="absolute left-[3px] md:left-[5px] top-4 w-[3px] bg-[#F4CE14] shadow-[0_0_15px_#F4CE14] rounded-full transition-all duration-100 ease-out z-10"
+                  style={{ height: `${Math.min(containerRef.current ? containerRef.current.clientHeight - 32 : 1000, scrollProgress)}px`, maxHeight: 'calc(100% - 32px)' }}
+                ></div>
+
+                <div className="space-y-4">
+                  {PROGRAM.map((item, idx) => {
+                    // Approximate position for each item to trigger 'active' state of the dot
+                    // Simple heuristic: if scrollProgress is significantly vast past the index * estimated height
+                    const itemActive = scrollProgress > (idx * 150 + 50); // rough estimation, or just let line pass
+
+                    return (
+                      <div key={idx} className="relative group/timeline-item">
+                        {/* Timeline Dot */}
+                        <div className={`absolute -left-[35.5px] md:-left-[49.5px] top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transition-all duration-300 z-20 ${itemActive ? 'bg-[#F4CE14] border-[#F4CE14] shadow-[0_0_10px_#F4CE14] scale-125' : 'bg-[#111] border-white/20'}`}></div>
+
+                        <div className={`flex flex-col md:flex-row gap-2 md:gap-6 p-4 md:p-8 border-2 border-white/5 transition-all duration-500 relative group shadow-2xl ${item.isCurrent ? 'bg-white/10 border-[#F4CE14] yellow-glow z-10 scale-[1.03]' : 'hover:bg-white/[0.03] hover:border-white/20'}`}>
+                          <div className="md:w-32 text-left shrink-0">
+                            <span className="font-tech text-2xl md:text-3xl block mb-0 md:mb-2 tracking-tighter font-bold text-[#F4CE14]">{item.time}</span>
+                            {item.isCurrent && (
+                              <span className="bg-[#F4CE14] text-black px-2 py-0.5 text-[10px] font-bold font-tech uppercase tracking-widest inline-block">LIVE</span>
+                            )}
+                          </div>
+                          <div className="flex-1 text-left">
+                            <h4 style={{ fontSize: 'var(--fs-h4)' }} className={`font-bebas mb-1 leading-none tracking-tight uppercase font-bold ${item.isCurrent ? 'text-white' : 'text-gray-400 group-hover:text-white transition-colors'}`}>{item.title}</h4>
+                            <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-500 font-tech leading-relaxed">{item.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-8 relative hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
-              <div className="flex flex-col gap-6">
-                <div className="border-b border-white/10 pb-6">
-                  <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">JEDNODENNÍ VSTUP</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-bebas text-6xl text-[#F4CE14] font-bold">200 <span className="text-3xl">KČ</span></span>
-                    <span className="font-tech text-white text-xl uppercase font-bold ml-2">DOSPĚLÍ</span>
+            {/* Upozornění - Moved under Harmonogram */}
+            <div className="border-l-4 border-[#F4CE14] bg-[#F4CE14]/5 p-6 font-tech text-gray-400 text-sm leading-relaxed">
+              <div className="flex items-center gap-3 mb-3 text-[#F4CE14] font-bold uppercase tracking-widest">
+                <Info size={18} />
+                <span>Důležité upozornění</span>
+              </div>
+              <p style={{ fontSize: 'var(--fs-p)' }} className="mb-2">Pořadatel si vyhrazuje právo na změnu programu.</p>
+              <p style={{ fontSize: 'var(--fs-p)' }}>V den závodu se můžou časy posunout. <span className="text-white font-bold">Děkujeme za pochopení.</span></p>
+            </div>
+          </div>
+
+          {/* Right Column: Fees (Vstupné, Startovné) */}
+          <div ref={feesRef} className="text-left space-y-12 lg:space-y-24 animate-fadeIn">
+
+            {/* Vstupné */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">VSTUPNÉ</h3>
+              </div>
+
+              <div className="shadow-[0_0_30px_rgba(244,206,20,0.2)] relative overflow-hidden group transition-transform duration-300 hover:scale-[1.01]">
+                {/* Yellow Section */}
+                <div className="bg-[#F4CE14] p-8 pb-10 relative z-10">
+                  {/* Decorative background accent */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+                  <div className="relative z-10 flex flex-col gap-6">
+                    {/* Adult Ticket */}
+                    <div className="flex items-center justify-between border-b-2 border-black/10 border-dashed pb-6">
+                      <div className="flex flex-col">
+                        <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
+                        <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">DOSPĚLÉ</span>
+                      </div>
+                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.adult} KČ</span>
+                    </div>
+
+                    {/* Child Ticket */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
+                        <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">DĚTI <span className="text-lg opacity-60 align-top ml-1 font-tech tracking-normal">(6-15 LET)</span></span>
+                      </div>
+                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.child} KČ</span>
+                    </div>
                   </div>
                 </div>
 
-                <div>
-                  <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-2 font-bold">DĚTI (6 - 15 LET)</span>
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-bebas text-4xl text-white font-bold">100 <span className="text-2xl">KČ</span></span>
+                {/* Black Section - Free Entry */}
+                <div className="bg-black p-8 relative flex items-center justify-between border-t border-[#F4CE14]/20">
+                  <div className="flex flex-col z-10">
+                    <span className="font-tech text-gray-500 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
+                    <span className="font-bebas text-white text-4xl md:text-5xl uppercase tracking-tight leading-none">DĚTI DO 6 LET</span>
                   </div>
-                  <p className="font-tech text-[#F4CE14] text-xs uppercase tracking-widest font-bold mt-4 border-l-2 border-[#F4CE14] pl-3">
-                    Děti do 6 let mají vstup zdarma
-                  </p>
+                  <span className="font-bebas text-6xl text-[#F4CE14] tracking-tighter z-10">ZDARMA</span>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Startovné */}
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">STARTOVNÉ</h3>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
-              <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="font-bebas text-6xl text-[#F4CE14] font-bold">2000 <span className="text-3xl">KČ</span></span>
-                <span className="font-tech text-white text-xl uppercase font-bold ml-2">ZA ZÁVODNÍKA</span>
+            {/* Startovné */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">STARTOVNÉ</h3>
               </div>
-              <p className="font-tech text-gray-400 text-sm italic border-t border-white/10 pt-4">
-                Platba možná <span className="text-white font-bold not-italic decoration-[#F4CE14] underline decoration-2 underline-offset-4">pouze předem na účet</span>.
-              </p>
-            </div>
-          </div>
 
-          {/* Upozornění */}
-          <div className="border-l-4 border-[#F4CE14] bg-[#F4CE14]/5 p-6 font-tech text-gray-400 text-sm leading-relaxed">
-            <div className="flex items-center gap-3 mb-3 text-[#F4CE14] font-bold uppercase tracking-widest">
-              <Info size={18} />
-              <span>Důležité upozornění</span>
-            </div>
-            <p style={{ fontSize: 'var(--fs-p)' }} className="mb-2">Pořadatel si vyhrazuje právo na změnu programu.</p>
-            <p style={{ fontSize: 'var(--fs-p)' }}>V den závodu se můžou časy posunout. <span className="text-white font-bold">Děkujeme za pochopení.</span></p>
-          </div>
-
-        </div>
-
-        {/* Right Column: Harmonogram (Original Timeline Reverted) */}
-        <div className="relative space-y-4">
-          <div className="flex items-center gap-4 mb-6">
-            <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">HARMONOGRAM</h3>
-          </div>
-          {PROGRAM.map((item, idx) => (
-            <div key={idx} className={`flex flex-col md:flex-row gap-6 p-8 border-2 border-white/5 transition-all duration-500 relative group shadow-2xl ${item.isCurrent ? 'bg-white/10 border-[#F4CE14] yellow-glow z-10 scale-[1.03]' : 'hover:bg-white/[0.03] hover:border-white/20'}`}>
-              <div className="md:w-32 text-left shrink-0">
-                <span className={`font-tech text-3xl block mb-2 tracking-tighter font-bold ${item.isCurrent ? 'text-[#F4CE14]' : 'text-gray-600'}`}>{item.time}</span>
-                {item.isCurrent && (
-                  <span className="bg-[#F4CE14] text-black px-2 py-0.5 text-[10px] font-bold font-tech uppercase tracking-widest inline-block">LIVE</span>
-                )}
-              </div>
-              <div className="flex-1 text-left">
-                <h4 style={{ fontSize: 'var(--fs-h4)' }} className={`font-bebas mb-1 leading-none tracking-tight uppercase font-bold ${item.isCurrent ? 'text-white' : 'text-gray-400 group-hover:text-white transition-colors'}`}>{item.title}</h4>
-                <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-500 font-tech leading-relaxed">{item.description}</p>
+              <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
+                <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
+                <div className="flex items-baseline gap-2 mb-4">
+                  <span className="font-bebas text-6xl text-[#F4CE14] tracking-tighter">{feeCounts.registration} <span className="text-3xl">KČ</span></span>
+                  <span className="font-tech text-white text-xl uppercase font-bold ml-2">ZA ZÁVODNÍKA</span>
+                </div>
+                <p className="font-tech text-gray-400 text-sm italic border-t border-white/10 pt-4">
+                  Platba možná <span className="text-white font-bold not-italic decoration-[#F4CE14] underline decoration-2 underline-offset-4">pouze předem na účet</span>.
+                </p>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const EventGrid = () => {
   const [activeId, setActiveId] = useState('1');
@@ -477,7 +847,7 @@ const EventGrid = () => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 h-[600px] items-stretch">
+        <div className="flex flex-col lg:flex-row gap-4 h-[850px] lg:h-[600px] items-stretch">
           {EVENTS.map((event) => {
             const isActive = activeId === event.id;
             return (
@@ -486,7 +856,7 @@ const EventGrid = () => {
                 onClick={() => setActiveId(event.id)}
                 className={`
                   relative overflow-hidden cursor-pointer transition-all duration-500 ease-in-out will-change-[flex]
-                  ${isActive ? 'lg:flex-[4] flex-[4]' : 'lg:flex-[0.5] flex-[1]'}
+                  ${isActive ? 'lg:flex-[4] flex-[8]' : 'lg:flex-[0.5] flex-[0.8]'}
                   border-2 ${isActive ? 'border-[#F4CE14]' : 'border-white/5 hover:border-white/20'}
                   bg-black group
                   mx-2
@@ -508,7 +878,7 @@ const EventGrid = () => {
 
                   {/* Vertical Text (Invariant) */}
                   <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isActive ? 'opacity-0' : 'opacity-100 delay-500'}`}>
-                    <h3 className="font-bebas text-3xl text-gray-400 tracking-widest uppercase lg:-rotate-90 whitespace-nowrap group-hover:text-white transition-colors">
+                    <h3 className="font-bebas !text-[22px] lg:!text-3xl text-gray-400 tracking-widest uppercase lg:-rotate-90 whitespace-nowrap group-hover:text-white transition-colors px-4 text-center leading-none">
                       {event.title}
                     </h3>
                   </div>
@@ -522,7 +892,7 @@ const EventGrid = () => {
 
                   {/* Active Content */}
                   <div className={`
-                  absolute inset-0 p-10 md:p-14 flex flex-col justify-end 
+                  absolute inset-0 p-6 md:p-14 flex flex-col justify-end 
                   transition-opacity duration-500 linear
                   ${isActive ? 'opacity-100 delay-[400ms]' : 'opacity-0 delay-0 pointer-events-none'}
                 `}>
@@ -537,11 +907,11 @@ const EventGrid = () => {
                     </div>
 
                     {event.id === '1' ? (
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <Button size="medium" className="bg-transparent border border-white text-white hover:bg-white hover:text-black">
+                      <div className="flex flex-row gap-2 md:gap-4">
+                        <Button size="medium" className="bg-transparent border border-white text-white hover:bg-white hover:text-black flex-1 md:flex-none md:w-auto px-2 md:px-8 whitespace-nowrap">
                           Více o akci
                         </Button>
-                        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden">
+                        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden flex-1 md:flex-none md:w-auto px-2 md:px-8 whitespace-nowrap">
                           <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                           <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
                         </Button>
@@ -565,11 +935,37 @@ const EventGrid = () => {
 
 const DriverRoster = () => {
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let animationId: number;
+    const speed = 1.5; // "trochu víc to zrychli"
+
+    const animate = () => {
+      // Run auto-scroll if not paused (works on both mobile and desktop)
+      if (!isPaused) {
+        if (el.scrollLeft >= (el.scrollWidth / 3)) {
+          // Reset to start (seamless loop logic with tripled content)
+          el.scrollLeft = 1;
+        } else {
+          el.scrollLeft += speed;
+        }
+      }
+      animationId = requestAnimationFrame(animate);
+    };
+
+    animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, [isPaused]);
 
   return (
     <section id="riders" className="py-32 bg-black overflow-hidden relative">
       <div className="container mx-auto px-6 mb-16">
-        <div className="flex items-start justify-between gap-8">
+        <div className="flex flex-col md:flex-row items-start justify-between gap-8">
           <SectionHeader
             title="STARTOVNÍ ROŠT"
             subtitle={
@@ -580,7 +976,7 @@ const DriverRoster = () => {
           />
 
           {/* Dynamic Driver Count Badge - Matches Hero Section Style */}
-          <div className="relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+          <div className="w-full md:w-auto relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
             <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
@@ -595,7 +991,12 @@ const DriverRoster = () => {
         </div>
       </div>
 
-      <div className="flex gap-6 px-6 animate-scroll-x hover:pause">
+      <div
+        ref={scrollRef}
+        className="flex gap-6 px-6 overflow-x-auto no-scrollbar touch-pan-x"
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
+      >
         {[...DRIVERS, ...DRIVERS, ...DRIVERS].map((driver, i) => {
           // Parse Name and Nickname (e.g. PETR "DEMOLIČ" NOVÁK)
           let nickname = driver.category;
@@ -658,11 +1059,11 @@ const DriverRoster = () => {
 
       {/* Action Buttons */}
       <div className="container mx-auto px-6 mt-16 flex flex-col sm:flex-row justify-center gap-6">
-        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
-          Zobrazit všechny jezdce
+        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
+          ZOBRAZIT VŠECHNY JEZDCE
         </Button>
-        <Button size="medium" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto">
-          Chci taky závodit
+        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto">
+          CHCI TAKY ZÁVODIT
         </Button>
       </div>
 
@@ -750,7 +1151,7 @@ const Standings = () => {
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-8 py-4 font-bebas text-2xl uppercase tracking-wider transition-all duration-300 border-2 ${activeCategory === category
+              className={`px-4 py-2 md:px-8 md:py-4 font-bebas text-lg md:text-2xl uppercase tracking-wider transition-all duration-300 border-2 ${activeCategory === category
                 ? 'bg-[#F4CE14] text-black border-[#F4CE14]'
                 : 'bg-transparent text-gray-400 border-white/10 hover:border-[#F4CE14]/50 hover:text-white'
                 }`}
@@ -764,11 +1165,11 @@ const Standings = () => {
         {/* Standings Table */}
         <div className="max-w-7xl mx-auto">
           {/* Table Header */}
-          <div className="grid grid-cols-[120px_2fr_2fr_140px] gap-12 px-8 py-4 bg-black/60 border-b-2 border-[#F4CE14] mb-2">
-            <div className="font-tech text-xs text-[#F4CE14] uppercase tracking-[0.3em] font-bold">ST. ČÍSLO</div>
-            <div className="font-tech text-xs text-[#F4CE14] uppercase tracking-[0.3em] font-bold">JMÉNO JEZDCE</div>
-            <div className="font-tech text-xs text-[#F4CE14] uppercase tracking-[0.3em] font-bold">AUTO</div>
-            <div className="font-tech text-xs text-[#F4CE14] uppercase tracking-[0.3em] font-bold text-right">BODY</div>
+          <div className="grid grid-cols-[50px_1.5fr_1.5fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-2 md:px-8 py-4 bg-black/60 border-b-2 border-[#F4CE14] mb-2">
+            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left">ST.Č</div>
+            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left">JEZDEC</div>
+            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left">AUTO</div>
+            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left md:text-right">BODY</div>
           </div>
 
           {/* Scrollable Table Rows - Max 10 visible */}
@@ -776,7 +1177,7 @@ const Standings = () => {
             {filteredDrivers.map((driver, index) => (
               <div
                 key={driver.startNumber}
-                className={`grid grid-cols-[120px_2fr_2fr_140px] gap-12 px-8 py-6 transition-all duration-300 border-2 ${index === 0
+                className={`grid grid-cols-[50px_1.5fr_1.5fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-2 md:px-8 py-3 md:py-6 transition-all duration-300 border mb-2 md:mb-0 md:border-2 ${index === 0
                   ? 'bg-[#F4CE14]/10 border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.2)]'
                   : index === 1
                     ? 'bg-white/5 border-white/20'
@@ -787,28 +1188,28 @@ const Standings = () => {
               >
                 {/* Start Number */}
                 <div className="flex items-center">
-                  <span className={`font-bebas text-3xl ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
+                  <span className={`font-bebas text-xl md:text-3xl ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
                     #{driver.startNumber}
                   </span>
                 </div>
 
                 {/* Driver Name */}
-                <div className="flex items-center">
-                  <span className={`font-bebas text-2xl uppercase tracking-tight ${index === 0 ? 'text-white' : 'text-gray-300'}`}>
+                <div className="flex items-center overflow-hidden">
+                  <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>
                     {driver.name}
                   </span>
                 </div>
 
                 {/* Car */}
                 <div className="flex items-center">
-                  <span className="font-tech text-sm text-gray-400 uppercase tracking-wider">
+                  <span className="font-tech text-[10px] md:text-sm text-gray-400 uppercase tracking-wider">
                     {driver.car}
                   </span>
                 </div>
 
                 {/* Points */}
-                <div className="flex items-center justify-end">
-                  <span className={`font-bebas text-4xl text-right w-full ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
+                <div className="flex items-center justify-center md:justify-end">
+                  <span className={`font-bebas text-lg md:text-4xl text-center md:text-right w-full ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
                     {driver.points}
                   </span>
                 </div>
@@ -823,7 +1224,8 @@ const Standings = () => {
 
 const RulesAndSpecs = () => {
   const [activeCategory, setActiveCategory] = useState(0);
-  const [activeItem, setActiveItem] = useState(0);
+  const [activeItem, setActiveItem] = useState<number | null>(0);
+  const [lastActiveItem, setLastActiveItem] = useState(0);
 
   const rulesData = [
     {
@@ -843,7 +1245,8 @@ const RulesAndSpecs = () => {
           title: "ZÁVODNÍ KATEGORIE",
           content: [
             "Do 1600ccm",
-            "Nad 1600ccm"
+            "Nad 1600ccm",
+            "Ženy"
           ],
           image: "https://picsum.photos/seed/categories/700/500"
         },
@@ -953,11 +1356,25 @@ const RulesAndSpecs = () => {
   ];
 
   const handleItemClick = (categoryIdx: number, itemIdx: number) => {
-    setActiveCategory(categoryIdx);
-    setActiveItem(itemIdx);
+    if (activeCategory === categoryIdx && activeItem === itemIdx) {
+      setActiveItem(null);
+    } else {
+      setActiveCategory(categoryIdx);
+      setActiveItem(itemIdx);
+      setLastActiveItem(itemIdx);
+      setTimeout(() => {
+        const el = document.getElementById(`rule-item-${categoryIdx}-${itemIdx}`);
+        if (el) {
+          const headerOffset = 85;
+          const elementPosition = el.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+      }, 600);
+    }
   };
 
-  const currentImage = rulesData[activeCategory]?.items[activeItem]?.image || rulesData[0].items[0].image;
+  const currentImage = rulesData[activeCategory]?.items[activeItem ?? 0]?.image || rulesData[0].items[0].image;
 
   return (
     <section id="rules" className="py-32 bg-[#0a0a0a] relative">
@@ -981,15 +1398,16 @@ const RulesAndSpecs = () => {
                 </h3>
 
                 {/* Two-column layout with alternating image position */}
-                <div className={`grid lg:grid-cols-2 gap-12 items-start`}>
+                <div className={`grid lg:grid-cols-2 gap-12 items-stretch`}>
                   {/* Rules/Specs List */}
                   <div className={`space-y-3 ${!isImageRight ? 'lg:order-2' : 'lg:order-1'}`}>
                     {section.items.map((item, itemIdx) => {
                       // Show first item of each category as active, or the clicked item
-                      const isActive = (activeCategory === categoryIdx && activeItem === itemIdx) || (activeCategory !== categoryIdx && itemIdx === 0);
+                      const isActive = activeCategory === categoryIdx && activeItem === itemIdx;
                       return (
                         <div
                           key={itemIdx}
+                          id={`rule-item-${categoryIdx}-${itemIdx}`}
                           className={`border-2 transition-all duration-300 shadow-xl cursor-pointer ${isActive
                             ? 'bg-white/5 border-[#F4CE14]/40'
                             : 'bg-black/60 border-white/5 hover:bg-white/[0.04] hover:border-white/10'
@@ -1000,12 +1418,12 @@ const RulesAndSpecs = () => {
                             className="w-full p-6 flex items-center justify-between font-bebas text-2xl tracking-tight group text-left uppercase font-bold"
                           >
                             <div className="flex items-center gap-6">
-                              <span
-                                className={`font-tech text-sm transition-colors font-bold ${isActive ? 'text-[#F4CE14]' : 'text-gray-600'
+                              <div
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-tech shrink-0 transition-all duration-300 ${isActive ? 'bg-[#F4CE14] text-black shadow-[0_0_10px_#F4CE14]' : 'bg-white/10 text-gray-500 group-hover:bg-white/20 group-hover:text-gray-300'
                                   }`}
                               >
-                                [ {String(itemIdx + 1).padStart(2, '0')} ]
-                              </span>
+                                {String(itemIdx + 1).padStart(2, '0')}
+                              </div>
                               <span
                                 className={`group-hover:text-[#F4CE14] transition-colors ${isActive ? 'text-white' : 'text-gray-400'
                                   }`}
@@ -1023,7 +1441,7 @@ const RulesAndSpecs = () => {
                             </div>
                           </button>
                           <div
-                            className={`overflow-hidden transition-all duration-500 ease-in-out ${isActive ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                            className={`overflow-hidden transition-all duration-500 ease-in-out ${isActive ? 'max-h-[6000px] opacity-100' : 'max-h-0 opacity-0'
                               }`}
                           >
                             <div className="px-16 pb-8 text-gray-400 font-tech text-sm leading-relaxed border-t border-white/5 pt-6">
@@ -1035,6 +1453,22 @@ const RulesAndSpecs = () => {
                                   </li>
                                 ))}
                               </ul>
+
+                              {/* Mobile Image - Shown below content when expanded */}
+                              <div className="lg:hidden mt-8 relative group overflow-hidden border-2 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-700 shadow-2xl">
+                                <img
+                                  src={item.image}
+                                  alt={item.title}
+                                  className="w-full h-[300px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                                <div className="absolute bottom-0 left-0 right-0 p-6">
+                                  <div className="font-bebas text-2xl text-white uppercase tracking-tight">
+                                    {item.title}
+                                  </div>
+                                </div>
+                              </div>
+
                             </div>
                           </div>
                         </div>
@@ -1042,13 +1476,13 @@ const RulesAndSpecs = () => {
                     })}
                   </div>
 
-                  {/* Dynamic Image - shows active item or first item of category */}
-                  <div className={`${!isImageRight ? 'lg:order-1' : 'lg:order-2'}`}>
-                    <div className="sticky top-40">
-                      <div className="relative group overflow-hidden border-4 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-700 shadow-2xl">
+                  <div className={`${!isImageRight ? 'lg:order-1' : 'lg:order-2'} hidden lg:block`}>
+                    <div className="sticky top-28 self-start">
+                      <div className={`relative group overflow-hidden border-4 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-500 shadow-2xl ${activeCategory === categoryIdx && activeItem === null ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
+                        }`}>
                         <img
-                          key={activeCategory === categoryIdx ? rulesData[categoryIdx]?.items[activeItem]?.image : section.items[0]?.image}
-                          src={activeCategory === categoryIdx ? rulesData[categoryIdx]?.items[activeItem]?.image : section.items[0]?.image}
+                          key={activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].image : section.items[0].image}
+                          src={activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].image : section.items[0].image}
                           alt="Pravidla a specifikace"
                           className="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 animate-fadeIn"
                         />
@@ -1058,7 +1492,7 @@ const RulesAndSpecs = () => {
                             {section.category}
                           </div>
                           <div className="font-bebas text-4xl text-white uppercase tracking-tight">
-                            {activeCategory === categoryIdx ? rulesData[categoryIdx]?.items[activeItem]?.title : section.items[0]?.title}
+                            {activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].title : section.items[0].title}
                           </div>
                         </div>
                       </div>
@@ -1184,7 +1618,7 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
-              <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
+              <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                 POKRAČOVAT →
               </Button>
             </div>
@@ -1238,29 +1672,31 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Odkud jsi?</label>
-                <input
-                  type="text"
-                  className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
-                  placeholder="Odkud jsi?"
-                />
-              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Odkud jsi? *</label>
+                  <input
+                    type="text"
+                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                    placeholder="Odkud jsi?"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Komentář</label>
-                <textarea
-                  rows={4}
-                  className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base resize-none"
-                  placeholder="Jak se má moderátor představit? Něco o sobě. Přezdívka."
-                ></textarea>
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka *</label>
+                  <input
+                    type="text"
+                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                    placeholder="Tvoje přezdívka (např. Drtič)"
+                  />
+                </div>
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(1)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors py-4 text-lg font-bold uppercase">
+                <Button variant="outline" onClick={() => setStep(1)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors">
                   ← ZPĚT
                 </Button>
-                <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
+                <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                   POKRAČOVAT →
                 </Button>
               </div>
@@ -1315,10 +1751,10 @@ const RegistrationForm = () => {
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors py-4 text-lg font-bold uppercase">
+                <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors">
                   ← ZPĚT
                 </Button>
-                <Button className="flex-1 bg-green-600 text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 py-4 text-lg font-bold uppercase">
+                <Button className="flex-1 bg-green-600 text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                   🏁 ZAREGISTROVAT
                 </Button>
               </div>
@@ -1332,6 +1768,119 @@ const RegistrationForm = () => {
 
 
 
+
+const AccreditationAndArticles = () => {
+  const articles = [
+    { title: "ZIMNÍ PŘIPRAVA VRCHOLÍ", text: "Týmy dokončují poslední úpravy na svých speciálech pro nadcházející sezónu." },
+    { title: "NOVÁ KATEGORIE PRO ŽENY", text: "Vyslyšeli jsme vaše přání a otevíráme zcela novou kategorii čistě pro závodnice." },
+    { title: "ZETOR CUP ZRUŠEN", text: "Z technických důvodů se letošní ročník Zetor Cupu neuskuteční." }
+  ];
+
+  return (
+    <section className="py-24 bg-black relative border-t border-white/5">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+          {/* Left Column: Accreditation */}
+          <div>
+            <div className="flex items-center gap-4 mb-8">
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">AKREDITACE</h3>
+            </div>
+            <p className="font-tech text-gray-400 mb-8 leading-relaxed">
+              Jste fotograf, kameraman nebo novinář? Získejte oficiální akreditaci na Vrakfest a přístup do media zóny.
+            </p>
+
+            <form className="space-y-4">
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Pozice</label>
+                  <div className="relative">
+                    <select className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none appearance-none cursor-pointer hover:bg-white/10 transition-colors">
+                      <option>Fotograf</option>
+                      <option>Kameraman</option>
+                      <option>Dronař</option>
+                      <option>Bloger / Influencer</option>
+                      <option>Novinář</option>
+                      <option>Televize</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Jméno a Příjmení</label>
+                  <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-gray-700" placeholder="JAN NOVÁK" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Email</label>
+                    <input type="email" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-gray-700" placeholder="@" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Telefon</label>
+                    <input type="tel" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-gray-700" placeholder="+420" />
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="h-4"></div>
+
+              <Button className="w-full md:w-1/2">
+                ODESLAT ŽÁDOST
+              </Button>
+            </form>
+          </div>
+
+          {/* Right Column: Articles */}
+          <div className="bg-white/5 border border-white/10 p-8 lg:p-12 shadow-2xl relative overflow-hidden">
+            {/* Decorative background accent */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#F4CE14]/5 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">POSLEDNÍ ČLÁNKY</h3>
+              </div>
+
+              <div className="space-y-6">
+                {articles.map((article, i) => (
+                  <div key={i} className={`group cursor-pointer border-b border-white/10 ${i === 2 ? 'border-b-0 pb-0' : 'pb-6'} hover:border-[#F4CE14] transition-colors`}>
+
+                    {/* Image for first article only */}
+                    {i === 0 && (
+                      <div className="mb-4 overflow-hidden rounded-sm border border-white/10 group-hover:border-[#F4CE14]/50 transition-colors">
+                        <img
+                          src="/articles/winter_prep.png"
+                          alt="Zimní příprava"
+                          className="w-full h-48 object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
+                        />
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="w-2 h-2 bg-[#F4CE14] rounded-full"></span>
+                      <span className="font-tech text-xs text-gray-500 uppercase tracking-widest">{new Date().getFullYear()}</span>
+                    </div>
+                    <h4 className="font-bebas text-2xl text-white group-hover:text-[#F4CE14] transition-colors mb-2 tracking-wide">{article.title}</h4>
+                    <p className="font-tech text-gray-400 text-sm leading-relaxed">{article.text}</p>
+                  </div>
+                ))}
+              </div>
+
+              <Button variant="outline" className="mt-8 w-full md:w-auto">
+                VŠECHNY ČLÁNKY
+              </Button>
+            </div>
+          </div>
+
+        </div>
+      </div >
+    </section >
+  );
+};
 
 const MobileApp = () => (
   <section className="py-32 bg-black overflow-hidden relative text-left">
@@ -1417,6 +1966,18 @@ const MobileApp = () => (
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 export const Home = () => {
   useEffect(() => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1448,8 +2009,11 @@ export const Home = () => {
         <Standings />
         <RulesAndSpecs />
         <RegistrationForm />
+        <AccreditationAndArticles />
         <MobileApp />
+        <InstagramFeed />
       </main>
+
 
       <style>{`
         @keyframes fadeIn {

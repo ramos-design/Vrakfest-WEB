@@ -9,7 +9,7 @@ export const DRIVERS: Driver[] = [
     name: 'PETR "DEMOLIČ" NOVÁK',
     car: 'ŠKODA FELICIA TANK',
     category: 'VETERAN CLASH',
-    image: 'https://picsum.photos/seed/driver1/400/500',
+    image: '/drivers/muddy_profile.png',
     stats: { wins: 12, wrecks: 45, experience: '8 ROKŮ', races: 84, points: 2450 }
   },
   {
@@ -17,7 +17,7 @@ export const DRIVERS: Driver[] = [
     name: 'JAN "VRAKOUN" SVOBODA',
     car: 'BMW E36 COMPACT',
     category: 'PRO SERIES',
-    image: 'https://picsum.photos/seed/driver2/400/500',
+    image: '/drivers/muddy_helmet.png',
     stats: { wins: 24, wrecks: 89, experience: '12 ROKŮ', races: 156, points: 5890 }
   },
   {
@@ -25,7 +25,7 @@ export const DRIVERS: Driver[] = [
     name: 'LUKÁŠ "ŠROT" MAREK',
     car: 'VW GOLF MK3',
     category: 'STREET FIGHT',
-    image: 'https://picsum.photos/seed/driver3/400/500',
+    image: '/drivers/rough_portrait.png',
     stats: { wins: 5, wrecks: 12, experience: '2 ROKY', races: 24, points: 650 }
   },
   {
@@ -33,13 +33,13 @@ export const DRIVERS: Driver[] = [
     name: 'MARTIN "OCEL" ČERNÝ',
     car: 'OPEL ASTRA G',
     category: 'PRO SERIES',
-    image: 'https://picsum.photos/seed/driver4/400/500',
+    image: '/drivers/action_helmet.png',
     stats: { wins: 31, wrecks: 102, experience: '15 ROKŮ', races: 210, points: 8400 }
   }
 ];
 
 export const EVENTS: EventItem[] = [
-  { id: '1', title: 'OSTRAVA', date: '04.04.2026', location: 'VŘESÍNSKÁ STRŽ', image: 'https://picsum.photos/seed/ev1/600/400' },
+  { id: '1', title: 'OSTRAVA', date: '04.04.2026', location: 'VŘESÍNSKÁ STRŽ', image: '/media/DSC_7229.jpg' },
   { id: '2', title: 'PŘIPRAVUJEME', date: '???', location: '???', image: 'https://picsum.photos/seed/ev2/600/400' },
   { id: '3', title: 'PŘIPRAVUJEME', date: '???', location: '???', image: 'https://picsum.photos/seed/ev3/600/400' },
   { id: '4', title: 'PŘIPRAVUJEME', date: '???', location: '???', image: 'https://picsum.photos/seed/ev4/600/400' }

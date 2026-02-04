@@ -22,8 +22,8 @@ export const Button = ({
     const sizeClasses = (() => {
         switch (size) {
             case 'small': return "px-6 py-2 text-base";
-            case 'medium': return "px-8 py-3 text-[15px]";
-            default: return "px-10 py-4 text-xl";
+            case 'medium': return "px-8 py-3 text-[15px]"; // Unchanged, rarely used
+            default: return "px-10 py-4 text-[18px]"; // UPDATED: 18px as requested
         }
     })();
 

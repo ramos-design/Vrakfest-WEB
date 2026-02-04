@@ -20,15 +20,28 @@ export const TechNavBar = () => {
         if (mobileMenuOpen) {
             document.body.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'auto'; // or '' to reset
+            document.body.style.overflow = 'auto';
         }
         return () => { document.body.style.overflow = 'auto'; };
     }, [mobileMenuOpen]);
 
     const navLinks = [
-        { label: 'O VRAKFESTU', href: isHome ? '#ovrakfestu' : '/#ovrakfestu' },
+        {
+            label: 'O VRAKFESTU',
+            href: isHome ? '#ovrakfestu' : '/#ovrakfestu',
+            subItems: [
+                { label: 'PARTNEŘI', href: '#partneri' },
+                { label: 'VSTUPNÉ', href: '#vstupne' }
+            ]
+        },
         { label: 'KALENDÁŘ', href: isHome ? '#kalendář' : '/#kalendář' },
-        { label: 'JEZDCI', href: isHome ? '#jezdci' : '/#jezdci' },
+        {
+            label: 'JEZDCI',
+            href: isHome ? '#jezdci' : '/#jezdci',
+            subItems: [
+                { label: 'BODOVÉ POŘADÍ', href: '#poradi' }
+            ]
+        },
         { label: 'PRAVIDLA', href: isHome ? '#pravidla' : '/#pravidla' },
         { label: 'APLIKACE', href: isHome ? '#aplikace' : '/#aplikace' },
     ];
@@ -46,15 +59,18 @@ export const TechNavBar = () => {
                 <div className="w-[95%] mx-auto px-3 lg:px-6 relative flex justify-between items-center lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-4">
 
                     {/* DESKTOP: Left Navigation */}
-                    <nav className="hidden lg:flex justify-self-start items-center gap-6">
+                    {/* DESKTOP: Left Navigation */}
+                    {/* DESKTOP: Left Navigation */}
+                    <nav className="hidden lg:flex justify-self-start items-center gap-8 min-h-[3rem]">
                         {navLinks.map(item => (
-                            <a
-                                key={item.label}
-                                href={item.href}
-                                className="font-bebas text-lg text-white hover:text-[#F4CE14] transition-all uppercase tracking-wide no-underline hover:no-underline"
-                            >
-                                {item.label}
-                            </a>
+                            <div key={item.label} className="relative group">
+                                <a
+                                    href={item.href}
+                                    className="font-bebas text-lg text-white hover:text-[#F4CE14] transition-all uppercase tracking-wide no-underline hover:no-underline py-4 block"
+                                >
+                                    {item.label}
+                                </a>
+                            </div>
                         ))}
                     </nav>
 
