@@ -29,7 +29,8 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: var(--font-body);
-    font-size: 18px;
+    font-size: 1.125rem;
+    /* 18px relative to 16px root */
     line-height: 1.6;
     overflow-x: hidden;
 }
@@ -45,7 +46,29 @@ h6 {
     letter-spacing: 0.5px;
     margin-bottom: 1rem;
     font-weight: 600;
-    /* Bebas only has 400 */
+}
+
+/* Dynamic Font Sizes controlled by ThemeController/DesignSystem */
+h1 {
+    font-size: var(--fs-h1, 6rem) !important;
+}
+
+h2 {
+    font-size: var(--fs-h2, 4.5rem) !important;
+}
+
+h3 {
+    font-size: var(--fs-h3, 3rem) !important;
+}
+
+/* Paragraphs and small text generally follow utility classes, 
+   but we can set defaults if needed */
+p {
+    font-size: var(--fs-p, 1rem);
+}
+
+small {
+    font-size: var(--fs-small, 0.875rem);
 }
 
 a {
@@ -59,11 +82,11 @@ ul {
 }
 
 /* UTILITIES */
-.container {
+/* .container {
     max-width: var(--container-width);
     margin: 0 auto;
     padding: 0 20px;
-}
+} */
 
 .container-narrow {
     max-width: 800px;
@@ -99,11 +122,13 @@ ul {
 }
 
 .section-title {
-    font-size: 64px;
+    font-size: 4rem;
+    /* 64px */
     line-height: 0.9;
     margin-bottom: 30px;
     background: linear-gradient(180deg, #fff 0%, #aaa 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
