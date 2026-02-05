@@ -34,7 +34,7 @@ export const TechNavBar = () => {
                 { label: 'VSTUPNÉ', href: '#vstupne' }
             ]
         },
-        { label: 'KALENDÁŘ', href: isHome ? '#kalendář' : '/#kalendář' },
+        { label: 'KALENDÁŘ', href: isHome ? '#kalendar' : '/#kalendar' },
         {
             label: 'JEZDCI',
             href: isHome ? '#jezdci' : '/#jezdci',

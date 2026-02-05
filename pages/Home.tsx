@@ -540,7 +540,7 @@ const SponsorsTicker = () => {
   }, [selectedSponsor]);
 
   return (
-    <section className="py-24 bg-black relative overflow-hidden">
+    <section id="partneri" className="py-24 bg-black relative overflow-hidden">
       <div className="container mx-auto px-6 mb-16 text-center">
         <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-white tracking-tight leading-[1.1] uppercase mb-2">
           PARTNEŘI AKCE
@@ -767,7 +767,7 @@ const Program = () => {
           <div ref={feesRef} className="text-left space-y-12 lg:space-y-24 animate-fadeIn">
 
             {/* Vstupné */}
-            <div>
+            <div id="vstupne">
               <div className="flex items-center gap-4 mb-6">
                 <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">VSTUPNÉ</h3>
               </div>
@@ -838,7 +838,7 @@ const EventGrid = () => {
   const [activeId, setActiveId] = useState('1');
 
   return (
-    <section className="py-32 bg-[#111] relative">
+    <section id="kalendar" className="py-32 bg-[#111] relative">
       <div className="container mx-auto px-6">
         <div className="mb-20 text-center">
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
@@ -966,7 +966,7 @@ const DriverRoster = () => {
   }, [isPaused]);
 
   return (
-    <section id="riders" className="py-32 bg-black overflow-hidden relative">
+    <section id="jezdci" className="py-32 bg-black overflow-hidden relative">
       <div className="container mx-auto px-6 mb-16">
         <div className="flex flex-col md:flex-row items-start justify-between gap-8">
           <SectionHeader
@@ -1135,7 +1135,7 @@ const Standings = () => {
     .sort((a, b) => b.points - a.points);
 
   return (
-    <section id="standings" className="py-32 bg-[#0a0a0a] relative">
+    <section id="poradi" className="py-32 bg-[#0a0a0a] relative">
       <div className="absolute left-0 top-0 h-full w-px bg-white/5"></div>
       <div className="container mx-auto px-6">
         <div className="mb-20 text-center">
@@ -1383,7 +1383,7 @@ const RulesAndSpecs = () => {
   const currentImage = rulesData[activeCategory]?.items[activeItem ?? 0]?.image || rulesData[0].items[0].image;
 
   return (
-    <section id="rules" className="py-32 bg-[#0a0a0a] relative">
+    <section id="pravidla" className="py-32 bg-[#0a0a0a] relative">
       <div className="absolute left-0 top-0 h-full w-px bg-white/5"></div>
       <div className="container mx-auto px-6 text-left">
         <SectionHeader
@@ -1534,7 +1534,7 @@ const RegistrationForm = () => {
   };
 
   return (
-    <section className="py-32 bg-white text-black relative">
+    <section id="registrace" className="py-32 bg-white text-black relative">
       {/* Racing Flag Border Top */}
       <div
         className="absolute top-0 left-0 w-full h-8 z-10 shadow-lg"
@@ -1910,7 +1910,7 @@ const AccreditationAndArticles = () => {
 };
 
 const MobileApp = () => (
-  <section className="py-32 bg-black overflow-hidden relative text-left">
+  <section id="aplikace" className="py-32 bg-black overflow-hidden relative text-left">
     <div className="absolute inset-0 bg-[linear-gradient(rgba(244,206,20,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,206,20,0.03)_1px,transparent_1px)] bg-[length:50px_50px] pointer-events-none"></div>
 
     <div className="container mx-auto px-6 relative z-10 text-left">
