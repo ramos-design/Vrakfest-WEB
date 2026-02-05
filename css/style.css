@@ -1,4 +1,5 @@
 :root {
+    scroll-behavior: smooth;
     --bg-dark: #111111;
     --bg-darker: #0a0a0a;
     --bg-card: #1a1a1a;
@@ -833,7 +834,8 @@ ul {
 
 /* APP SECTION */
 .reverse-mobile {
-    /* on desktop, img left or right? Design says phone image around.. */
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .app-buttons {

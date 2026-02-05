@@ -14,17 +14,17 @@ export const RegistrationForm = () => {
                     <h2 className="text-7xl md:text-9xl font-bebas mb-6 tracking-tight leading-none uppercase font-semibold">REGISTRACE JEZDCE</h2>
 
                     {/* Progress Bar */}
-                    <div className="relative flex items-center justify-between px-16">
+                    <div className="relative flex items-center justify-between px-4 md:px-16 max-w-[280px] md:max-w-none mx-auto">
                         <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -z-10 -translate-y-1/2"></div>
                         <div className="absolute top-1/2 left-0 h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `${(step - 1) * 50}%` }}></div>
 
                         {[1, 2, 3].map(i => (
-                            <div key={i} className={`w-14 h-14 rounded-full flex items-center justify-center font-tech font-semibold text-xl transition-all duration-500 ${step >= i ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
-                                {step > i ? <CheckCircle size={28} /> : i}
+                            <div key={i} className={`w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center font-tech font-semibold text-base md:text-xl transition-all duration-500 ${step >= i ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
+                                {step > i ? <CheckCircle className="w-5 h-5 md:w-7 md:h-7" /> : i}
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-between mt-6 font-tech text-xs text-gray-400 tracking-[0.4em] px-4 uppercase font-bold">
+                    <div className="flex justify-between mt-6 font-tech text-[9px] md:text-xs text-gray-400 tracking-normal md:tracking-[0.4em] px-0 md:px-4 uppercase font-bold max-w-[280px] md:max-w-none mx-auto">
                         <span>OSOBNÍ ÚDAJE</span>
                         <span>VOZIDLO</span>
                         <span>DOKONČENÍ</span>

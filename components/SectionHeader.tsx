@@ -2,7 +2,7 @@ import React from 'react';
 
 export const SectionHeader = ({ title, subtitle, align = 'left' }: { title: React.ReactNode, subtitle?: React.ReactNode, align?: 'left' | 'center' | 'right' }) => (
     <div className={`mb-12 ${align === 'center' ? 'text-center' : align === 'right' ? 'text-right' : 'text-left'}`}>
-        <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
+        <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-[1.1] mb-2 uppercase">
             {title}
         </h2>
         {subtitle && <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">{subtitle}</p>}

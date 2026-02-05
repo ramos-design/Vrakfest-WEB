@@ -87,7 +87,7 @@ const Hero = () => {
               </p>
 
               <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-                87<span className="text-white/30 text-3xl md:text-4xl ml-2 align-top">/90</span>
+                0<span className="text-white/30 text-3xl md:text-4xl ml-2 align-top">/90</span>
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 JEZDCŮ
@@ -222,7 +222,7 @@ const About = () => {
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-24 items-start w-full max-w-full">
           {/* Left Column - Content */}
           <div className="w-full max-w-full min-w-0 flex flex-col items-start text-left">
-            <SectionHeader title="CO JE TO VRAKFEST" subtitle="INDUSTRIAL ADRENALINE. TOTAL CARNAGE." />
+            <SectionHeader title={<>MILUJEME AUTA,<br />ZÁBAVU A <span className="text-white">ADRENALIN</span></>} subtitle="JSME KOMUNITA PŘÁTEL, CO MAJÍ RÁDI BOURAČKY." />
 
             <div className="w-full max-w-full prose prose-invert">
               <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-400 leading-relaxed mb-8 md:mb-12 font-medium break-words w-full">
@@ -470,8 +470,8 @@ const GalleryGrid = () => {
             <div className="text-left">
               <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(0) ? 'text-[#F4CE14]' : 'text-white'
                 } group-hover:text-[#F4CE14]`}>Den plný adrenalinu pro celou rodinu!</h3>
-              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-400 leading-relaxed font-medium">
+                Vrakfest není jen o bourání. Je to festival zážitků pro malé i velké. Od doprovodných show pro děti až po vyhlášenou gastro sekci – u nás si den užije celá rodina.
               </p>
             </div>
           </div>
@@ -494,8 +494,8 @@ const GalleryGrid = () => {
             <div className="text-left">
               <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(1) ? 'text-[#F4CE14]' : 'text-white'
                 } group-hover:text-[#F4CE14]`}>Přijď si zazávodit, zabourat a vyhrát 10000 Kč! a víc!</h3>
-              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit.
+              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-400 leading-relaxed font-medium">
+                Máš staré auto a chuť na pořádnou porci destrukce? Přihlas se do naší arény. Bojuj o čest, slávu a tučnou finanční odměnu, která čeká na posledního vítěze.
               </p>
             </div>
           </div>
@@ -518,8 +518,8 @@ const GalleryGrid = () => {
             <div className="text-left">
               <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(2) ? 'text-[#F4CE14]' : 'text-white'
                 } group-hover:text-[#F4CE14]`}>Užijte si srandu se starými vraky.</h3>
-              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-500 leading-relaxed">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+              <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-400 leading-relaxed font-medium">
+                Sledujte, jak se plechy kroutí v dechberoucích soubojích. Čekají vás tvrdé nárazy a atmosféra, kterou jinde nezažijete. Tohle je čistý adrenalin bez pravidel!
               </p>
             </div>
           </div>
@@ -542,9 +542,12 @@ const SponsorsTicker = () => {
   return (
     <section className="py-24 bg-black relative overflow-hidden">
       <div className="container mx-auto px-6 mb-16 text-center">
-        <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-white tracking-tight leading-none uppercase mb-2">
+        <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-white tracking-tight leading-[1.1] uppercase mb-2">
           PARTNEŘI AKCE
         </h2>
+        <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">
+          CHCEŠ SE STÁT TAKY PARTNEREM? <a href="mailto:info@vrakfest.cz" className="text-[#F4CE14] hover:text-white transition-colors underline decoration-2 underline-offset-4">TAK KLIKNI ZDE</a>
+        </p>
         <div className="w-24 h-1 bg-[#F4CE14] mx-auto mt-4 relative">
           <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
         </div>
@@ -699,7 +702,7 @@ const Program = () => {
   return (
     <section id="program" className="py-32 bg-black relative">
       <div className="container mx-auto px-6">
-        <SectionHeader title="PROGRAM" subtitle="ČASOVÝ HARMONOGRAM AKCE" />
+        <SectionHeader title="PROGRAM" subtitle="JAK TO U NÁS CHODÍ A KOLIK TO STOJÍ?" />
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left Column: Harmonogram & Warning */}
@@ -841,7 +844,7 @@ const EventGrid = () => {
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
             KALENDÁŘ AKCÍ 2026
           </h2>
-          <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">VYZNAČ SI DATUM V KALENDÁŘI.</p>
+          <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">TOHLE NESMÍŠ PROPASNOUT!</p>
           <div className="w-24 h-1 bg-[#F4CE14] mt-4 relative mx-auto">
             <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
           </div>
@@ -984,7 +987,7 @@ const DriverRoster = () => {
               PŘIHLÁŠENÝCH
             </p>
             <p className="font-bebas text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-              87<span className="text-white/30 text-6xl ml-2">/ 90</span>
+              0<span className="text-white/30 text-6xl ml-2">/ 90</span>
             </p>
             <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
           </div>
@@ -1028,7 +1031,7 @@ const DriverRoster = () => {
                 {/* Overlay Name */}
                 <div className="absolute bottom-4 left-4 right-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <p className="font-tech text-[#F4CE14] text-sm tracking-widest uppercase font-bold mb-2 drop-shadow-md">"{nickname}"</p>
-                  <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas text-white leading-none uppercase tracking-tight font-bold">{displayName}</h4>
+                  <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas text-white leading-[1.1] uppercase tracking-tight font-bold">{displayName}</h4>
                 </div>
               </div>
 
@@ -1078,7 +1081,7 @@ const DriverRoster = () => {
             <div className="p-16 flex flex-col justify-center text-left">
               <div className="mb-12">
                 <span className="font-tech text-[#F4CE14] tracking-[0.6em] text-sm mb-4 block uppercase font-bold">{selectedDriver.category}</span>
-                <h2 className="text-8xl font-bebas leading-none mb-6 uppercase tracking-tight font-semibold">{selectedDriver.name}</h2>
+                <h2 className="text-8xl font-bebas leading-[1.1] mb-6 uppercase tracking-tight font-semibold">{selectedDriver.name}</h2>
                 <div className="w-32 h-2 bg-[#F4CE14] shadow-[0_0_20px_#F4CE14]"></div>
               </div>
 
@@ -1173,7 +1176,7 @@ const Standings = () => {
           </div>
 
           {/* Scrollable Table Rows - Max 10 visible */}
-          <div className="space-y-2 max-h-[700px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-2 max-h-[700px] overflow-y-auto pr-2 custom-scrollbar" data-lenis-prevent>
             {filteredDrivers.map((driver, index) => (
               <div
                 key={driver.startNumber}
@@ -1529,15 +1532,25 @@ const RegistrationForm = () => {
 
   return (
     <section className="py-32 bg-white text-black relative">
-      <div className="absolute top-0 left-0 w-full h-3 bg-[#F4CE14] shadow-lg"></div>
+      {/* Racing Flag Border Top */}
+      <div
+        className="absolute top-0 left-0 w-full h-8 z-10 shadow-lg"
+        style={{
+          backgroundImage: `
+            conic-gradient(#000 0.25turn, #fff 0.25turn 0.5turn, #000 0.5turn 0.75turn, #fff 0.75turn)
+          `,
+          backgroundSize: '32px 32px'
+        }}
+      ></div>
+
       <div className="container mx-auto px-6 max-w-4xl text-left">
         <div className="mb-20 text-center">
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas mb-12 tracking-tight leading-none uppercase font-semibold text-black">REGISTRACE JEZDCE</h2>
 
           {/* Progress Bar */}
-          <div className="relative flex items-center justify-center gap-32 px-16">
-            <div className="absolute top-1/2 left-16 right-16 h-1 bg-gray-100 -z-10 -translate-y-1/2"></div>
-            <div className="absolute top-1/2 left-16 h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `calc(${(step - 1) * 50}% - 64px)` }}></div>
+          <div className="relative flex items-center justify-center gap-14 md:gap-32 px-4 md:px-16">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[calc(100%-110px)] md:w-[calc(100%-128px)] h-1 bg-gray-100 -z-10 -translate-y-1/2"></div>
+            <div className="absolute top-1/2 left-[55px] md:left-[64px] h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `calc(${(step - 1) * 50}% - ${step === 1 ? 0 : step === 2 ? 0 : 0}px)` }}></div>
 
             {[
               { num: 1, label: 'OSOBNÍ ÚDAJE' },
@@ -1545,10 +1558,10 @@ const RegistrationForm = () => {
               { num: 3, label: 'DOKONČENÍ' }
             ].map(item => (
               <div key={item.num} className="flex flex-col items-center">
-                <div className={`w-14 h-14 rounded-full flex items-center justify-center font-tech font-semibold text-xl transition-all duration-500 ${step >= item.num ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
-                  {step > item.num ? <CheckCircle size={28} /> : item.num}
+                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center font-tech font-semibold text-lg md:text-xl transition-all duration-500 ${step >= item.num ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
+                  {step > item.num ? <CheckCircle className="w-6 h-6 md:w-7 md:h-7" /> : item.num}
                 </div>
-                <span className="mt-4 font-tech text-xs text-gray-400 tracking-[0.4em] uppercase font-bold text-center">{item.label}</span>
+                <span className="mt-4 font-tech text-[10px] md:text-xs text-gray-400 tracking-wider md:tracking-[0.4em] uppercase font-bold text-center max-w-[90px] md:max-w-none">{item.label}</span>
               </div>
             ))}
           </div>
@@ -1580,6 +1593,14 @@ const RegistrationForm = () => {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
+                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka *</label>
+                  <input
+                    type="text"
+                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                    placeholder="Tvoje přezdívka (např. Drtič)"
+                  />
+                </div>
+                <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Věk *</label>
                   <input
                     type="number"
@@ -1587,14 +1608,6 @@ const RegistrationForm = () => {
                     max="99"
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Věk (musí být 18+)"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Heslo (k vašemu účtu) *</label>
-                  <input
-                    type="password"
-                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
-                    placeholder="Heslo"
                   />
                 </div>
               </div>
@@ -1683,11 +1696,11 @@ const RegistrationForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka *</label>
+                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Za jaký tým jedeš?</label>
                   <input
                     type="text"
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
-                    placeholder="Tvoje přezdívka (např. Drtič)"
+                    placeholder="Název tvého týmu"
                   />
                 </div>
               </div>
@@ -1708,7 +1721,7 @@ const RegistrationForm = () => {
             <div className="space-y-8 animate-fadeIn">
               {/* Payment Information Box */}
               <div className="border-4 border-dashed border-red-500 bg-red-50 p-6">
-                <h3 className="font-bebas text-3xl text-center mb-4 uppercase">PLATBA STARTOVNÉHO:<br />(POUZE PŘEDEM)</h3>
+                <h3 className="font-bebas text-xl text-center mb-4 uppercase leading-[1.1]">PLATBA STARTOVNÉHO:<br />(POUZE PŘEDEM)</h3>
                 <div className="space-y-2 text-center font-bold">
                   <p className="text-sm">Číslo účtu:</p>
                   <p className="text-2xl font-bebas">2402064559/2010</p>
@@ -1762,6 +1775,17 @@ const RegistrationForm = () => {
           )}
         </div>
       </div>
+
+      {/* Racing Flag Border Bottom */}
+      <div
+        className="absolute bottom-0 left-0 w-full h-8 z-10 shadow-lg"
+        style={{
+          backgroundImage: `
+            conic-gradient(#000 0.25turn, #fff 0.25turn 0.5turn, #000 0.5turn 0.75turn, #fff 0.75turn)
+          `,
+          backgroundSize: '32px 32px'
+        }}
+      ></div>
     </section>
   );
 };

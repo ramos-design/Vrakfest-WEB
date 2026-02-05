@@ -5,36 +5,36 @@ import { Driver, EventItem, ProgramStep, MarketItem, StandingsDriver } from './t
 
 export const DRIVERS: Driver[] = [
   {
-    id: '1',
-    name: 'PETR "DEMOLIČ" NOVÁK',
-    car: 'ŠKODA FELICIA TANK',
-    category: 'VETERAN CLASH',
+    id: 'v1',
+    name: 'PATRIK "KLEPI" KLEPÁČ',
+    car: 'FELICIE',
+    category: 'DO 1.6L',
     image: '/drivers/muddy_profile.png',
-    stats: { wins: 12, wrecks: 45, experience: '8 ROKŮ', races: 84, points: 2450 }
+    stats: { wins: 8, wrecks: 32, experience: '5 ROKŮ', races: 45, points: 33 }
   },
   {
-    id: '2',
-    name: 'JAN "VRAKOUN" SVOBODA',
-    car: 'BMW E36 COMPACT',
-    category: 'PRO SERIES',
-    image: '/drivers/muddy_helmet.png',
-    stats: { wins: 24, wrecks: 89, experience: '12 ROKŮ', races: 156, points: 5890 }
-  },
-  {
-    id: '3',
-    name: 'LUKÁŠ "ŠROT" MAREK',
-    car: 'VW GOLF MK3',
-    category: 'STREET FIGHT',
+    id: 'v2',
+    name: 'VÁCLAV "ADAM" ADAMČÍK',
+    car: 'OCTAVIE',
+    category: 'NAD 1.6L',
     image: '/drivers/rough_portrait.png',
-    stats: { wins: 5, wrecks: 12, experience: '2 ROKY', races: 24, points: 650 }
+    stats: { wins: 6, wrecks: 28, experience: '4 ROKY', races: 38, points: 29 }
   },
   {
-    id: '4',
-    name: 'MARTIN "OCEL" ČERNÝ',
-    car: 'OPEL ASTRA G',
-    category: 'PRO SERIES',
+    id: 'v3',
+    name: 'KATEŘINA "PIKA" PIKOVÁ',
+    car: 'FELICIE',
+    category: 'ŽENY',
     image: '/drivers/action_helmet.png',
-    stats: { wins: 31, wrecks: 102, experience: '15 ROKŮ', races: 210, points: 8400 }
+    stats: { wins: 5, wrecks: 15, experience: '3 ROKY', races: 24, points: 25 }
+  },
+  {
+    id: 'v4',
+    name: 'MARTIN "ČERV" ČERVENKA',
+    car: 'PEUGEOT 206',
+    category: 'DO 1.6L',
+    image: '/drivers/muddy_helmet.png',
+    stats: { wins: 7, wrecks: 30, experience: '6 ROKŮ', races: 52, points: 32 }
   }
 ];
 
@@ -62,136 +62,98 @@ export const MARKET_ITEMS: MarketItem[] = [
 
 export const SPONSORS = [
   {
-    name: 'MONSTER ENERGY',
-    description: 'Oficiální energetický partner Vrakfestu. Unleash the Beast! Monster Energy podporuje adrenalinové sporty po celém světě a Vrakfest není výjimkou.',
-    image: 'https://picsum.photos/seed/sponsor1/600/400'
+    name: 'GRANEX',
+    description: 'Specialista na náhradní díly. Granex nabízí široký sortiment dílů pro váš vrak, od motorových částí až po karosářské prvky.',
+    image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=800'
   },
   {
-    name: 'CASTROL EDGE',
-    description: 'Špičkové motorové oleje pro maximální výkon i v těch nejnáročnějších podmínkách demoličního derby.',
-    image: 'https://picsum.photos/seed/sponsor2/600/400'
+    name: 'YOMAX',
+    description: 'Výrobce stylových pohárů a ocenění. Yomax dodává unikátní trofeje pro vítěze všech kategorií Vrakfestu.',
+    image: 'https://images.unsplash.com/photo-1578267139062-70fb980f7694?q=80&w=800'
   },
   {
-    name: 'AKUMA BATTERIES',
-    description: 'Spolehlivá energie pro start každého vraku. Akuma Batteries vás nenechá ve štychu ani po nárazu.',
-    image: 'https://picsum.photos/seed/sponsor3/600/400'
+    name: 'ELEKTRO DVOŘÁK',
+    description: 'Váš partner pro elektro ve Valašském Meziříčí. Elektro Dvořák věnuje hodnotné dárky pro ty nejlepší závodníky.',
+    image: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=800'
   },
   {
-    name: 'WURTH',
-    description: 'Profesionální nářadí a spojovací materiál. Když potřebujete opravit vrak za 5 minut, Wurth je jasná volba.',
-    image: 'https://picsum.photos/seed/sponsor4/600/400'
+    name: 'HYPE PRINT',
+    description: 'Profesionální tisk a grafika. Hype Print se stará o to, aby Vrakfest vypadal skvěle na bannerech i samolepkách.',
+    image: 'https://images.unsplash.com/photo-1598301257982-0cf014dabbcd?q=80&w=800'
   },
   {
-    name: 'KARCHER',
-    description: 'Čistící technika pro ty nejšpinavější stroje. Po závodě je Karcher nejlepší přítel mechanika.',
-    image: 'https://picsum.photos/seed/sponsor5/600/400'
+    name: 'VRAKOVIŠTĚ SILVIE',
+    description: 'Nekonečný zdroj materiálu pro demoliční derby. Vrakoviště Silvie je klíčovým dodavatelem vozů pro naše závody.',
+    image: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?q=80&w=800'
   },
   {
-    name: 'SPARCO',
-    description: 'Bezpečnostní vybavení pro závodníky. Sedačky, pásy, helmy - bezpečnost je na prvním místě i ve vracích.',
-    image: 'https://picsum.photos/seed/sponsor6/600/400'
+    name: 'ZVÝŠENO',
+    description: 'Komunita a servis pro ty, co chtějí víc než jen sériovku. Zvýšeno podporuje technickou kreativitu našich jezdců.',
+    image: 'https://images.unsplash.com/photo-1620216447820-2c7009403328?q=80&w=800'
   },
   {
-    name: 'PIRELLI',
-    description: 'Pneumatiky, které drží stopu i v bahně. Výkon a kontrola pro každou zatáčku.',
-    image: 'https://picsum.photos/seed/sponsor7/600/400'
+    name: 'FRESH RADIO OSTRAVA',
+    description: 'Oficiální mediální partner. Fresh Radio Ostrava zajišťuje hudební setup a šíří atmosféru Vrakfestu do celého éteru.',
+    image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=800'
   }
 ];
 
 export const STANDINGS: StandingsDriver[] = [
-  // Do 1.6L (30 drivers)
-  { startNumber: 12, name: 'PETR NOVÁK', car: 'ŠKODA FELICIA', points: 245, category: 'do1.6L' },
-  { startNumber: 7, name: 'MARTIN SVOBODA', car: 'VW POLO', points: 198, category: 'do1.6L' },
-  { startNumber: 23, name: 'TOMÁŠ DVOŘÁK', car: 'OPEL CORSA', points: 176, category: 'do1.6L' },
-  { startNumber: 45, name: 'JAKUB ČERNÝ', car: 'FORD FIESTA', points: 154, category: 'do1.6L' },
-  { startNumber: 18, name: 'LUKÁŠ PROCHÁZKA', car: 'PEUGEOT 206', points: 132, category: 'do1.6L' },
-  { startNumber: 31, name: 'DAVID KRÁL', car: 'RENAULT CLIO', points: 118, category: 'do1.6L' },
-  { startNumber: 56, name: 'VÁCLAV BENEŠ', car: 'ŠKODA FAVORIT', points: 105, category: 'do1.6L' },
-  { startNumber: 9, name: 'MIROSLAV POSPÍŠIL', car: 'FIAT PUNTO', points: 98, category: 'do1.6L' },
-  { startNumber: 42, name: 'STANISLAV FIALA', car: 'SEAT IBIZA', points: 87, category: 'do1.6L' },
-  { startNumber: 27, name: 'JOSEF HÁJEK', car: 'CITROËN SAXO', points: 76, category: 'do1.6L' },
-  { startNumber: 63, name: 'ALEŠ Urban', car: 'NISSAN MICRA', points: 68, category: 'do1.6L' },
-  { startNumber: 14, name: 'RADEK KOLÁŘ', car: 'MAZDA 121', points: 61, category: 'do1.6L' },
-  { startNumber: 38, name: 'VLASTIMIL RŮŽIČKA', car: 'HONDA CIVIC', points: 54, category: 'do1.6L' },
-  { startNumber: 51, name: 'ZDENĚK BLAŽEK', car: 'TOYOTA YARIS', points: 48, category: 'do1.6L' },
-  { startNumber: 19, name: 'MILAN KREJČÍ', car: 'HYUNDAI ACCENT', points: 43, category: 'do1.6L' },
-  { startNumber: 74, name: 'JAROSLAV MORAVEC', car: 'KIA RIO', points: 39, category: 'do1.6L' },
-  { startNumber: 6, name: 'VLADIMÍR POKORNÝ', car: 'SUZUKI SWIFT', points: 35, category: 'do1.6L' },
-  { startNumber: 88, name: 'BOHUMIL ČECH', car: 'DACIA SANDERO', points: 31, category: 'do1.6L' },
-  { startNumber: 33, name: 'ANTONÍN DOLEŽAL', car: 'LADA SAMARA', points: 28, category: 'do1.6L' },
-  { startNumber: 47, name: 'BŘETISLAV HOLUB', car: 'CHEVROLET AVEO', points: 25, category: 'do1.6L' },
-  { startNumber: 21, name: 'CTIBOR JELÍNEK', car: 'DAEWOO MATIZ', points: 22, category: 'do1.6L' },
-  { startNumber: 59, name: 'DALIBOR KUČERA', car: 'ROVER 25', points: 19, category: 'do1.6L' },
-  { startNumber: 82, name: 'EMANUEL NOVOTNÝ', car: 'MG ZR', points: 16, category: 'do1.6L' },
-  { startNumber: 15, name: 'FERDINAND MAREK', car: 'PROTON PERSONA', points: 13, category: 'do1.6L' },
-  { startNumber: 67, name: 'GUSTAV SVOBODA', car: 'CHRYSLER NEON', points: 10, category: 'do1.6L' },
-  { startNumber: 91, name: 'HERBERT VESELÝ', car: 'DODGE NEON', points: 8, category: 'do1.6L' },
-  { startNumber: 24, name: 'IGNÁC HORÁK', car: 'PLYMOUTH NEON', points: 6, category: 'do1.6L' },
-  { startNumber: 76, name: 'JINDŘICH NĚMEC', car: 'SATURN SL', points: 4, category: 'do1.6L' },
-  { startNumber: 53, name: 'KAMIL DVOŘÁK', car: 'GEO METRO', points: 2, category: 'do1.6L' },
-  { startNumber: 29, name: 'LADISLAV ČERNÝ', car: 'PONTIAC SUNFIRE', points: 1, category: 'do1.6L' },
+  // DO 1.6 L
+  { startNumber: 74, name: 'PATRIK KLEPÁČ', car: 'FELICIE', points: 33, category: 'do1.6L' },
+  { startNumber: 131, name: 'MARTIN ČERVENKA', car: 'PEUGEOT 206', points: 32, category: 'do1.6L' },
+  { startNumber: 337, name: 'PETR BIJA', car: 'FELICIE', points: 31, category: 'do1.6L' },
+  { startNumber: 747, name: 'PETR KLEPÁČ', car: 'FELICIE', points: 27, category: 'do1.6L' },
+  { startNumber: 12, name: 'MAREK CHRASTINA', car: 'VW POLO', points: 25, category: 'do1.6L' },
+  { startNumber: 25, name: 'MARTIN VENCL', car: 'VW GOLF 4 16V', points: 23, category: 'do1.6L' },
+  { startNumber: 146, name: 'MICHAEL BĚLÍK', car: 'FELICIE', points: 21, category: 'do1.6L' },
+  { startNumber: 90, name: 'DANIEL BEZDĚK', car: 'RENAULT CLIO', points: 17, category: 'do1.6L' },
+  { startNumber: 27, name: 'JIŘÍ FEIX', car: 'FABIE', points: 17, category: 'do1.6L' },
+  { startNumber: 773, name: 'MATYÁŠ WYSOGLAD', car: 'NISSAN ALMERA', points: 17, category: 'do1.6L' },
+  { startNumber: 153, name: 'MIROSLAV TANEČEK', car: 'FELICIE', points: 17, category: 'do1.6L' },
+  { startNumber: 0, name: 'PAVEL JANKŮJ', car: 'FAVORIT', points: 17, category: 'do1.6L' },
+  { startNumber: 262, name: 'MARTIN BANČÍK', car: 'FELICIE', points: 15, category: 'do1.6L' },
+  { startNumber: 8, name: 'JAN KOCOUREK', car: 'PEUGEOT 206', points: 14, category: 'do1.6L' },
+  { startNumber: 16, name: 'ADAM PANÁČEK', car: 'HONDA CIVIC', points: 12, category: 'do1.6L' },
+  { startNumber: 123, name: 'ŠTĚPÁN URBANCZYK', car: 'FELICIE', points: 12, category: 'do1.6L' },
+  { startNumber: 599, name: 'JAN KRYL', car: 'VW GOLF', points: 11, category: 'do1.6L' },
+  { startNumber: 1995, name: 'MARIO SCHON', car: 'FIAT PUNTO', points: 11, category: 'do1.6L' },
+  { startNumber: 202, name: 'LUKÁŠ BRIM', car: 'FAVORIT', points: 10, category: 'do1.6L' },
 
-  // Nad 1.6L (30 drivers)
-  { startNumber: 5, name: 'JAN VÁVRA', car: 'BMW E36', points: 289, category: 'nad1.6L' },
-  { startNumber: 14, name: 'ONDŘEJ MAREK', car: 'AUDI A4', points: 267, category: 'nad1.6L' },
-  { startNumber: 8, name: 'MICHAL HORÁK', car: 'VW GOLF MK4', points: 234, category: 'nad1.6L' },
-  { startNumber: 22, name: 'PAVEL KUČERA', car: 'ŠKODA OCTAVIA', points: 201, category: 'nad1.6L' },
-  { startNumber: 36, name: 'ROMAN VESELÝ', car: 'OPEL ASTRA', points: 178, category: 'nad1.6L' },
-  { startNumber: 41, name: 'FILIP NĚMEC', car: 'FORD MONDEO', points: 145, category: 'nad1.6L' },
-  { startNumber: 17, name: 'ROBERT SOUKUP', car: 'MERCEDES C-CLASS', points: 134, category: 'nad1.6L' },
-  { startNumber: 52, name: 'DANIEL ŠIMEK', car: 'VOLVO S40', points: 126, category: 'nad1.6L' },
-  { startNumber: 3, name: 'ADAM BARTOŠ', car: 'SAAB 9-3', points: 118, category: 'nad1.6L' },
-  { startNumber: 68, name: 'RICHARD KONEČNÝ', car: 'ALFA ROMEO 156', points: 109, category: 'nad1.6L' },
-  { startNumber: 25, name: 'MAREK SEDLÁČEK', car: 'FIAT BRAVO', points: 102, category: 'nad1.6L' },
-  { startNumber: 79, name: 'TOMÁŠ RŮŽIČKA', car: 'SEAT LEON', points: 95, category: 'nad1.6L' },
-  { startNumber: 11, name: 'JAKUB VLČEK', car: 'RENAULT LAGUNA', points: 88, category: 'nad1.6L' },
-  { startNumber: 44, name: 'PETR ZEMAN', car: 'PEUGEOT 406', points: 81, category: 'nad1.6L' },
-  { startNumber: 60, name: 'LUKÁŠ KOLÁŘ', car: 'CITROËN XSARA', points: 74, category: 'nad1.6L' },
-  { startNumber: 32, name: 'MARTIN NOVÁK', car: 'HONDA ACCORD', points: 67, category: 'nad1.6L' },
-  { startNumber: 87, name: 'JAN PROCHÁZKA', car: 'MAZDA 6', points: 60, category: 'nad1.6L' },
-  { startNumber: 16, name: 'DAVID KRÁL', car: 'NISSAN PRIMERA', points: 53, category: 'nad1.6L' },
-  { startNumber: 49, name: 'ONDŘEJ SVOBODA', car: 'TOYOTA AVENSIS', points: 46, category: 'nad1.6L' },
-  { startNumber: 71, name: 'MICHAL DVOŘÁK', car: 'SUBARU LEGACY', points: 39, category: 'nad1.6L' },
-  { startNumber: 4, name: 'PAVEL ČERNÝ', car: 'MITSUBISHI LANCER', points: 32, category: 'nad1.6L' },
-  { startNumber: 58, name: 'ROMAN NOVOTNÝ', car: 'HYUNDAI SONATA', points: 25, category: 'nad1.6L' },
-  { startNumber: 83, name: 'FILIP VESELÝ', car: 'KIA OPTIMA', points: 18, category: 'nad1.6L' },
-  { startNumber: 20, name: 'ROBERT HORÁK', car: 'CHEVROLET CRUZE', points: 11, category: 'nad1.6L' },
-  { startNumber: 65, name: 'DANIEL NĚMEC', car: 'FORD FOCUS', points: 9, category: 'nad1.6L' },
-  { startNumber: 92, name: 'ADAM MAREK', car: 'OPEL VECTRA', points: 7, category: 'nad1.6L' },
-  { startNumber: 37, name: 'RICHARD KUČERA', car: 'VW PASSAT', points: 5, category: 'nad1.6L' },
-  { startNumber: 73, name: 'MAREK SOUKUP', car: 'ŠKODA SUPERB', points: 3, category: 'nad1.6L' },
-  { startNumber: 10, name: 'TOMÁŠ ŠIMEK', car: 'AUDI A6', points: 2, category: 'nad1.6L' },
-  { startNumber: 55, name: 'JAKUB BARTOŠ', car: 'BMW E46', points: 1, category: 'nad1.6L' },
+  // NAD 1.6 L
+  { startNumber: 92, name: 'VÁCLAV ADAMČÍK', car: 'OCTAVIE', points: 29, category: 'nad1.6L' },
+  { startNumber: 23, name: 'MATĚJ ŽUŽOV', car: 'FELICIE', points: 25, category: 'nad1.6L' },
+  { startNumber: 696, name: 'PETR MAZÁNEK', car: 'VW GOLF', points: 20, category: 'nad1.6L' },
+  { startNumber: 713, name: 'VÁCLAV KAŇOK', car: 'BMW', points: 19, category: 'nad1.6L' },
+  { startNumber: 222, name: 'TOMÁŠ ROVENSKÝ', car: 'AUDI', points: 15, category: 'nad1.6L' },
+  { startNumber: 5, name: 'KAMIL GRICHNIK', car: 'RENAULT SCENIC', points: 15, category: 'nad1.6L' },
+  { startNumber: 108, name: 'LUKÁŠ DIVILA', car: 'OCTAVIE', points: 14, category: 'nad1.6L' },
+  { startNumber: 46, name: 'ONDŘEJ SPÁČIL', car: 'FELICIE', points: 14, category: 'nad1.6L' },
+  { startNumber: 101, name: 'KAMIL BEZDĚK', car: 'OCTAVIE', points: 12, category: 'nad1.6L' },
+  { startNumber: 89, name: 'MARTIN ADAMČÍK', car: 'VW GOLF', points: 12, category: 'nad1.6L' },
+  { startNumber: 66, name: 'STÁŇA JAROŠ', car: 'TOYOTA', points: 11, category: 'nad1.6L' },
+  { startNumber: 112, name: 'JAN PREKOP', car: 'FORD', points: 11, category: 'nad1.6L' },
+  { startNumber: 106, name: 'PAVEL ŠINDLER', car: 'BMW', points: 10, category: 'nad1.6L' },
+  { startNumber: 3, name: 'LUKÁŠ BAČA', car: 'FORD COUGAR', points: 10, category: 'nad1.6L' },
+  { startNumber: 21, name: 'RADEK HECZKO', car: 'OCTAVIE', points: 9, category: 'nad1.6L' },
+  { startNumber: 166, name: 'JAN KRAJČÍR', car: 'FORD FOCUS', points: 9, category: 'nad1.6L' },
+  { startNumber: 271, name: 'LUKÁŠ RYBÁR', car: 'FORD FOCUS', points: 9, category: 'nad1.6L' },
+  { startNumber: 666, name: 'RADEK PLESNÍK', car: 'VW VENTO', points: 9, category: 'nad1.6L' },
+  { startNumber: 12, name: 'MAREK CHRASTINA', car: 'VW POLO', points: 8, category: 'nad1.6L' },
 
-  // Ženy (30 drivers)
-  { startNumber: 3, name: 'PETRA NOVÁKOVÁ', car: 'ŠKODA FABIA', points: 212, category: 'zeny' },
-  { startNumber: 17, name: 'JANA SVOBODOVÁ', car: 'VW GOLF MK3', points: 189, category: 'zeny' },
-  { startNumber: 28, name: 'TEREZA MALÁ', car: 'OPEL CORSA', points: 167, category: 'zeny' },
-  { startNumber: 39, name: 'LUCIE HORÁKOVÁ', car: 'PEUGEOT 307', points: 143, category: 'zeny' },
-  { startNumber: 11, name: 'MARKÉTA DVOŘÁKOVÁ', car: 'RENAULT MEGANE', points: 121, category: 'zeny' },
-  { startNumber: 46, name: 'KATEŘINA ČERNÁ', car: 'FORD FOCUS', points: 112, category: 'zeny' },
-  { startNumber: 62, name: 'VERONIKA PROCHÁZKOVÁ', car: 'SEAT LEON', points: 105, category: 'zeny' },
-  { startNumber: 8, name: 'BARBORA KRÁLOVÁ', car: 'FIAT PUNTO', points: 98, category: 'zeny' },
-  { startNumber: 54, name: 'SIMONA BENEŠOVÁ', car: 'TOYOTA YARIS', points: 91, category: 'zeny' },
-  { startNumber: 26, name: 'ANDREA POSPÍŠILOVÁ', car: 'HONDA JAZZ', points: 84, category: 'zeny' },
-  { startNumber: 70, name: 'MICHAELA FIALOVÁ', car: 'MAZDA 2', points: 77, category: 'zeny' },
-  { startNumber: 13, name: 'LENKA HÁJKOVÁ', car: 'NISSAN MICRA', points: 70, category: 'zeny' },
-  { startNumber: 48, name: 'DENISA URBANOVÁ', car: 'CITROËN C3', points: 63, category: 'zeny' },
-  { startNumber: 81, name: 'KRISTÝNA KOLÁŘOVÁ', car: 'HYUNDAI I20', points: 56, category: 'zeny' },
-  { startNumber: 19, name: 'NIKOLA RŮŽIČKOVÁ', car: 'KIA RIO', points: 49, category: 'zeny' },
-  { startNumber: 64, name: 'ADÉLA BLAŽKOVÁ', car: 'SUZUKI SWIFT', points: 42, category: 'zeny' },
-  { startNumber: 35, name: 'ELIŠKA KREJČÍ', car: 'DACIA SANDERO', points: 35, category: 'zeny' },
-  { startNumber: 77, name: 'KLÁRA MORAVCOVÁ', car: 'CHEVROLET SPARK', points: 28, category: 'zeny' },
-  { startNumber: 2, name: 'NATÁLIE POKORNÁ', car: 'DAEWOO MATIZ', points: 21, category: 'zeny' },
-  { startNumber: 50, name: 'DOMINIKA ČECHOVÁ', car: 'ROVER 25', points: 18, category: 'zeny' },
-  { startNumber: 86, name: 'ANETA DOLEŽALOVÁ', car: 'MG ZR', points: 15, category: 'zeny' },
-  { startNumber: 23, name: 'KAROLÍNA HOLUBOVÁ', car: 'PROTON PERSONA', points: 12, category: 'zeny' },
-  { startNumber: 69, name: 'ZUZANA JELÍNKOVÁ', car: 'LADA KALINA', points: 9, category: 'zeny' },
-  { startNumber: 94, name: 'PAVLÍNA KUČEROVÁ', car: 'CHRYSLER PT CRUISER', points: 7, category: 'zeny' },
-  { startNumber: 40, name: 'IVANA NOVOTNÁ', car: 'DODGE CALIBER', points: 5, category: 'zeny' },
-  { startNumber: 75, name: 'MONIKA MARKOVÁ', car: 'SATURN ION', points: 4, category: 'zeny' },
-  { startNumber: 12, name: 'RADKA SVOBODOVÁ', car: 'GEO PRIZM', points: 3, category: 'zeny' },
-  { startNumber: 57, name: 'HANA VESELÁ', car: 'PONTIAC VIBE', points: 2, category: 'zeny' },
-  { startNumber: 89, name: 'ALENA HORÁKOVÁ', car: 'SAAB 9-2X', points: 1, category: 'zeny' },
-  { startNumber: 30, name: 'BOŽENA NĚMCOVÁ', car: 'SUBARU IMPREZA', points: 1, category: 'zeny' },
+  // ŽENY
+  { startNumber: 47, name: 'KATEŘINA PIKOVÁ', car: 'FELICIE', points: 25, category: 'zeny' },
+  { startNumber: 52, name: 'MARTINA PEŠKOVÁ', car: 'FABIE', points: 22, category: 'zeny' },
+  { startNumber: 122, name: 'IVETA FALUŠI', car: 'TOYOTA YARIS', points: 16, category: 'zeny' },
+  { startNumber: 613, name: 'NIKOLA BERNÁTKOVÁ', car: 'FELICIE', points: 14, category: 'zeny' },
+  { startNumber: 6002, name: 'KAROLÍNA POSPÍŠILOVÁ', car: 'KIA CEED', points: 14, category: 'zeny' },
+  { startNumber: 94, name: 'MONIKA ZÁTOPKOVÁ', car: 'OCTAVIE', points: 9, category: 'zeny' },
+  { startNumber: 100, name: 'PAVLÍNA JANEČKOVÁ', car: 'HYUNDAI GETZ', points: 8, category: 'zeny' },
+  { startNumber: 156, name: 'JAROSLAVA SOLANSKÁ', car: 'FORD FOCUS', points: 6, category: 'zeny' },
+  { startNumber: 11, name: 'GABRIELA ZAVADILOVÁ', car: 'ŠKODA PICKUP', points: 4, category: 'zeny' },
+  { startNumber: 777, name: 'SHARLOTA BOGDALÍKOVÁ', car: 'RENAULT TWINGO', points: 4, category: 'zeny' },
+  { startNumber: 55, name: 'ELIŠKA HRŮZOVÁ', car: 'FABIA', points: 2, category: 'zeny' },
+  { startNumber: 32, name: 'MAGDA PYSZKOVÁ', car: 'FABIA', points: 2, category: 'zeny' },
+  { startNumber: 28, name: 'NADĚŽDA STUDÝNKOVÁ', car: 'FELICIE', points: 2, category: 'zeny' },
+  { startNumber: 1109, name: 'VERONIKA LANDTOVÁ', car: 'FELICIE', points: 1, category: 'zeny' },
 ];
