@@ -827,6 +827,25 @@ const Program = () => {
                 </p>
               </div>
             </div>
+
+            {/* Demolition Derby Prize */}
+            <div>
+              <div className="flex items-center gap-4 mb-6">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none">DEMOLITION DERBY</h3>
+              </div>
+
+              <div className="bg-[#F4CE14]/5 border-2 border-[#F4CE14]/30 p-8 hover:border-[#F4CE14] transition-all shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
+                <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
+                <div className="flex items-baseline gap-2 mb-4">
+                  <span className="font-bebas text-6xl text-white tracking-tighter">10 000 <span className="text-3xl font-tech">KČ</span></span>
+                  <span className="font-tech text-[#F4CE14] text-xl uppercase font-bold ml-2">VÝHRA</span>
+                </div>
+                <p className="font-tech text-gray-400 text-sm border-t border-white/10 pt-4">
+                  Tuto finanční odměnu získá jezdec, jehož vrak zůstane <span className="text-white font-bold">jako poslední v pohybu</span>.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
