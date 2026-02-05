@@ -39,7 +39,7 @@ const Hero = () => {
 
       <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
         {/* Mobile: Block layout with <br/> and leading-[1.25] for consistent spacing. Desktop: Flex column with gap. */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[9rem] font-bebas font-semibold leading-[1.25] md:leading-[0.9] mb-6 md:mb-10 animate-fadeIn uppercase tracking-tight block md:flex md:flex-col md:items-center md:gap-4 lg:gap-6 text-center">
+        <h1 className="font-bebas font-semibold leading-[1.25] md:leading-[0.9] mb-6 md:mb-10 animate-fadeIn uppercase tracking-tight block md:flex md:flex-col md:items-center md:gap-4 lg:gap-6 text-center">
           <span className="text-white">ZÁVODY VRAKŮ</span>
           <br className="md:hidden" />
           <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)] no-underline">A DEMOLIČNÍ DERBY</span>
@@ -1149,17 +1149,20 @@ const Standings = () => {
         </div>
 
         {/* Category Tabs */}
-        <div className="flex justify-center gap-4 mb-16">
+        <div className="flex justify-center gap-6 mb-16">
           {(Object.keys(categoryLabels) as Array<keyof typeof categoryLabels>).map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`px-4 py-2 md:px-8 md:py-4 font-bebas text-lg md:text-2xl uppercase tracking-wider transition-all duration-300 border-2 ${activeCategory === category
-                ? 'bg-[#F4CE14] text-black border-[#F4CE14]'
-                : 'bg-transparent text-gray-400 border-white/10 hover:border-[#F4CE14]/50 hover:text-white'
-                }`}
+              className={`relative px-8 py-3 transition-all duration-300 group ${activeCategory === category ? 'z-10' : 'z-0'}`}
             >
-              {categoryLabels[category]}
+              <div className={`absolute inset-0 transform -skew-x-[15deg] border-2 transition-all duration-300 ${activeCategory === category
+                ? 'bg-[#F4CE14] border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.4)]'
+                : 'bg-transparent border-white/20 group-hover:border-[#F4CE14]/50'
+                }`}></div>
+              <span className={`relative font-tech font-bold text-[20px] uppercase tracking-wider transition-colors duration-300 ${activeCategory === category ? 'text-black' : 'text-gray-400 group-hover:text-white'}`}>
+                {categoryLabels[category]}
+              </span>
             </button>
           ))}
         </div>
@@ -1665,7 +1668,7 @@ const RegistrationForm = () => {
 
               <div>
                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Kategorie *</label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-2 md:gap-4">
                   {[
                     { value: 'do1.6L', label: 'DO 1,6L' },
                     { value: 'nad1.6L', label: 'NAD 1,6L' },
@@ -1674,7 +1677,7 @@ const RegistrationForm = () => {
                     <div
                       key={cat.value}
                       onClick={() => setSelectedCategory(cat.value)}
-                      className={`border-2 p-4 cursor-pointer transition-all text-center font-bold ${selectedCategory === cat.value
+                      className={`border-2 py-2 px-1 md:p-4 cursor-pointer transition-all text-center font-bold text-[14px] md:text-base ${selectedCategory === cat.value
                         ? 'border-[#F4CE14] bg-[#F4CE14]/10'
                         : 'border-gray-200 hover:border-[#F4CE14]/50'
                         }`}

@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { Home } from './pages/Home';
-import { DesignSystem } from './pages/DesignSystem';
 import { LockScreen } from './components/LockScreen';
 import { TechNavBar } from './components/TechNavBar';
 import { Footer } from './components/Footer';
@@ -65,7 +64,6 @@ export default function App() {
             <TechNavBar />
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/dsgn" element={<DesignSystem />} />
             </Routes>
             <Footer />
           </div>

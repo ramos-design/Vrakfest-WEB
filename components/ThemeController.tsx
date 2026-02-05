@@ -3,66 +3,35 @@ import React, { useEffect } from 'react';
 // Default configuration structure holding values for all devices
 // Desktop is base, Tablet < 1024, Mobile < 640
 const DEFAULT_CONFIG = {
-    baseFontSize: 16,
-    desktop: [
-        { tag: 'h1', rem: 6 },
-        { tag: 'h2', rem: 4.5 },
-        { tag: 'h3', rem: 3 },
-        { tag: 'h4', rem: 2.25 },
-        { tag: 'p', rem: 1.125 },
-        { tag: 'small', rem: 0.875 },
-    ],
-    tablet: [
-        { tag: 'h1', rem: 4.5 },
-        { tag: 'h2', rem: 3.5 },
-        { tag: 'h3', rem: 2.5 },
-        { tag: 'h4', rem: 1.75 },
-        { tag: 'p', rem: 1 },
-        { tag: 'small', rem: 0.8 },
-    ],
-    mobile: [
-        { tag: 'h1', rem: 3 },
-        { tag: 'h2', rem: 2.25 },
-        { tag: 'h3', rem: 1.75 },
-        { tag: 'h4', rem: 1.5 },
-        { tag: 'p', rem: 1 },
-        { tag: 'small', rem: 0.75 },
-    ]
-};
-
-export const STORAGE_KEY = 'vrakfest_theme_responsive_config';
-
-export const saveTheme = (baseFontSize: number, typographyConfig: any) => {
-    const config = {
-        baseFontSize,
-        ...typographyConfig // expects { desktop: [], tablet: [], mobile: [] }
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-    applyTheme(config);
+  baseFontSize: 16,
+  desktop: { h1: 6.75, h2: 4.5, h3: 3, h4: 2.25, p: 1.125, small: 0.875 },
+  tablet: { h1: 4.5, h2: 3.5, h3: 2.5, h4: 1.75, p: 1, small: 0.8 },
+  mobile: { h1: 4, h2: 4, h3: 2.75, h4: 2, p: 1.125, small: 0.9 }
 };
 
 export const applyTheme = (config: any) => {
-    if (!config) return;
+  if (!config) return;
 
-    // 1. Set Base Font Size (global)
-    document.documentElement.style.fontSize = `${config.baseFontSize}px`;
+  // 1. Set Base Font Size (global)
+  document.documentElement.style.fontSize = `${config.baseFontSize}px`;
 
-    // 2. Generate CSS Block with Media Queries
-    // This allows us to use CSS variables that change based on viewport width
-    const styleId = 'vrakfest-dynamic-theme';
-    let styleEl = document.getElementById(styleId);
+  // 2. Generate CSS Block with Media Queries
+  const styleId = 'vrakfest-dynamic-theme';
+  let styleEl = document.getElementById(styleId);
 
-    if (!styleEl) {
-        styleEl = document.createElement('style');
-        styleEl.id = styleId;
-        document.head.appendChild(styleEl);
-    }
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = styleId;
+    document.head.appendChild(styleEl);
+  }
 
-    // Helper to generate vars string
-    const getVars = (items: any[]) => items.map(item => `--fs-${item.tag}: ${item.rem}rem;`).join('\n');
+  // Helper to generate vars string
+  const getVars = (items: { [key: string]: number }) =>
+    Object.entries(items)
+      .map(([tag, rem]) => `--fs-${tag}: ${rem}rem;`)
+      .join('\n');
 
-    // We define Desktop as root (default), then override for smaller screens
-    const css = `
+  const css = `
     /* Default / Desktop (Base) */
     :root {
       ${getVars(config.desktop)}
@@ -83,22 +52,13 @@ export const applyTheme = (config: any) => {
     }
   `;
 
-    styleEl.innerHTML = css;
+  styleEl.innerHTML = css;
 };
 
 export const ThemeController = () => {
-    useEffect(() => {
-        try {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                applyTheme(JSON.parse(stored));
-            } else {
-                applyTheme(DEFAULT_CONFIG);
-            }
-        } catch (e) {
-            console.error('Failed to load theme:', e);
-        }
-    }, []);
+  useEffect(() => {
+    applyTheme(DEFAULT_CONFIG);
+  }, []);
 
-    return null;
+  return null;
 };

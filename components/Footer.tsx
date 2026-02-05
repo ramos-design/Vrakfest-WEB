@@ -53,8 +53,6 @@ export const Footer = () => (
         <div className="container mx-auto px-6 pt-16 border-t border-white/5 text-center font-tech text-xs text-gray-600 tracking-[0.5em] uppercase font-black">
             <p>
                 © 2026 VRAKFEST_SYSTEMS. ALL_SYSTEMS_SECURED.
-                <span className="mx-2 text-[#F4CE14]">|</span>
-                <Link to="/dsgn" className="hover:text-[#F4CE14] transition-colors">DSGN</Link>
             </p>
         </div>
 
