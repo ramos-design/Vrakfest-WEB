@@ -50,7 +50,7 @@ export const TechNavBar = () => {
 
     return (
         <>
-            <header className={`fixed top-0 left-0 w-full z-[60] transition-all duration-300 border-b ${scrolled && !mobileMenuOpen ? 'bg-[#111]/95 border-white/5 shadow-2xl py-3' : mobileMenuOpen ? 'bg-transparent border-transparent py-5 lg:py-6' : 'bg-transparent border-white/5 py-5 lg:py-6'}`}>
+            <header className={`fixed top-0 left-0 w-full z-[999] transition-all duration-300 border-b ${scrolled && !mobileMenuOpen ? 'bg-[#111]/95 border-white/5 shadow-2xl py-3' : mobileMenuOpen ? 'bg-transparent border-transparent py-5 lg:py-6' : 'bg-transparent border-white/5 py-5 lg:py-6'}`}>
                 {/* 
                     GRID LAYOUT STRATEGY:
                     Mobile: [ User Icon ] [ Logo (Centered ABSOLUTELY) ] [ Toggle Button ]
@@ -124,7 +124,7 @@ export const TechNavBar = () => {
             </header>
 
             {/* FULL SCREEN MOBILE MENU OVERLAY - Slide from Top */}
-            <div className={`fixed inset-0 bg-[#F4CE14] z-[50] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-32 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`fixed inset-0 bg-[#F4CE14] z-[998] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-32 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
 
                 {/* Mobile Menu Content */}
                 <nav className="flex-1 flex flex-col justify-start items-center gap-6 p-8 overflow-y-auto">

@@ -6,7 +6,7 @@ import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
   ChevronDown, ChevronRight, CheckCircle, Info,
-  Search, ExternalLink, Settings, Cpu, ArrowRight, User
+  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User
 } from 'lucide-react';
 import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS } from '../constants';
 import { Driver } from '../types';
@@ -957,32 +957,6 @@ const EventGrid = () => {
 
 const DriverRoster = () => {
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    let animationId: number;
-    const speed = 1.5; // "trochu víc to zrychli"
-
-    const animate = () => {
-      // Run auto-scroll if not paused (works on both mobile and desktop)
-      if (!isPaused) {
-        if (el.scrollLeft >= (el.scrollWidth / 3)) {
-          // Reset to start (seamless loop logic with tripled content)
-          el.scrollLeft = 1;
-        } else {
-          el.scrollLeft += speed;
-        }
-      }
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animationId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationId);
-  }, [isPaused]);
 
   return (
     <section id="jezdci" className="py-32 bg-black overflow-hidden relative">
@@ -997,7 +971,7 @@ const DriverRoster = () => {
             }
           />
 
-          {/* Dynamic Driver Count Badge - Matches Hero Section Style */}
+          {/* Dynamic Driver Count Badge */}
           <div className="w-full md:w-auto relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
             <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -1013,70 +987,68 @@ const DriverRoster = () => {
         </div>
       </div>
 
-      <div
-        ref={scrollRef}
-        className="flex gap-6 px-6 overflow-x-auto no-scrollbar touch-pan-x"
-        onTouchStart={() => setIsPaused(true)}
-        onTouchEnd={() => setTimeout(() => setIsPaused(false), 2000)}
-      >
-        {[...DRIVERS, ...DRIVERS, ...DRIVERS].map((driver, i) => {
-          // Parse Name and Nickname (e.g. PETR "DEMOLIČ" NOVÁK)
-          let nickname = driver.category;
-          let displayName = driver.name;
+      <div className="w-full relative overflow-hidden">
+        <div className="flex gap-6 px-6 w-max animate-driver-scroll hover:pause-off">
+          {/* We repeat the drivers 3 times to ensure smooth infinite looping */}
+          {[...DRIVERS, ...DRIVERS, ...DRIVERS].map((driver, i) => {
+            // Parse Name and Nickname
+            let nickname = driver.category;
+            let displayName = driver.name;
 
-          const parts = driver.name.split('"');
-          if (parts.length >= 3) {
-            nickname = parts[1]; // The part inside quotes
-            displayName = (parts[0] + parts[2]).replace(/\s+/g, ' ').trim(); // Remove extra spaces
-          }
+            const parts = driver.name.split('"');
+            if (parts.length >= 3) {
+              nickname = parts[1];
+              displayName = (parts[0] + parts[2]).replace(/\s+/g, ' ').trim();
+            }
 
-          const shortCarName = driver.car.split(' ').slice(0, 2).join(' ');
+            const shortCarName = driver.car.split(' ').slice(0, 2).join(' ');
 
-          return (
-            <div
-              key={`${driver.id}-${i}`}
-              className="min-w-[280px] w-[280px] aspect-[4/6] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
-              onClick={() => setSelectedDriver(driver)}
-            >
-              {/* Card Image Area */}
-              <div className="flex-1 relative overflow-hidden">
-                <img
-                  src={driver.image}
-                  alt={driver.name}
-                  className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-90"></div>
+            return (
+              <div
+                key={`${driver.id}-${i}`}
+                className="min-w-[280px] w-[280px] aspect-[4/6] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
+                onClick={() => setSelectedDriver(driver)}
+              >
+                {/* Card Image Area */}
+                <div className="flex-1 relative overflow-hidden">
+                  <img
+                    src={driver.image}
+                    alt={driver.name}
+                    className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-90"></div>
 
-                {/* Overlay Name */}
-                <div className="absolute bottom-4 left-4 right-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <p className="font-tech text-[#F4CE14] text-sm tracking-widest uppercase font-bold mb-2 drop-shadow-md">"{nickname}"</p>
-                  <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas text-white leading-[1.1] uppercase tracking-tight font-bold">{displayName}</h4>
+                  {/* Overlay Name */}
+                  <div className="absolute bottom-4 left-4 right-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <p className="font-tech text-[#F4CE14] text-sm tracking-widest uppercase font-bold mb-2 drop-shadow-md">"{nickname}"</p>
+                    <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas text-white leading-[1.1] uppercase tracking-tight font-bold">{displayName}</h4>
+                  </div>
+                </div>
+
+                {/* Stats Bar */}
+                <div className="p-4 grid grid-cols-3 gap-2 border-t border-white/10 bg-[#0a0a0a] group-hover:bg-[#F4CE14] transition-colors duration-300 group-hover:text-black">
+                  <div className="text-center border-r border-white/10 group-hover:border-black/10">
+                    <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">ZÁVODŮ</p>
+                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.races}</p>
+                  </div>
+                  <div className="text-center border-r border-white/10 group-hover:border-black/10">
+                    <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">VÝHRY</p>
+                    <p className="font-bebas text-xl text-[#F4CE14] group-hover:text-black font-bold">{driver.stats.wins}</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">BODY</p>
+                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.points}</p>
+                  </div>
+                </div>
+
+                {/* Car Model Strip */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#F4CE14] text-black px-3 py-1 font-tech font-bold uppercase text-sm tracking-wider shadow-lg z-10 whitespace-nowrap">
+                  {shortCarName}
                 </div>
               </div>
-
-              {/* Stats Bar */}
-              <div className="p-4 grid grid-cols-3 gap-2 border-t border-white/10 bg-[#0a0a0a] group-hover:bg-[#F4CE14] transition-colors duration-300 group-hover:text-black">
-                <div className="text-center border-r border-white/10 group-hover:border-black/10">
-                  <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">ZÁVODŮ</p>
-                  <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.races}</p>
-                </div>
-                <div className="text-center border-r border-white/10 group-hover:border-black/10">
-                  <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">VÝHRY</p>
-                  <p className="font-bebas text-xl text-[#F4CE14] group-hover:text-black font-bold">{driver.stats.wins}</p>
-                </div>
-                <div className="text-center">
-                  <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">BODY</p>
-                  <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.points}</p>
-                </div>
-              </div>
-
-              {/* Car Model Strip (Slide Down) */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#F4CE14] text-black px-3 py-1 font-tech font-bold uppercase text-sm tracking-wider shadow-lg z-10 whitespace-nowrap">
-                {shortCarName}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
 
       {/* Action Buttons */}
@@ -1126,14 +1098,14 @@ const DriverRoster = () => {
       )}
 
       <style>{`
-        @keyframes scrollX {
+        @keyframes driverScroll {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.3333%); }
         }
-        .animate-scroll-x {
-          animation: scrollX 60s linear infinite;
+        .animate-driver-scroll {
+          animation: driverScroll 40s linear infinite;
         }
-        .pause:hover { animation-play-state: paused; }
+        /* No pause on hover class is purposefully omitted */
       `}</style>
     </section>
   );
@@ -1161,25 +1133,25 @@ const Standings = () => {
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
             BODOVÉ POŘADÍ
           </h2>
-          <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">AKTUÁLNÍ STAV SEZÓNY 2026</p>
+          <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">STAV SEZÓNY 2025</p>
           <div className="w-24 h-1 bg-[#F4CE14] mt-4 relative mx-auto">
             <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
           </div>
         </div>
 
         {/* Category Tabs */}
-        <div className="flex justify-center gap-6 mb-16">
+        <div className="flex flex-row justify-center gap-2 md:gap-6 mb-12 md:mb-16 w-full">
           {(Object.keys(categoryLabels) as Array<keyof typeof categoryLabels>).map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`relative px-8 py-3 transition-all duration-300 group ${activeCategory === category ? 'z-10' : 'z-0'}`}
+              className={`relative flex-1 px-2 py-4 md:px-8 md:py-3 transition-all duration-300 group ${activeCategory === category ? 'z-10' : 'z-0'}`}
             >
               <div className={`absolute inset-0 transform -skew-x-[15deg] border-2 transition-all duration-300 ${activeCategory === category
                 ? 'bg-[#F4CE14] border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.4)]'
                 : 'bg-transparent border-white/20 group-hover:border-[#F4CE14]/50'
                 }`}></div>
-              <span className={`relative font-tech font-bold text-[20px] uppercase tracking-wider transition-colors duration-300 ${activeCategory === category ? 'text-black' : 'text-gray-400 group-hover:text-white'}`}>
+              <span className={`relative font-tech font-bold text-sm md:text-[20px] uppercase tracking-wider transition-colors duration-300 whitespace-nowrap ${activeCategory === category ? 'text-black' : 'text-gray-400 group-hover:text-white'}`}>
                 {categoryLabels[category]}
               </span>
             </button>
@@ -1566,7 +1538,7 @@ const RegistrationForm = () => {
       ></div>
 
       <div className="container mx-auto px-6 max-w-4xl text-left">
-        <div className="mb-20 text-center">
+        <div className="mb-8 md:mb-20 text-center">
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas mb-12 tracking-tight leading-none uppercase font-semibold text-black">REGISTRACE JEZDCE</h2>
 
           {/* Progress Bar */}
@@ -1593,7 +1565,7 @@ const RegistrationForm = () => {
           {/* STEP 1: Personal Information */}
           {step === 1 && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Jméno *</label>
                   <input
@@ -1613,13 +1585,13 @@ const RegistrationForm = () => {
               </div>
 
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka *</label>
                   <input
                     type="text"
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
-                    placeholder="Tvoje přezdívka (např. Drtič)"
+                    placeholder="Např. Drtič"
                   />
                 </div>
                 <div>
@@ -1634,7 +1606,7 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">E-mail *</label>
                   <input
@@ -1662,7 +1634,7 @@ const RegistrationForm = () => {
           {/* STEP 2: Vehicle Information */}
           {step === 2 && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="grid md:grid-cols-[1fr_2fr] gap-6">
+              <div className="grid grid-cols-[1fr_2fr] gap-4 md:gap-6">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Startovní číslo *</label>
                   <input
@@ -1680,7 +1652,7 @@ const RegistrationForm = () => {
                   <input
                     type="text"
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
-                    placeholder="Typ závodního vozu (Škoda Favorit, Ford Mondeo...)"
+                    placeholder="Např. Škoda Fabia"
                   />
                 </div>
               </div>
@@ -1707,7 +1679,7 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Odkud jsi? *</label>
                   <input
@@ -1728,8 +1700,8 @@ const RegistrationForm = () => {
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(1)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors">
-                  ← ZPĚT
+                <Button variant="outline" onClick={() => setStep(1)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
+                  <ArrowLeft size={24} />
                 </Button>
                 <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                   POKRAČOVAT →
@@ -1742,29 +1714,42 @@ const RegistrationForm = () => {
           {step === 3 && (
             <div className="space-y-8 animate-fadeIn">
               {/* Payment Information Box */}
-              <div className="border-4 border-dashed border-red-500 bg-red-50 p-6">
-                <h3 className="font-bebas text-xl text-center mb-4 uppercase leading-[1.1]">PLATBA STARTOVNÉHO:<br />(POUZE PŘEDEM)</h3>
-                <div className="space-y-2 text-center font-bold">
-                  <p className="text-sm">Číslo účtu:</p>
-                  <p className="text-2xl font-bebas">2402064559/2010</p>
-                  <p className="text-sm mt-4">Částka:</p>
-                  <p className="text-2xl font-bebas text-red-600">2000 Kč</p>
-                  <p className="text-sm mt-4">Variabilní symbol:</p>
-                  <p className="text-2xl font-bebas">1392025</p>
-                  <p className="text-sm mt-4">Poznámka:</p>
-                  <p className="text-base">VRAKFEST a „Vaše jméno"</p>
+              {/* Photo Upload & Password Section */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider">Profilová fotografie *</label>
+
+                <div className="grid grid-cols-2 md:grid-cols-[240px_1fr] gap-4 md:gap-6 items-start">
+                  <div>
+                    <label className="block w-full aspect-square cursor-pointer bg-white border-2 border-gray-200 hover:border-[#F4CE14] text-center flex flex-col items-center justify-center transition-colors group p-2 md:p-4">
+                      <input type="file" className="hidden" accept="image/*" />
+                      <div className="flex flex-col items-center gap-2 md:gap-3 text-gray-400 group-hover:text-black transition-colors">
+                        <svg className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
+                        <span className="font-bold uppercase tracking-widest text-[9px] md:text-[10px] leading-tight">Nahrát<br />fotku</span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <div className="contents md:flex md:flex-col md:gap-4">
+                    <p className="text-xs text-gray-500 leading-relaxed pt-1 md:pt-0">
+                      Nahrajte prosím fotografii pro váš profil jezdce. Může se jednat o fotku obličeje, celé postavy v kombinéze nebo třeba jen vašeho závodního speciálu. Maximální velikost 5MB, doporučený formát na výšku 4:3.
+                    </p>
+
+                    <div className="col-span-2 md:col-span-1">
+                      <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Heslo do aplikace *</label>
+                      <input
+                        type="password"
+                        className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                        placeholder="Nastavte si heslo"
+                      />
+                      <p className="text-xs text-gray-400 mt-2">
+                        Slouží pro přihlášení do mobilní aplikace.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Important Notice */}
-              <div className="border-4 border-dashed border-red-500 bg-red-50 p-6">
-                <p className="font-bold text-center mb-4">POZOR – Startovné lze zaplatit pouze předem.<br />Platba startovného hotově na místě nebude možná!</p>
-                <p className="text-sm text-center">Počet startujících závodníků je omezený – platbou předem rezervujete své místo v závodě.</p>
-                <p className="text-sm text-center mt-4">Závodník bude připsán na startovní listinu při přijetí platby.</p>
-                <p className="text-sm text-center mt-4">V ceně je volný vstup pro závodníka jeho posádku včetně místa v depu pro jedno doprovodné vozidlo.</p>
-                <p className="text-sm text-center mt-4 font-bold">Hlavní výhra je 10000 Kč + Stylové poháry od firmy YOMAX a dárky od sponzorů Elektro Dvořák Valašské Meziříčí.</p>
-                <p className="text-sm text-center mt-4 font-bold">Níže najdete pravidla závodu.</p>
-              </div>
+
 
               {/* Consent Checkboxes */}
               <div className="space-y-4">
@@ -1780,14 +1765,22 @@ const RegistrationForm = () => {
                   <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
                   <span className="text-sm">
                     <strong>Souhlas s pravidly: *</strong><br />
-                    Čestně prohlašuji, že jsem si přečetl pravidla závodu (viz níže), souhlasím s nimi a budu je dodržovat.
+                    Čestně prohlašuji, že jsem si přečetl <a href="#pravidla" className="text-black font-bold underline hover:text-[#F4CE14] transition-colors">pravidla závodu</a>, souhlasím s nimi a budu je dodržovat.
+                  </span>
+                </label>
+
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
+                  <span className="text-sm">
+                    <strong>Ochrana osobních údajů: *</strong><br />
+                    Souhlasím se zpracováním osobních údajů pro účely registrace a účasti v závodě.
                   </span>
                 </label>
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(2)} className="flex-1 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors">
-                  ← ZPĚT
+                <Button variant="outline" onClick={() => setStep(2)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
+                  <ArrowLeft size={24} />
                 </Button>
                 <Button className="flex-1 bg-green-600 text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                   🏁 ZAREGISTROVAT
@@ -1808,7 +1801,7 @@ const RegistrationForm = () => {
           backgroundSize: '32px 32px'
         }}
       ></div>
-    </section>
+    </section >
   );
 };
 
@@ -1828,20 +1821,83 @@ const AccreditationAndArticles = () => {
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
           {/* Left Column: Accreditation */}
-          <div>
-            <div className="flex items-center gap-4 mb-8">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">AKREDITACE</h3>
+
+          {/* NEW: Driver Information Q&A */}
+          <div id="informace-pro-jezdce">
+            <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none mb-8">
+              INFORMACE PRO JEZDCE
+            </h3>
+
+            <div className="space-y-4 font-tech text-gray-400">
+              <div className="bg-white/5 border-l-4 border-[#F4CE14] p-6">
+                <p className="font-bold text-white mb-2 uppercase tracking-wider text-lg">PLATBA STARTOVNÉHO</p>
+                <p className="leading-relaxed text-lg">
+                  POZOR – Startovné lze zaplatit <span className="text-white font-bold">pouze předem</span>.
+                  Platba startovného hotově na místě <span className="text-red-500 font-bold">nebude možná!</span>
+                </p>
+              </div>
+
+              <div className="bg-white/5 border-l-4 border-gray-700 hover:border-[#F4CE14] transition-colors p-6">
+                <p className="font-bold text-white mb-2 uppercase tracking-wider text-lg">REZERVACE MÍSTA</p>
+                <p className="leading-relaxed text-lg">
+                  Počet startujících závodníků je omezený – platbou předem rezervujete své místo v závodě.
+                  Závodník bude připsán na startovní listinu při přijetí platby.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border-l-4 border-gray-700 hover:border-[#F4CE14] transition-colors p-6">
+                <p className="font-bold text-white mb-2 uppercase tracking-wider text-lg">CO JE V CENĚ?</p>
+                <p className="leading-relaxed text-lg">
+                  V ceně je volný vstup pro závodníka jeho posádku včetně místa v depu pro jedno doprovodné vozidlo.
+                </p>
+              </div>
+
+              <div className="bg-white/5 border-l-4 border-gray-700 hover:border-[#F4CE14] transition-colors p-6">
+                <p className="font-bold text-white mb-2 uppercase tracking-wider text-lg">VÝHRY A CENY</p>
+                <p className="leading-relaxed text-lg">
+                  Hlavní výhra je <span className="text-[#F4CE14] font-bold">10 000 Kč</span> + Stylové poháry od firmy YOMAX a dárky od sponzorů Elektro Dvořák Valašské Meziříčí.
+                </p>
+              </div>
+
+              <a href="#pravidla" className="block mt-6 text-[#F4CE14] hover:text-white transition-colors uppercase tracking-widest text-sm font-bold flex items-center gap-2 group">
+                <span className="w-8 h-[2px] bg-[#F4CE14] group-hover:w-16 transition-all"></span>
+                PRAVIDLA NAJDETE KLIKNUTÍM ZDE
+              </a>
             </div>
-            <p className="font-tech text-gray-400 mb-8 leading-relaxed">
+          </div>
+
+          {/* Existing Accreditation Form */}
+          {/* Existing Accreditation Form */}
+          <div id="akreditace" className="bg-[#F4CE14] p-8 md:p-10 relative overflow-hidden shadow-2xl">
+
+            <div className="flex items-center gap-4 mb-6 relative z-10">
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-black uppercase tracking-tight font-bold leading-none">AKREDITACE 2026</h3>
+            </div>
+            <p className="font-tech text-black/70 mb-8 leading-relaxed font-medium relative z-10">
               Jste fotograf, kameraman nebo novinář? Získejte oficiální akreditaci na Vrakfest a přístup do media zóny.
             </p>
 
-            <form className="space-y-4">
+            <form className="space-y-4 relative z-10">
               <div className="grid gap-4">
                 <div className="space-y-2">
-                  <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Pozice</label>
+                  <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Vyberte Závod</label>
                   <div className="relative">
-                    <select className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none appearance-none cursor-pointer hover:bg-white/10 transition-colors">
+                    <select className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none appearance-none cursor-pointer hover:bg-black/10 transition-colors font-bold">
+                      <option>OSTRAVA - 4.4.2026</option>
+                      <option>HRACHOVEC - 27.6.2026</option>
+                      <option>NOVÉ MÍSTO - 22.8.2026</option>
+                      <option>OSTRAVA - 24.10.2026</option>
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black/60">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Pozice</label>
+                  <div className="relative">
+                    <select className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none appearance-none cursor-pointer hover:bg-black/10 transition-colors font-bold">
                       <option>Fotograf</option>
                       <option>Kameraman</option>
                       <option>Dronař</option>
@@ -1849,25 +1905,25 @@ const AccreditationAndArticles = () => {
                       <option>Novinář</option>
                       <option>Televize</option>
                     </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black/60">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Jméno a Příjmení</label>
-                  <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-gray-700" placeholder="JAN NOVÁK" />
+                  <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Jméno a Příjmení</label>
+                  <input type="text" className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none hover:bg-black/10 transition-colors placeholder:text-black/40 font-bold" placeholder="JAN NOVÁK" />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Email</label>
-                    <input type="email" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-gray-700" placeholder="@" />
+                    <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Email</label>
+                    <input type="email" className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none hover:bg-black/10 transition-colors placeholder:text-black/40 font-bold" placeholder="@" />
                   </div>
                   <div className="space-y-2">
-                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Telefon</label>
-                    <input type="tel" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-gray-700" placeholder="+420" />
+                    <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Telefon</label>
+                    <input type="tel" className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none hover:bg-black/10 transition-colors placeholder:text-black/40 font-bold" placeholder="+420" />
                   </div>
                 </div>
               </div>
@@ -1875,54 +1931,70 @@ const AccreditationAndArticles = () => {
 
               <div className="h-4"></div>
 
-              <Button className="w-full md:w-1/2">
+              <Button className="w-full bg-black text-white hover:bg-white hover:text-black border-transparent shadow-xl">
                 ODESLAT ŽÁDOST
               </Button>
             </form>
           </div>
 
-          {/* Right Column: Articles */}
-          <div className="bg-white/5 border border-white/10 p-8 lg:p-12 shadow-2xl relative overflow-hidden">
-            {/* Decorative background accent */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#F4CE14]/5 blur-[80px] rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
 
-            <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-8">
-                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">POSLEDNÍ ČLÁNKY</h3>
-              </div>
 
-              <div className="space-y-6">
-                {articles.map((article, i) => (
-                  <div key={i} className={`group cursor-pointer border-b border-white/10 ${i === 2 ? 'border-b-0 pb-0' : 'pb-6'} hover:border-[#F4CE14] transition-colors`}>
 
-                    {/* Image for first article only */}
-                    {i === 0 && (
-                      <div className="mb-4 overflow-hidden rounded-sm border border-white/10 group-hover:border-[#F4CE14]/50 transition-colors">
-                        <img
-                          src="/articles/winter_prep.png"
-                          alt="Zimní příprava"
-                          className="w-full h-48 object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
-                        />
-                      </div>
-                    )}
+        </div>
 
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="w-2 h-2 bg-[#F4CE14] rounded-full"></span>
-                      <span className="font-tech text-xs text-gray-500 uppercase tracking-widest">{new Date().getFullYear()}</span>
+        {/* ROW 2: Articles & Media */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start border-t border-white/5 pt-16 mt-24">
+
+          {/* Left: Articles */}
+          <div className="bg-white/5 border border-white/10 p-8 shadow-2xl relative overflow-hidden">
+            <div className="flex items-center gap-4 mb-8">
+              <h3 className="font-bebas text-3xl text-white uppercase tracking-tight font-bold leading-none">POSLEDNÍ ČLÁNKY</h3>
+            </div>
+            <div className="space-y-6">
+              {articles.map((article, i) => (
+                <div key={i} className={`group cursor-pointer border-b border-white/10 ${i === 2 ? 'border-b-0 pb-0' : 'pb-6'} hover:border-[#F4CE14] transition-colors`}>
+
+                  {/* Image for first article only */}
+                  {i === 0 && (
+                    <div className="mb-4 overflow-hidden rounded-sm border border-white/10 group-hover:border-[#F4CE14]/50 transition-colors">
+                      <img
+                        src="/articles/winter_prep.png"
+                        alt="Zimní příprava"
+                        className="w-full h-48 object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
+                      />
                     </div>
-                    <h4 className="font-bebas text-2xl text-white group-hover:text-[#F4CE14] transition-colors mb-2 tracking-wide">{article.title}</h4>
-                    <p className="font-tech text-gray-400 text-sm leading-relaxed">{article.text}</p>
-                  </div>
-                ))}
-              </div>
+                  )}
 
-              <Button variant="outline" className="mt-8 w-full md:w-auto">
-                VŠECHNY ČLÁNKY
-              </Button>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-2 h-2 bg-[#F4CE14] rounded-full"></span>
+                    <span className="font-tech text-xs text-gray-500 uppercase tracking-widest">{new Date().getFullYear()}</span>
+                  </div>
+                  <h4 className="font-bebas text-xl text-white group-hover:text-[#F4CE14] transition-colors mb-2 tracking-wide">{article.title}</h4>
+                  <p className="font-tech text-gray-400 text-sm leading-relaxed line-clamp-2">{article.text}</p>
+                </div>
+              ))}
+            </div>
+            <Button variant="outline" className="mt-8 w-full">VŠECHNY ČLÁNKY</Button>
+          </div>
+
+          {/* Right: Media Logos */}
+          <div>
+            <div className="flex items-center gap-4 mb-8">
+              <h3 className="font-bebas text-3xl text-[#F4CE14] uppercase tracking-tight font-bold leading-none">NAPSALI O NÁS</h3>
+            </div>
+            <p className="font-tech text-gray-400 mb-8">Vrakfest se pravidelně objevuje v médiích.</p>
+
+            <div className="grid grid-cols-2 gap-4">
+              {['DENIK.CZ', 'VALAŠSKÝ DENÍK', 'PORTAL RIDIČE', 'POLAR TV', 'KURZY.CZ'].map((media, i) => (
+                <div key={i} className="h-24 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-[#F4CE14]/30 transition-all cursor-default group">
+                  <span className="font-bebas text-2xl text-gray-600 group-hover:text-white transition-colors">{media}</span>
+                </div>
+              ))}
             </div>
           </div>
 
         </div>
+
       </div >
     </section >
   );
@@ -2054,8 +2126,22 @@ export const Home = () => {
         <DriverRoster />
         <Standings />
         <RulesAndSpecs />
-        <RegistrationForm />
+
+        {/* Caution Tape Separator */}
+        <div className="bg-gradient-to-b from-[#0a0a0a] to-black py-24 relative z-20">
+          <div className="relative h-20 bg-[#F4CE14] overflow-hidden -skew-y-1">
+            <div
+              className="absolute inset-0 h-full w-[200%]"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(45deg, #000 0, #000 40px, #F4CE14 40px, #F4CE14 80px)',
+                animation: 'slideTape 2s linear infinite'
+              }}
+            ></div>
+          </div>
+        </div>
+
         <AccreditationAndArticles />
+        <RegistrationForm />
         <MobileApp />
         <InstagramFeed />
       </main>
@@ -2065,6 +2151,10 @@ export const Home = () => {
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideTape {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-113.14px); }
         }
         .animate-fadeIn {
           animation: fadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;

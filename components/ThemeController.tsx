@@ -6,7 +6,7 @@ const DEFAULT_CONFIG = {
   baseFontSize: 16,
   desktop: { h1: 6.75, h2: 4.5, h3: 3, h4: 2.25, p: 1.125, small: 0.875 },
   tablet: { h1: 4.5, h2: 3.5, h3: 2.5, h4: 1.75, p: 1, small: 0.8 },
-  mobile: { h1: 4, h2: 4, h3: 2.75, h4: 2, p: 1.125, small: 0.9 }
+  mobile: { h1: 4.75, h2: 4, h3: 2.75, h4: 2, p: 1.125, small: 0.9 }
 };
 
 export const applyTheme = (config: any) => {

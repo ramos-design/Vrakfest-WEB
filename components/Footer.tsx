@@ -154,10 +154,15 @@ export const Footer = () => (
 
             {/* Bottom Bar */}
             <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                <p className="font-tech text-center md:text-left text-[10px] text-gray-600 tracking-[0.3em] uppercase order-2 md:order-1">
+                <p className="font-tech text-[10px] text-gray-500 uppercase tracking-widest order-3 md:order-1 text-center md:text-left">
                     © 2026 VRAKFEST_OFFICIAL. VŠECHNA PRÁVA VYHRAZENA.
                 </p>
-                <div className="flex flex-wrap justify-center gap-8 font-tech text-[10px] text-gray-500 uppercase tracking-widest order-1 md:order-2">
+
+                <p className="font-tech text-[10px] text-gray-500 uppercase tracking-widest order-2 md:order-2 text-center">
+                    TENTO WEB VYTVOŘIL <span className="text-[#F4CE14]">DANIEL RAMOS</span>
+                </p>
+
+                <div className="flex flex-wrap justify-center gap-8 font-tech text-[10px] text-gray-500 uppercase tracking-widest order-1 md:order-3">
                     <a href="#" className="hover:text-white transition-colors">OCHRANA OSOBNÍCH ÚDAJŮ</a>
                     <a href="#" className="hover:text-white transition-colors">OBCHODNÍ PODMÍNKY</a>
                 </div>
