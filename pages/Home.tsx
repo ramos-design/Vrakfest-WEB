@@ -6,7 +6,7 @@ import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
   ChevronDown, ChevronRight, CheckCircle, Info,
-  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User
+  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User, ShoppingBag
 } from 'lucide-react';
 import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS } from '../constants';
 import { Driver } from '../types';
@@ -222,7 +222,7 @@ const About = () => {
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-24 items-start w-full max-w-full">
           {/* Left Column - Content */}
           <div className="w-full max-w-full min-w-0 flex flex-col items-start text-left">
-            <SectionHeader title={<>MILUJEME AUTA,<br />ZÁBAVU A <span className="text-white">ADRENALIN</span></>} subtitle="JSME KOMUNITA PŘÁTEL, CO MAJÍ RÁDI BOURAČKY." />
+            <SectionHeader title={<>MILUJEME AUTA,<br />ZÁBAVU A <span className="text-white">ADRENALIN</span></>} subtitle="VRAKFEST JE PRO VŠECHNY, CO MAJÍ RÁDI BOURAČKY!" />
 
             <div className="w-full max-w-full prose prose-invert">
               <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-400 leading-relaxed mb-8 md:mb-12 font-medium break-words w-full">
@@ -1219,6 +1219,99 @@ const Standings = () => {
   );
 };
 
+const TriviaSlider = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slides = [
+    {
+      text: "Výhra v Demolition Derby je 10 000 Kč pro posledního v pohybu!",
+      image: "/media/DSC_0871.jpg"
+    },
+    {
+      text: "Vrakfestu se může zúčastnit každý starší 18 let se svým upraveným vrakem.",
+      image: "/media/DSC_4209.jpg"
+    },
+    {
+      text: "Po hlavním závodu následuje hromadná demolice zbylých pojízdných aut.",
+      image: "/media/DSC_0655.jpg"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative aspect-square overflow-hidden shadow-[0_0_10px_rgba(0,0,0,0.5)] group bg-black animate-fadeIn">
+      {slides.map((slide, idx) => (
+        <div
+          key={idx}
+          className={`absolute inset-0 p-8 md:p-12 flex flex-col justify-center items-center text-center transition-all duration-[1200ms] cubic-bezier(0.4, 0, 0.2, 1) will-change-[opacity,transform] ${currentSlide === idx
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-105 translate-y-4 pointer-events-none'
+            }`}
+        >
+          <img
+            src={slide.image}
+            className="absolute inset-0 w-full h-full object-cover grayscale brightness-[0.2] -z-10"
+            alt=""
+          />
+
+          <div className="relative z-10 w-full">
+            <div className={`transition-all duration-[1200ms] delay-200 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : '-translate-y-6 opacity-0'
+              }`}>
+              <span className="font-bebas text-[#F4CE14] text-4xl md:text-5xl lg:text-7xl tracking-tight uppercase drop-shadow-[0_0_15px_rgba(244,206,20,0.4)] font-bold block mb-2">
+                Věděli jste, že...?
+              </span>
+              <div className="w-16 h-1 bg-[#F4CE14] mx-auto mb-8 shadow-[0_0_10px_#F4CE14]"></div>
+            </div>
+
+            <p className={`font-tech text-white text-lg md:text-2xl uppercase font-bold tracking-tight leading-snug max-w-sm mx-auto transition-all duration-[1200ms] delay-400 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+              }`}>
+              {slide.text}
+            </p>
+          </div>
+        </div>
+      ))}
+
+      {/* Dynamic Progress Bars */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-3 z-10">
+        {slides.map((_, idx) => (
+          <div
+            key={idx}
+            className="h-1 bg-white/10 w-12 overflow-hidden relative"
+          >
+            {currentSlide === idx && (
+              <div className="absolute inset-0 bg-[#F4CE14] animate-progress-timer origin-left shadow-[0_0_8px_#F4CE14]"></div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Tech Grid Overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#F4CE14_1px,transparent_1px)] [background-size:24px_24px]"></div>
+
+      {/* Corner Brackets */}
+      <div className="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-[#F4CE14]/50"></div>
+      <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-[#F4CE14]/50"></div>
+      <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-[#F4CE14]/50"></div>
+      <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-[#F4CE14]/50"></div>
+
+      <style>{`
+        @keyframes progress-timer {
+          0% { transform: scaleX(0); }
+          100% { transform: scaleX(1); }
+        }
+        .animate-progress-timer {
+          animation: progress-timer 10s linear forwards;
+        }
+      `}</style>
+    </div>
+  );
+};
+
 const RulesAndSpecs = () => {
   const [activeCategory, setActiveCategory] = useState(0);
   const [activeItem, setActiveItem] = useState<number | null>(0);
@@ -1322,7 +1415,7 @@ const RulesAndSpecs = () => {
           content: [
             "Zpevnění či uchycení kapoty pro zvýšení tuhosti (řetězy, nebo šrouby či sváry)."
           ],
-          image: "https://picsum.photos/seed/hood/700/500"
+          image: "/media/povolene%20upravy/kapota-768x480.png"
         },
         {
           title: "DOPORUČENÉ VYSTUŽENÍ INTERIÉRU",
@@ -1330,14 +1423,14 @@ const RulesAndSpecs = () => {
             "Doporučené vystužení interiéru vozu, použití rámu (viz foto).",
             "Možnost omotání A,B sloupků pro zvýšení tuhosti karoserie."
           ],
-          image: "https://picsum.photos/seed/interior/700/500"
+          image: "/media/povolene%20upravy/R%C3%A1m-sloupky-768x507.png"
         },
         {
           title: "POVOLENÁ VÝZTUHA BOČNÍ",
           content: [
             "Povolená výztuha boční (Řidičovy strany!) Např.: hardox, jekl, roxor apod."
           ],
-          image: "https://picsum.photos/seed/side/700/500"
+          image: "/media/povolene%20upravy/vystuha-dve%C5%99e-1024x682.png"
         },
         {
           title: "POVOLENÉ ÚPRAVY V MOTOROVÉM PROSTORU",
@@ -1346,7 +1439,7 @@ const RulesAndSpecs = () => {
             "Za nárazníkem a blatníky nesmí být umístěno nic.",
             "Všechny skla kromě čelního musí být odstraněny!"
           ],
-          image: "https://picsum.photos/seed/engine_bay/700/500"
+          image: "/media/povolene%20upravy/Motorovy-prostor.png"
         }
       ]
     }
@@ -1451,20 +1544,22 @@ const RulesAndSpecs = () => {
                                 ))}
                               </ul>
 
-                              {/* Mobile Image - Shown below content when expanded */}
-                              <div className="lg:hidden mt-8 relative group overflow-hidden border-2 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-700 shadow-2xl">
-                                <img
-                                  src={item.image}
-                                  alt={item.title}
-                                  className="w-full h-[300px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                                <div className="absolute bottom-0 left-0 right-0 p-6">
-                                  <div className="font-bebas text-2xl text-white uppercase tracking-tight">
-                                    {item.title}
+                              {/* Mobile Image - Shown below content when expanded (ONLY for Modifications) */}
+                              {categoryIdx !== 0 && (
+                                <div className="lg:hidden mt-8 relative group overflow-hidden border-2 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-700 shadow-2xl">
+                                  <img
+                                    src={item.image}
+                                    alt={item.title}
+                                    className="w-full h-[300px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                                    <div className="font-bebas text-2xl text-white uppercase tracking-tight">
+                                      {item.title}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
+                              )}
 
                             </div>
                           </div>
@@ -1475,27 +1570,38 @@ const RulesAndSpecs = () => {
 
                   <div className={`${!isImageRight ? 'lg:order-1' : 'lg:order-2'} hidden lg:block`}>
                     <div className="sticky top-28 self-start">
-                      <div className={`relative group overflow-hidden border-4 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-500 shadow-2xl ${activeCategory === categoryIdx && activeItem === null ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
-                        }`}>
-                        <img
-                          key={activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].image : section.items[0].image}
-                          src={activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].image : section.items[0].image}
-                          alt="Pravidla a specifikace"
-                          className="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 animate-fadeIn"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
-                        <div className="absolute bottom-0 left-0 right-0 p-8">
-                          <div className="font-tech text-xs text-[#F4CE14] tracking-[0.3em] uppercase mb-2">
-                            {section.category}
-                          </div>
-                          <div className="font-bebas text-4xl text-white uppercase tracking-tight">
-                            {activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].title : section.items[0].title}
+                      {categoryIdx === 0 ? (
+                        <TriviaSlider />
+                      ) : (
+                        <div className={`relative group overflow-hidden border-4 border-white/10 hover:border-[#F4CE14]/40 transition-all duration-500 shadow-2xl ${activeCategory === categoryIdx && activeItem === null ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'
+                          }`}>
+                          <img
+                            key={activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].image : section.items[0].image}
+                            src={activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].image : section.items[0].image}
+                            alt="Pravidla a specifikace"
+                            className="w-full h-[600px] object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 animate-fadeIn"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
+                          <div className="absolute bottom-0 left-0 right-0 p-8">
+                            <div className="font-tech text-xs text-[#F4CE14] tracking-[0.3em] uppercase mb-2">
+                              {section.category}
+                            </div>
+                            <div className="font-bebas text-4xl text-white uppercase tracking-tight">
+                              {activeCategory === categoryIdx ? rulesData[categoryIdx].items[activeItem ?? lastActiveItem].title : section.items[0].title}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
+
+                {/* Mobile Trivia Slider (between sections) */}
+                {categoryIdx === 0 && (
+                  <div className="lg:hidden mt-8">
+                    <TriviaSlider />
+                  </div>
+                )}
               </div>
             );
           })}
@@ -2005,74 +2111,87 @@ const MobileApp = () => (
     <div className="absolute inset-0 bg-[linear-gradient(rgba(244,206,20,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,206,20,0.03)_1px,transparent_1px)] bg-[length:50px_50px] pointer-events-none"></div>
 
     <div className="container mx-auto px-6 relative z-10 text-left">
-      <div className="grid lg:grid-cols-2 gap-24 items-center">
-        <div className="order-2 lg:order-1 flex justify-center relative scale-90 md:scale-100">
+      <div className="grid lg:grid-cols-3 gap-16 lg:gap-24 items-center">
+        {/* Left Column: Mobile (33%) */}
+        <div className="lg:col-span-1 flex justify-center relative scale-85 md:scale-100 lg:scale-110 origin-center lg:-ml-8">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-[#F4CE14]/10 blur-[140px] rounded-full animate-pulse"></div>
 
-          <div className="relative w-[340px] h-[680px] bg-black border-[16px] border-[#222] rounded-[60px] shadow-[0_0_100px_rgba(0,0,0,1)] z-10 p-2 overflow-hidden border-b-[24px]">
-            <div className="h-full rounded-[44px] overflow-hidden bg-[#0d0d0d] p-8 pt-14 flex flex-col font-tech text-left">
-              <div className="flex items-center gap-4 mb-12 border-b-2 border-white/5 pb-8">
-                <Shield size={32} className="text-[#F4CE14]" />
-                <span className="font-bebas text-4xl tracking-tight uppercase font-bold">VRAK<span className="text-[#F4CE14]">APP</span></span>
+          <div className="relative w-[320px] h-[640px] bg-black border-[14px] border-[#222] rounded-[50px] shadow-[0_0_80px_rgba(0,0,0,1)] z-10 p-2 overflow-hidden border-b-[20px]">
+            <div className="h-full rounded-[38px] overflow-hidden bg-[#0a0a0a] p-5 pt-10 flex flex-col font-tech text-left relative">
+              <div className="flex justify-center mb-8 border-b border-white/5 pb-6">
+                <img src="/video/LOGO-Y.png" alt="VRAKAPP" className="h-10 w-auto object-contain brightness-110" />
               </div>
 
-              <div className="space-y-8 flex-1">
-                <div className="h-5 w-40 bg-white/5 rounded"></div>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="aspect-square bg-[#F4CE14]/15 border-2 border-[#F4CE14]/30 rounded-3xl flex flex-col items-center justify-center gap-3 group">
-                    <Clock size={28} className="text-[#F4CE14]" />
-                    <span className="text-[12px] text-[#F4CE14] font-semibold uppercase tracking-widest">TIMING</span>
+              <div className="grid grid-cols-2 gap-3 flex-1 overflow-hidden pb-4">
+                {[
+                  { icon: <Clock size={20} />, label: 'TIMING', active: true },
+                  { icon: <ShoppingCart size={20} />, label: 'BAZAR' },
+                  { icon: <Users size={20} />, label: 'HLASOVÁNÍ' },
+                  { icon: <User size={20} />, label: 'PROFILY' },
+                  { icon: <ShoppingBag size={20} />, label: 'MERCH' },
+                  { icon: <MapPin size={20} />, label: 'AKCE' }
+                ].map((tile, tidx) => (
+                  <div
+                    key={tidx}
+                    className={`aspect-square rounded-2xl border flex flex-col items-center justify-center gap-2 transition-all duration-500 ${tile.active
+                      ? 'bg-[#F4CE14]/10 border-[#F4CE14]/30 text-[#F4CE14]'
+                      : 'bg-white/5 border-white/10 text-gray-500'
+                      }`}
+                  >
+                    {tile.icon}
+                    <span className="text-[8px] font-bold tracking-widest leading-none">{tile.label}</span>
                   </div>
-                  <div className="aspect-square bg-white/5 border-2 border-white/10 rounded-3xl flex flex-col items-center justify-center gap-3">
-                    <ShoppingCart size={28} className="text-gray-500" />
-                    <span className="text-[12px] text-gray-500 font-semibold uppercase tracking-widest uppercase">BAZAR</span>
-                  </div>
-                </div>
+                ))}
               </div>
 
-              <div className="mt-auto flex justify-between gap-4 pb-4">
-                <div className="h-14 flex-1 bg-white/5 rounded-2xl border-2 border-white/10 flex items-center justify-center"><Users size={24} className="text-gray-400" /></div>
-                <div className="h-14 flex-1 bg-[#F4CE14] rounded-2xl flex items-center justify-center shadow-lg"><Play size={24} className="text-black fill-black" /></div>
-                <div className="h-14 flex-1 bg-white/5 rounded-2xl border-2 border-white/10 flex items-center justify-center"><Settings size={24} className="text-gray-400" /></div>
+              <div className="mt-auto flex justify-between gap-3 pb-2">
+                <div className="h-12 flex-1 bg-white/5 rounded-xl border-2 border-white/10 flex items-center justify-center"><Users size={20} className="text-gray-400" /></div>
+                <div className="h-12 flex-1 bg-[#F4CE14] rounded-xl flex items-center justify-center"><Play size={20} className="text-black fill-black" /></div>
+                <div className="h-12 flex-1 bg-white/5 rounded-xl border-2 border-white/10 flex items-center justify-center"><Settings size={20} className="text-gray-400" /></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="order-1 lg:order-2 text-left">
-          <SectionHeader title="VRAKFEST APP" subtitle="VŠE POTŘEBNÉ PŘÍMO V KAPSE." />
-          <ul className="space-y-10 mb-20">
+        {/* Right Column: Content (66%) */}
+        <div className="lg:col-span-2 text-left">
+          <SectionHeader title="VRAKFEST APP" subtitle="PŘIPRAVUJEME NĚCO VELKÉHO. PŘIDEJ SE NA WAITING LIST!" />
+
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
             {[
-              { icon: <Clock size={32} />, text: 'LIVE TIMING Z KAŽDÉ JÍZDY', desc: 'Sleduj časy všech závodníků v reálném čase se zpožděním pod 1 sekundu.' },
-              { icon: <ShoppingCart size={32} />, text: 'EXCLUSIVE MARKETPLACE', desc: 'Přístup k limitovaným nabídkám náhradních dílů přímo od jezdců.' },
-              { icon: <Users size={32} />, text: 'HLASOVÁNÍ DIVÁKŮ', desc: 'Rozhoduj o nejlepším vraku dne a vyhrávej ceny od sponzorů.' }
+              { icon: <Clock size={28} />, text: 'LIVE TIMING', desc: 'Sleduj body a časy všech závodníků online v reálném čase.' },
+              { icon: <ShoppingCart size={28} />, text: 'MARKETPLACE', desc: 'Přístup k limitovaným nabídkám náhradních dílů přímo od jezdců.' },
+              { icon: <Users size={28} />, text: 'HLASOVÁNÍ', desc: 'Rozhoduj o nejlepším vraku dne a vyhrávej ceny od sponzorů.' },
+              { icon: <User size={28} />, text: 'PROFILY JEZDCŮ', desc: 'Kompletní statistiky, historie bouraček a týmové info na jednom místě.' },
+              { icon: <ShoppingBag size={28} />, text: 'PRODEJ MERCHE', desc: 'Oficiální Vrakfest trička, mikiny a doplňky přímo v aplikaci.' },
+              { icon: <MapPin size={28} />, text: 'KALENDÁŘ AKCÍ', desc: 'Interaktivní mapa a harmonogram všech plánovaných závodů v sezóně.' }
             ].map((item, i) => (
-              <li key={i} className="flex gap-8 group">
-                <div className="flex-shrink-0 w-20 h-20 bg-white/5 border-2 border-white/10 flex items-center justify-center text-[#F4CE14] group-hover:bg-[#F4CE14] group-hover:text-black transition-all duration-700 group-hover:rotate-6 border-b-8 border-black shadow-2xl">
+              <div key={i} className="flex gap-6 group">
+                <div className="flex-shrink-0 w-16 h-16 bg-white/5 border-2 border-white/10 flex items-center justify-center text-[#F4CE14] group-hover:bg-[#F4CE14] group-hover:text-black transition-all duration-500 group-hover:-rotate-3 border-b-4 border-black shadow-xl">
                   {item.icon}
                 </div>
                 <div>
-                  <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas tracking-tight group-hover:text-[#F4CE14] transition-colors mb-2 uppercase font-bold">{item.text}</h4>
-                  <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-500 font-tech leading-relaxed max-w-md">{item.desc}</p>
+                  <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas tracking-tight group-hover:text-[#F4CE14] transition-colors mb-1 uppercase font-bold leading-none">{item.text}</h4>
+                  <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-500 font-tech leading-snug">{item.desc}</p>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
-          <div className="flex flex-col sm:flex-row gap-6">
-            <button className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 border-b-8 border-black p-6 flex items-center gap-5 transition-all group shadow-2xl">
-              <div className="text-[#F4CE14] group-hover:scale-110 transition-transform"><Shield size={40} /></div>
-              <div className="text-left">
-                <p className="text-[10px] font-tech text-gray-500 uppercase tracking-widest leading-none mb-1 font-semibold">DOWNLOAD ON THE</p>
-                <p className="font-bebas text-3xl leading-none uppercase tracking-tight font-bold">APP STORE</p>
+          </div>
+
+          <div className="max-w-3xl">
+            <p className="font-tech text-[#F4CE14] text-sm uppercase tracking-[0.2em] font-bold mb-4">BUĎ U TOHO JAKO PRVNÍ A PŘIDEJ SE NA WAITING LIST</p>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch pt-2">
+              <div className="flex-[2] min-w-0 relative transform -skew-x-[15deg] bg-white/5 border border-white/20 focus-within:border-[#F4CE14] transition-all duration-300">
+                <input
+                  type="email"
+                  placeholder="TVŮJ E-MAIL"
+                  className="w-full bg-transparent px-6 py-4 text-white font-tech focus:outline-none transform skew-x-[15deg] placeholder:text-white/20"
+                />
               </div>
-            </button>
-            <button className="flex-1 bg-white/5 hover:bg-white/10 border-2 border-white/10 border-b-8 border-black p-6 flex items-center gap-5 transition-all group shadow-2xl">
-              <div className="text-[#F4CE14] group-hover:scale-110 transition-transform"><Cpu size={40} /></div>
-              <div className="text-left">
-                <p className="text-[10px] font-tech text-gray-500 uppercase tracking-widest leading-none mb-1 font-semibold">GET IT ON</p>
-                <p className="font-bebas text-3xl leading-none uppercase tracking-tight font-bold">GOOGLE PLAY</p>
-              </div>
-            </button>
+              <Button className="flex-1 whitespace-nowrap !px-8">
+                PŘIDAT SE NA WAITING LIST
+              </Button>
+            </div>
           </div>
         </div>
       </div>
