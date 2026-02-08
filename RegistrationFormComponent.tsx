@@ -166,17 +166,50 @@ export const RegistrationForm = () => {
                     {step === 3 && (
                         <div className="space-y-8 animate-fadeIn">
                             {/* Payment Information Box */}
-                            <div className="border-4 border-dashed border-red-500 bg-red-50 p-6">
-                                <h3 className="font-bebas text-3xl text-center mb-4 uppercase">PLATBA STARTOVNÉHO:<br />(POUZE PŘEDEM)</h3>
-                                <div className="space-y-2 text-center font-bold">
-                                    <p className="text-sm">Číslo účtu:</p>
-                                    <p className="text-2xl font-bebas">2402064559/2010</p>
-                                    <p className="text-sm mt-4">Částka:</p>
-                                    <p className="text-2xl font-bebas text-red-600">2000 Kč</p>
-                                    <p className="text-sm mt-4">Variabilní symbol:</p>
-                                    <p className="text-2xl font-bebas">1392025</p>
-                                    <p className="text-sm mt-4">Poznámka:</p>
-                                    <p className="text-base">VRAKFEST a „Vaše jméno"</p>
+                            <div className="border-4 border-dashed border-red-500 bg-red-50/50 p-6 md:p-10 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rotate-45 translate-x-16 -translate-y-16"></div>
+
+                                <h3 className="font-bebas text-4xl text-center mb-8 uppercase tracking-tight text-red-600">
+                                    PLATBA STARTOVNÉHO:<br />
+                                    <span className="text-2xl text-black">(POUZE PŘEDEM!)</span>
+                                </h3>
+
+                                <div className="flex flex-col md:flex-row items-center gap-10">
+                                    <div className="flex-1 space-y-4 text-center md:text-left font-bold">
+                                        <div>
+                                            <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Číslo účtu:</p>
+                                            <p className="font-bebas text-3xl md:text-4xl text-black tracking-tight underline decoration-[#F4CE14] decoration-4 underline-offset-4">2402064559/0600</p>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Částka:</p>
+                                                <p className="font-bebas text-3xl text-red-600">2000 Kč</p>
+                                            </div>
+                                            <div>
+                                                <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Var. symbol:</p>
+                                                <p className="font-bebas text-3xl text-black">442026</p>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Poznámka pro příjemce:</p>
+                                            <p className="font-tech text-base md:text-lg bg-black text-white px-4 py-2 inline-block">VRAKFEST a „Vaše jméno"</p>
+                                        </div>
+                                    </div>
+
+                                    {/* QR Code Section */}
+                                    <div className="w-full md:w-auto flex flex-col items-center">
+                                        <div className="bg-white p-4 shadow-xl border-2 border-gray-100 group-hover:border-[#F4CE14] transition-colors duration-500 relative">
+                                            <img
+                                                src="/qr_payment_demo_1770476385305.png"
+                                                alt="QR Platba Demo"
+                                                className="w-40 h-40 md:w-48 md:h-48"
+                                            />
+                                            <div className="absolute inset-0 border-4 border-transparent group-hover:border-[#F4CE14]/20 pointer-events-none transition-all duration-500"></div>
+                                        </div>
+                                        <p className="font-tech text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">QR PLATBA (DEMO)</p>
+                                    </div>
                                 </div>
                             </div>
 

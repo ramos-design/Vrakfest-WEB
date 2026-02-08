@@ -60,13 +60,28 @@ const Hero = () => {
                 {EVENTS[0].title}
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
-                {EVENTS[0].date}
+                Vřesínská strž
               </p>
             </div>
 
-            {/* Stat Card New - Days to Start */}
+            {/* Stat Card 2 - Date */}
             {/* Mobile borders: Bottom only */}
             <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-b border-white/10 md:border-0">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+                KDY TO BUDE?
+              </p>
+
+              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+                4.4.
+              </p>
+              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
+                ULOŽ SI TO
+              </p>
+            </div>
+
+            {/* Stat Card 3 - Days to Start */}
+            {/* Mobile borders: Right only */}
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-white/10 md:border-0">
               <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 POČET DNÍ
               </p>
@@ -79,9 +94,9 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Stat Card 2 - Registered Racers */}
-            {/* Mobile borders: Right only */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-white/10 md:border-0">
+            {/* Stat Card 4 - Registered Racers */}
+            {/* Mobile borders: None */}
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
               <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 PŘIHLÁŠENÝCH
               </p>
@@ -91,21 +106,6 @@ const Hero = () => {
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 JEZDCŮ
-              </p>
-            </div>
-
-            {/* Stat Card 3 - Deadline */}
-            {/* Mobile borders: None */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
-                UZÁVĚRKA
-              </p>
-
-              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-                30.3.
-              </p>
-              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
-                PŘIHLÁŠEK
               </p>
             </div>
           </div>
@@ -226,9 +226,10 @@ const About = () => {
 
             <div className="w-full max-w-full prose prose-invert">
               <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-400 leading-relaxed mb-8 md:mb-12 font-medium break-words w-full">
-                Vrakfest není jen závod. Je to oslava destrukce, technické vynalézavosti a čistého adrenalinu.
-                Stovky diváků, desítky upravených vraků a jediný cíl: <span className="text-white border-b-2 border-[#F4CE14]">přežít</span>.
-                Žádné slitování, žádné brzdy, jen zvuk skřípějících plechů.
+                Zapomeňte na naleštěné karoserie. Tady vládne hrubá síla, technický um a nekonečný adrenalin.
+                Právě zde se staré plechy mění v legendy a kousky rezu v medaile.
+                Tisíce fanoušků, desítky upravených vraků a jediný cíl: probojovat se skrze chaos a dojet do cíle jako první.
+                Žádné brzdy, žádné slitování – jen čistá destrukce a zvuk kovu na kov.
               </p>
             </div>
 
@@ -624,7 +625,7 @@ const SponsorsTicker = () => {
 const Program = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [feesStarted, setFeesStarted] = useState(false);
-  const [feeCounts, setFeeCounts] = useState({ adult: 0, child: 0, registration: 0 });
+  const [feeCounts, setFeeCounts] = useState({ adult: 0, child: 0, family21: 0, family22: 0, registration: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const feesRef = useRef<HTMLDivElement>(null);
 
@@ -654,13 +655,23 @@ const Program = () => {
           setFeesStarted(true);
 
           // Animate adult ticket price
-          animateFeeCounter(0, 200, 1500, (val) =>
+          animateFeeCounter(0, 300, 1500, (val) =>
             setFeeCounts(prev => ({ ...prev, adult: val }))
           );
 
           // Animate child ticket price
-          animateFeeCounter(0, 100, 1500, (val) =>
+          animateFeeCounter(0, 200, 1500, (val) =>
             setFeeCounts(prev => ({ ...prev, child: val }))
+          );
+
+          // Animate family 2+1 price
+          animateFeeCounter(0, 600, 1500, (val) =>
+            setFeeCounts(prev => ({ ...prev, family21: val }))
+          );
+
+          // Animate family 2+2 price
+          animateFeeCounter(0, 800, 1500, (val) =>
+            setFeeCounts(prev => ({ ...prev, family22: val }))
           );
 
           // Animate registration fee
@@ -789,12 +800,30 @@ const Program = () => {
                     </div>
 
                     {/* Child Ticket */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between border-b-2 border-black/10 border-dashed pb-6">
                       <div className="flex flex-col">
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">DĚTI <span className="text-lg opacity-60 align-top ml-1 font-tech tracking-normal">(6-15 LET)</span></span>
                       </div>
                       <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.child} KČ</span>
+                    </div>
+
+                    {/* Family Ticket 2+1 */}
+                    <div className="flex items-center justify-between border-b-2 border-black/10 border-dashed pb-6">
+                      <div className="flex flex-col">
+                        <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
+                        <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">RODINA 2+1</span>
+                      </div>
+                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.family21} KČ</span>
+                    </div>
+
+                    {/* Family Ticket 2+2 */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col">
+                        <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
+                        <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">RODINA 2+2</span>
+                      </div>
+                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.family22} KČ</span>
                     </div>
                   </div>
                 </div>
@@ -1648,14 +1677,15 @@ const RegistrationForm = () => {
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas mb-12 tracking-tight leading-none uppercase font-semibold text-black">REGISTRACE JEZDCE</h2>
 
           {/* Progress Bar */}
-          <div className="relative flex items-center justify-center gap-14 md:gap-32 px-4 md:px-16">
+          <div className="relative flex items-center justify-center gap-10 md:gap-24 px-4 md:px-16">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[calc(100%-110px)] md:w-[calc(100%-128px)] h-1 bg-gray-100 -z-10 -translate-y-1/2"></div>
-            <div className="absolute top-1/2 left-[55px] md:left-[64px] h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `calc(${(step - 1) * 50}% - ${step === 1 ? 0 : step === 2 ? 0 : 0}px)` }}></div>
+            <div className="absolute top-1/2 left-[55px] md:left-[64px] h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `calc(${(step - 1) * 33.333}% - ${step === 1 ? 0 : 0}px)` }}></div>
 
             {[
               { num: 1, label: 'OSOBNÍ ÚDAJE' },
               { num: 2, label: 'VOZIDLO' },
-              { num: 3, label: 'DOKONČENÍ' }
+              { num: 3, label: 'PLATBA' },
+              { num: 4, label: 'DOKONČENÍ' }
             ].map(item => (
               <div key={item.num} className="flex flex-col items-center">
                 <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center font-tech font-semibold text-lg md:text-xl transition-all duration-500 ${step >= item.num ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
@@ -1817,9 +1847,71 @@ const RegistrationForm = () => {
           )}
 
           {/* STEP 3: Consent and Payment */}
+          {/* STEP 3: Payment */}
           {step === 3 && (
             <div className="space-y-8 animate-fadeIn">
               {/* Payment Information Box */}
+              <div className="border-4 border-dashed border-red-500 bg-red-50/50 p-6 md:p-10 relative overflow-hidden group mb-12">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rotate-45 translate-x-16 -translate-y-16"></div>
+
+                <h3 className="font-bebas text-4xl text-center mb-8 uppercase tracking-tight text-red-600">
+                  PLATBA STARTOVNÉHO:<br />
+                  <span className="text-2xl text-black">(POUZE PŘEDEM!)</span>
+                </h3>
+
+                <div className="flex flex-col md:flex-row items-center gap-10">
+                  <div className="flex-1 space-y-4 text-center md:text-left font-bold">
+                    <div>
+                      <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Číslo účtu:</p>
+                      <p className="font-bebas text-3xl md:text-4xl text-black tracking-tight underline decoration-[#F4CE14] decoration-4 underline-offset-4">2402064559/0600</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Částka:</p>
+                        <p className="font-bebas text-3xl text-red-600">2000 Kč</p>
+                      </div>
+                      <div>
+                        <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Var. symbol:</p>
+                        <p className="font-bebas text-3xl text-black">442026</p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="font-tech text-gray-500 text-[10px] uppercase tracking-widest mb-1">Poznámka pro příjemce:</p>
+                      <p className="font-tech text-base md:text-lg bg-black text-white px-4 py-2 inline-block">VRAKFEST a „Vaše jméno"</p>
+                    </div>
+                  </div>
+
+                  {/* QR Code Section */}
+                  <div className="w-full md:w-auto flex flex-col items-center">
+                    <div className="bg-white p-4 shadow-xl border-2 border-gray-100 group-hover:border-[#F4CE14] transition-colors duration-500 relative">
+                      <img
+                        src="/qr_payment_demo_1770476385305.png"
+                        alt="QR Platba Demo"
+                        className="w-40 h-40 md:w-48 md:h-48"
+                      />
+                      <div className="absolute inset-0 border-4 border-transparent group-hover:border-[#F4CE14]/20 pointer-events-none transition-all duration-500"></div>
+                    </div>
+                    <p className="font-tech text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">QR PLATBA (DEMO)</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 mt-8">
+                <Button variant="outline" onClick={() => setStep(2)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
+                  <ArrowLeft size={24} />
+                </Button>
+                <Button onClick={() => setStep(4)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
+                  MÁM ZAPLACENO, POKRAČOVAT →
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: Finalization */}
+          {step === 4 && (
+            <div className="space-y-8 animate-fadeIn">
               {/* Photo Upload & Password Section */}
               <div className="space-y-2">
                 <label className="block text-xs font-bold text-gray-600 uppercase tracking-wider">Profilová fotografie *</label>
@@ -1855,8 +1947,6 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
-
-
               {/* Consent Checkboxes */}
               <div className="space-y-4">
                 <label className="flex items-start gap-3 cursor-pointer">
@@ -1885,7 +1975,7 @@ const RegistrationForm = () => {
               </div>
 
               <div className="flex gap-4 mt-8">
-                <Button variant="outline" onClick={() => setStep(2)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
+                <Button variant="outline" onClick={() => setStep(3)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
                   <ArrowLeft size={24} />
                 </Button>
                 <Button className="flex-1 bg-green-600 text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
@@ -1906,7 +1996,7 @@ const RegistrationForm = () => {
           `,
           backgroundSize: '32px 32px'
         }}
-      ></div>
+      ></div >
     </section >
   );
 };
