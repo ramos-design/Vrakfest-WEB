@@ -11,8 +11,31 @@ import {
 import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS } from '../constants';
 import { Driver } from '../types';
 
+
+// --- Helper Functions ---
+// --- Helper Functions ---
+const formatEventDate = (dateStr: string, includeYear = false) => {
+  if (!dateStr) return '';
+  let day, month, year;
+  if (dateStr.includes('-')) {
+    const parts = dateStr.split('-');
+    day = parseInt(parts[2], 10);
+    month = parseInt(parts[1], 10);
+    year = parts[0];
+  } else if (dateStr.includes('.')) {
+    const parts = dateStr.split('.');
+    day = parseInt(parts[0], 10);
+    month = parseInt(parts[1], 10);
+    year = parts[2];
+  } else {
+    return dateStr;
+  }
+  return includeYear && year ? `${day}.${month}.${year}` : `${day}.${month}.`;
+};
+
 // --- Components ---
 import { InstagramFeed } from '../components/InstagramFeed';
+import { supabase } from '../supabaseClient';
 
 
 
@@ -23,8 +46,10 @@ import { InstagramFeed } from '../components/InstagramFeed';
 // --- Fixed Header with Grid Layout (1fr auto 1fr) ---
 
 
-const Hero = () => {
-  const targetDate = new Date('2026-04-04');
+const Hero = ({ activeEvent, registeredCount }: { activeEvent: any, registeredCount: number }) => {
+  const displayEvent = activeEvent || EVENTS[0];
+
+  const targetDate = new Date(displayEvent.date.split('.').reverse().join('-')); // Handle DD.MM.YYYY
   const daysToStart = Math.ceil((targetDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
 
   return (
@@ -57,10 +82,10 @@ const Hero = () => {
               </p>
 
               <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 text-center whitespace-nowrap">
-                {EVENTS[0].title}
+                {displayEvent.title}
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
-                Vřesínská strž
+                {displayEvent.location}
               </p>
             </div>
 
@@ -72,7 +97,7 @@ const Hero = () => {
               </p>
 
               <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-                4.4.
+                {formatEventDate(displayEvent.date)}
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 ULOŽ SI TO
@@ -102,7 +127,7 @@ const Hero = () => {
               </p>
 
               <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-                0<span className="text-white/30 text-3xl md:text-4xl ml-2 align-top">/90</span>
+                {registeredCount}<span className="text-white/30 text-3xl md:text-4xl ml-2 align-top">/90</span>
               </p>
               <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 JEZDCŮ
@@ -882,8 +907,16 @@ const Program = () => {
   );
 };
 
-const EventGrid = () => {
-  const [activeId, setActiveId] = useState('1');
+const EventGrid = ({ liveEvents }: { liveEvents: any[] }) => {
+  const eventsToDisplay = liveEvents.length > 0 ? liveEvents : EVENTS;
+  const [activeId, setActiveId] = useState(eventsToDisplay[0]?.id || '1');
+
+  // Sync activeId when liveEvents are loaded
+  useEffect(() => {
+    if (liveEvents.length > 0 && (activeId === '1' || !liveEvents.find(e => e.id === activeId))) {
+      setActiveId(liveEvents[0].id);
+    }
+  }, [liveEvents]);
 
   return (
     <section id="kalendar" className="py-32 bg-[#111] relative">
@@ -899,7 +932,7 @@ const EventGrid = () => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-4 h-[850px] lg:h-[600px] items-stretch">
-          {EVENTS.map((event) => {
+          {eventsToDisplay.map((event) => {
             const isActive = activeId === event.id;
             return (
               <div
@@ -930,14 +963,14 @@ const EventGrid = () => {
                   {/* Vertical Text (Invariant) */}
                   <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isActive ? 'opacity-0' : 'opacity-100 delay-500'}`}>
                     <h3 className="font-bebas !text-[22px] lg:!text-3xl text-gray-400 tracking-widest uppercase lg:-rotate-90 whitespace-nowrap group-hover:text-white transition-colors px-4 text-center leading-none">
-                      {event.title}
+                      {event.title} <span className="opacity-40 ml-2">{formatEventDate(event.date, true)}</span>
                     </h3>
                   </div>
 
                   {/* Date Badge - Visible only on active slide */}
                   <div className={`absolute top-0 left-0 z-10 transition-opacity duration-500 ${isActive ? 'opacity-100 delay-[400ms]' : 'opacity-0'}`}>
                     <div className="bg-[#F4CE14] text-black px-6 py-3 font-bebas text-2xl font-bold shadow-lg">
-                      {event.date}
+                      {formatEventDate(event.date, true)}
                     </div>
                   </div>
 
@@ -984,8 +1017,11 @@ const EventGrid = () => {
   );
 };
 
-const DriverRoster = () => {
+const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registeredCount: number, paidDrivers: any[], liveStandings: any[] }) => {
   const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+
+  // Fallback to static DRIVERS if no paid drivers yet
+  const driversToDisplay = paidDrivers && paidDrivers.length > 0 ? paidDrivers : DRIVERS;
 
   return (
     <section id="jezdci" className="py-32 bg-black overflow-hidden relative">
@@ -1009,7 +1045,7 @@ const DriverRoster = () => {
               PŘIHLÁŠENÝCH
             </p>
             <p className="font-bebas text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-              0<span className="text-white/30 text-6xl ml-2">/ 90</span>
+              {registeredCount}<span className="text-white/30 text-6xl ml-2">/ 90</span>
             </p>
             <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
           </div>
@@ -1019,60 +1055,79 @@ const DriverRoster = () => {
       <div className="w-full relative overflow-hidden">
         <div className="flex gap-6 px-6 w-max animate-driver-scroll hover:pause-off">
           {/* We repeat the drivers 3 times to ensure smooth infinite looping */}
-          {[...DRIVERS, ...DRIVERS, ...DRIVERS].map((driver, i) => {
-            // Parse Name and Nickname
-            let nickname = driver.category;
-            let displayName = driver.name;
+          {[...driversToDisplay, ...driversToDisplay, ...driversToDisplay].map((driver, i) => {
+            const isDynamic = 'profiles' in driver;
+            let nickname = '';
+            let displayName = '';
+            let image = '';
+            let startNumber = 0;
+            let car = '';
+            let points = 0;
+            let wins = 0;
 
-            const parts = driver.name.split('"');
-            if (parts.length >= 3) {
-              nickname = parts[1];
-              displayName = (parts[0] + parts[2]).replace(/\s+/g, ' ').trim();
+            if (isDynamic) {
+              const d = driver as any;
+              displayName = `${d.profiles?.first_name} ${d.profiles?.last_name}`;
+              nickname = d.profiles?.nickname || '';
+              image = d.profiles?.profile_photo_url || 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=800';
+              startNumber = d.start_number;
+              car = d.car_model;
+              // Try to find points for this driver from liveStandings if available
+              const standing = liveStandings.find(s => s.profiles?.id === d.profiles?.id || s.profiles?.email === d.profiles?.email);
+              points = standing?.total_points || 0;
+              wins = standing?.wins_count || 0;
+            } else {
+              const d = driver as Driver;
+              displayName = d.name;
+              image = d.image;
+              startNumber = 0;
+              car = d.car;
+              points = d.stats.points || 0;
+              wins = d.stats.wins || 0;
+              const parts = d.name.split('"');
+              if (parts.length >= 3) {
+                nickname = parts[1];
+                displayName = (parts[0] + parts[2]).replace(/\s+/g, ' ').trim();
+              }
             }
-
-            const shortCarName = driver.car.split(' ').slice(0, 2).join(' ');
 
             return (
               <div
-                key={`${driver.id}-${i}`}
+                key={`${(driver as any).id || i}-${i}`}
                 className="min-w-[280px] w-[280px] aspect-[4/6] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
-                onClick={() => setSelectedDriver(driver)}
+                onClick={() => !isDynamic && setSelectedDriver(driver as Driver)}
               >
-                {/* Card Image Area */}
+                {/* Car Slide-In Badge */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-[#F4CE14] px-4 py-1.5 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30 shadow-xl rounded-b-md border-x border-b border-black/10 min-w-[120px] text-center">
+                  <span className="font-tech text-black text-[9px] font-black uppercase tracking-widest whitespace-nowrap leading-none block">{car}</span>
+                </div>
+
                 <div className="flex-1 relative overflow-hidden">
                   <img
-                    src={driver.image}
-                    alt={driver.name}
-                    className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-105"
+                    src={image}
+                    alt={displayName}
+                    className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent opacity-90"></div>
-
-                  {/* Overlay Name */}
                   <div className="absolute bottom-4 left-4 right-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <p className="font-tech text-[#F4CE14] text-sm tracking-widest uppercase font-bold mb-2 drop-shadow-md">"{nickname}"</p>
+                    {nickname && <p className="font-tech text-[#F4CE14] text-sm tracking-widest uppercase font-bold mb-2 drop-shadow-md">"{nickname}"</p>}
                     <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas text-white leading-[1.1] uppercase tracking-tight font-bold">{displayName}</h4>
                   </div>
                 </div>
 
-                {/* Stats Bar */}
-                <div className="p-4 grid grid-cols-3 gap-2 border-t border-white/10 bg-[#0a0a0a] group-hover:bg-[#F4CE14] transition-colors duration-300 group-hover:text-black">
+                <div className="p-4 grid grid-cols-3 gap-1 border-t border-white/10 bg-[#0a0a0a] group-hover:bg-[#F4CE14] transition-colors duration-300 group-hover:text-black">
                   <div className="text-center border-r border-white/10 group-hover:border-black/10">
-                    <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">ZÁVODŮ</p>
-                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.races}</p>
+                    <p className="font-tech min-h-[1.5em] text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold leading-tight">ČÍSLO</p>
+                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{startNumber}</p>
                   </div>
                   <div className="text-center border-r border-white/10 group-hover:border-black/10">
-                    <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">VÝHRY</p>
-                    <p className="font-bebas text-xl text-[#F4CE14] group-hover:text-black font-bold">{driver.stats.wins}</p>
+                    <p className="font-tech min-h-[1.5em] text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold leading-tight">BODY</p>
+                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold truncate px-1">{points}</p>
                   </div>
-                  <div className="text-center">
-                    <p className="font-tech text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold">BODY</p>
-                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{driver.stats.points}</p>
+                  <div className="text-center px-1">
+                    <p className="font-tech min-h-[1.5em] text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold leading-tight">VÝHRY</p>
+                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{wins}</p>
                   </div>
-                </div>
-
-                {/* Car Model Strip */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-[#F4CE14] text-black px-3 py-1 font-tech font-bold uppercase text-sm tracking-wider shadow-lg z-10 whitespace-nowrap">
-                  {shortCarName}
                 </div>
               </div>
             );
@@ -1080,7 +1135,6 @@ const DriverRoster = () => {
         </div>
       </div>
 
-      {/* Action Buttons */}
       <div className="container mx-auto px-6 mt-16 flex flex-col sm:flex-row justify-center gap-6">
         <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
           ZOBRAZIT VŠECHNY JEZDCE
@@ -1134,13 +1188,12 @@ const DriverRoster = () => {
         .animate-driver-scroll {
           animation: driverScroll 40s linear infinite;
         }
-        /* No pause on hover class is purposefully omitted */
       `}</style>
     </section>
   );
 };
 
-const Standings = () => {
+const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
   const [activeCategory, setActiveCategory] = useState<'do1.6L' | 'nad1.6L' | 'zeny'>('do1.6L');
 
   const categoryLabels = {
@@ -1150,9 +1203,20 @@ const Standings = () => {
   };
 
   // Filter and sort drivers by category and points (highest first)
-  const filteredDrivers = STANDINGS
-    .filter(driver => driver.category === activeCategory)
-    .sort((a, b) => b.points - a.points);
+  const filteredDrivers = (liveStandings && liveStandings.length > 0)
+    ? liveStandings
+      .map(s => ({
+        startNumber: 0, // Placeholder
+        name: `${s.profiles?.first_name} ${s.profiles?.last_name}`.toUpperCase(),
+        car: 'VRAK', // Placeholder
+        points: s.total_points,
+        category: 'do1.6L' // Placeholder
+      }))
+      .filter(driver => driver.category === activeCategory)
+      .sort((a, b) => b.points - a.points)
+    : STANDINGS
+      .filter(driver => driver.category === activeCategory)
+      .sort((a, b) => b.points - a.points);
 
   return (
     <section id="poradi" className="py-32 bg-[#0a0a0a] relative">
@@ -1642,20 +1706,205 @@ const RulesAndSpecs = () => {
 
 const RegistrationForm = () => {
   const [step, setStep] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [startNumber, setStartNumber] = useState('');
+  const [activeEvent, setActiveEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    nickname: '',
+    age: '',
+    email: '',
+    phone: '',
+    startNumber: '',
+    carModel: '',
+    teamName: '',
+    category: '',
+    city: '',
+    password: '',
+    photo: null as File | null,
+    consentGdpr: false,
+    consentRules: false,
+    consentAge: false,
+    websiteUrl: '' // Honeypot field (bots will fill this)
+  });
   const [startNumberError, setStartNumberError] = useState('');
 
-  const handleStartNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setStartNumber(value);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target as HTMLInputElement;
+    const checked = (e.target as HTMLInputElement).checked;
 
-    // Check if number exists in STANDINGS
-    const exists = STANDINGS.some(d => d.startNumber === parseInt(value));
-    if (exists) {
-      setStartNumberError('Toto startovní číslo je již obsazené!');
-    } else {
-      setStartNumberError('');
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+
+    if (name === 'startNumber') {
+      const exists = STANDINGS.some(d => d.startNumber === parseInt(value));
+      if (exists) {
+        setStartNumberError('Toto startovní číslo je již obsazené!');
+      } else {
+        setStartNumberError('');
+      }
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData(prev => ({ ...prev, photo: e.target.files![0] }));
+    }
+  };
+
+  useEffect(() => {
+    const fetchActiveEvent = async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('is_active', true)
+        .order('date', { ascending: true })
+        .limit(1)
+        .single();
+
+      if (data && !error) {
+        setActiveEvent(data);
+      }
+    };
+    fetchActiveEvent();
+  }, []);
+
+  const handleRegistration = async () => {
+    // 0. Honeypot check: If the hidden field is filled, it's a bot
+    if (formData.websiteUrl) {
+      console.warn('Bot detected via honeypot!');
+      setStep(5); // Show success to bot so they don't try other ways
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const normalizedEmail = formData.email.trim().toLowerCase();
+      console.log('Starting registration for address:', normalizedEmail);
+
+      let userId = '';
+
+      // 1. Initial Check: Does this email already have a profile?
+      // (This avoids Auth rate limits during testing)
+      const { data: profiles, error: lookupError } = await supabase
+        .from('profiles')
+        .select('id')
+        .ilike('email', normalizedEmail);
+
+      if (lookupError) {
+        console.error('Profile lookup error:', lookupError);
+      }
+
+      if (profiles && profiles.length > 0) {
+        console.log('Found existing profile, skipping signUp. ID:', profiles[0].id);
+        userId = profiles[0].id;
+      } else {
+        // 2. Sign Up User if they don't exist
+        console.log('Profile not found for', normalizedEmail, '- attempting signUp...');
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email: normalizedEmail,
+          password: formData.password,
+          options: {
+            data: {
+              first_name: formData.firstName,
+              last_name: formData.lastName,
+              nickname: formData.nickname,
+            }
+          }
+        });
+
+        if (authError) {
+          console.error('Auth Error during signUp:', authError);
+          // Special handling for rate limit during iterative testing
+          if (authError.message.toLowerCase().includes('rate limit')) {
+            throw new Error(`Limit pro odesílání e-mailů vyčerpán pro: ${normalizedEmail}. Pokud používáte novou adresu, prosím počkejte chvíli nebo VYPNĚTE potvrzování e-mailem v Supabase dashboardu (Authentication -> Providers -> Email -> Confirm email).`);
+          }
+          throw authError;
+        }
+
+        if (authData.user) {
+          userId = authData.user.id;
+        }
+      }
+
+      if (!userId) throw new Error('Registrace se nezdařila - uživatel nebyl vytvořen ani nalezen.');
+      console.log('Using userId:', userId);
+
+      // 2. Upload Photo (if exists)
+      let photoUrl = '';
+      if (formData.photo) {
+        try {
+          const fileExt = formData.photo.name.split('.').pop();
+          const fileName = `${userId}-${Date.now()}.${fileExt}`;
+          const { error: uploadError } = await supabase.storage
+            .from('driver-photos')
+            .upload(fileName, formData.photo);
+
+          if (uploadError) throw uploadError;
+
+          const { data: publicUrlData } = supabase.storage
+            .from('driver-photos')
+            .getPublicUrl(fileName);
+
+          photoUrl = publicUrlData.publicUrl;
+          console.log('Photo uploaded:', photoUrl);
+        } catch (err) {
+          console.error('Photo Upload Error:', err);
+        }
+      }
+
+      // 3. Create/Update Profile
+      console.log('Upserting profile...');
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: userId,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          nickname: formData.nickname,
+          email: normalizedEmail,
+          phone: formData.phone,
+          age: parseInt(formData.age),
+          city: formData.city,
+          profile_photo_url: photoUrl
+        });
+
+      if (profileError) {
+        console.error('Profile Upsert Error:', profileError);
+        throw profileError;
+      }
+
+      // 4. Create Registration
+      console.log('Inserting registration...');
+      const { error: regError } = await supabase
+        .from('registrations')
+        .insert({
+          profile_id: userId,
+          event_id: activeEvent?.id || '00000000-0000-0000-0000-000000000000',
+          start_number: parseInt(formData.startNumber),
+          car_model: formData.carModel,
+          team_name: formData.teamName,
+          category: formData.category, // e.g. 'do1.6L'
+          variable_symbol: '44' + Math.floor(Math.random() * 900000 + 100000),
+          consent_gdpr: formData.consentGdpr,
+          consent_rules: formData.consentRules,
+          consent_age: formData.consentAge
+        });
+
+      if (regError) {
+        console.error('Registration Insert Error:', regError);
+        throw regError;
+      }
+
+      console.log('Registration successful!');
+      setStep(5);
+    } catch (error: any) {
+      console.error('Registration Process Failed:', error);
+      alert('Chyba: ' + (error.message || 'Něco se nepovedlo při ukládání dat.'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1685,11 +1934,12 @@ const RegistrationForm = () => {
               { num: 1, label: 'OSOBNÍ ÚDAJE' },
               { num: 2, label: 'VOZIDLO' },
               { num: 3, label: 'PLATBA' },
-              { num: 4, label: 'DOKONČENÍ' }
+              { num: 4, label: 'DOKONČENÍ' },
+              { num: 5, label: 'HOTOVO' }
             ].map(item => (
               <div key={item.num} className="flex flex-col items-center">
                 <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center font-tech font-semibold text-lg md:text-xl transition-all duration-500 ${step >= item.num ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
-                  {step > item.num ? <CheckCircle className="w-6 h-6 md:w-7 md:h-7" /> : item.num}
+                  {step > item.num || step === 5 && item.num === 5 ? <CheckCircle className="w-6 h-6 md:w-7 md:h-7" /> : item.num}
                 </div>
                 <span className="mt-4 font-tech text-[10px] md:text-xs text-gray-400 tracking-wider md:tracking-[0.4em] uppercase font-bold text-center max-w-[90px] md:max-w-none">{item.label}</span>
               </div>
@@ -1704,18 +1954,37 @@ const RegistrationForm = () => {
               <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Jméno *</label>
+                  {/* Honeypot field - hidden from humans */}
+                  <div style={{ display: 'none', visibility: 'hidden' }}>
+                    <input
+                      type="text"
+                      name="websiteUrl"
+                      value={formData.websiteUrl}
+                      onChange={handleInputChange}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
                   <input
                     type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Jméno"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Příjmení *</label>
                   <input
                     type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Příjmení"
+                    required
                   />
                 </div>
               </div>
@@ -1726,18 +1995,26 @@ const RegistrationForm = () => {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka *</label>
                   <input
                     type="text"
+                    name="nickname"
+                    value={formData.nickname}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Např. Drtič"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Věk *</label>
                   <input
                     type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleInputChange}
                     min="18"
                     max="99"
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Věk (musí být 18+)"
+                    required
                   />
                 </div>
               </div>
@@ -1747,16 +2024,24 @@ const RegistrationForm = () => {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">E-mail *</label>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="E-mail"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Mobil *</label>
                   <input
                     type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Mobil"
+                    required
                   />
                 </div>
               </div>
@@ -1775,10 +2060,12 @@ const RegistrationForm = () => {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Startovní číslo *</label>
                   <input
                     type="number"
-                    value={startNumber}
-                    onChange={handleStartNumberChange}
+                    name="startNumber"
+                    value={formData.startNumber}
+                    onChange={handleInputChange}
                     className={`w-full border-2 px-4 py-3 outline-none transition-colors bg-white text-black font-normal text-base ${startNumberError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#F4CE14]'}`}
                     placeholder="Startovní číslo"
+                    required
                   />
                   {startNumberError && <p className="text-red-500 text-xs font-bold mt-1 uppercase tracking-wider">{startNumberError}</p>}
                 </div>
@@ -1787,8 +2074,12 @@ const RegistrationForm = () => {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Typ závodního vozu *</label>
                   <input
                     type="text"
+                    name="carModel"
+                    value={formData.carModel}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Např. Škoda Fabia"
+                    required
                   />
                 </div>
               </div>
@@ -1803,8 +2094,8 @@ const RegistrationForm = () => {
                   ].map(cat => (
                     <div
                       key={cat.value}
-                      onClick={() => setSelectedCategory(cat.value)}
-                      className={`border-2 py-2 px-1 md:p-4 cursor-pointer transition-all text-center font-bold text-[14px] md:text-base ${selectedCategory === cat.value
+                      onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
+                      className={`border-2 py-2 px-1 md:p-4 cursor-pointer transition-all text-center font-bold text-[14px] md:text-base ${formData.category === cat.value
                         ? 'border-[#F4CE14] bg-[#F4CE14]/10'
                         : 'border-gray-200 hover:border-[#F4CE14]/50'
                         }`}
@@ -1820,8 +2111,12 @@ const RegistrationForm = () => {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Odkud jsi? *</label>
                   <input
                     type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Odkud jsi?"
+                    required
                   />
                 </div>
 
@@ -1829,6 +2124,9 @@ const RegistrationForm = () => {
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Za jaký tým jedeš?</label>
                   <input
                     type="text"
+                    name="teamName"
+                    value={formData.teamName}
+                    onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Název tvého týmu"
                   />
@@ -1919,11 +2217,29 @@ const RegistrationForm = () => {
                 <div className="grid grid-cols-2 md:grid-cols-[240px_1fr] gap-4 md:gap-6 items-start">
                   <div>
                     <label className="block w-full aspect-square cursor-pointer bg-white border-2 border-gray-200 hover:border-[#F4CE14] text-center flex flex-col items-center justify-center transition-colors group p-2 md:p-4">
-                      <input type="file" className="hidden" accept="image/*" />
-                      <div className="flex flex-col items-center gap-2 md:gap-3 text-gray-400 group-hover:text-black transition-colors">
-                        <svg className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
-                        <span className="font-bold uppercase tracking-widest text-[9px] md:text-[10px] leading-tight">Nahrát<br />fotku</span>
-                      </div>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                      {formData.photo ? (
+                        <div className="w-full h-full relative">
+                          <img
+                            src={URL.createObjectURL(formData.photo)}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-white text-[10px] font-bold uppercase">Změnit fotku</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-2 md:gap-3 text-gray-400 group-hover:text-black transition-colors">
+                          <svg className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
+                          <span className="font-bold uppercase tracking-widest text-[9px] md:text-[10px] leading-tight">Nahrát<br />fotku</span>
+                        </div>
+                      )}
                     </label>
                   </div>
 
@@ -1936,8 +2252,12 @@ const RegistrationForm = () => {
                       <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Heslo do aplikace *</label>
                       <input
                         type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
                         className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                         placeholder="Nastavte si heslo"
+                        required
                       />
                       <p className="text-xs text-gray-400 mt-2">
                         Slouží pro přihlášení do mobilní aplikace.
@@ -1950,7 +2270,14 @@ const RegistrationForm = () => {
               {/* Consent Checkboxes */}
               <div className="space-y-4">
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
+                  <input
+                    type="checkbox"
+                    name="consentAge"
+                    checked={formData.consentAge}
+                    onChange={handleInputChange}
+                    className="mt-1 w-5 h-5 accent-[#F4CE14]"
+                    required
+                  />
                   <span className="text-sm">
                     <strong>Prohlášení o plnoletosti: *</strong><br />
                     Čestně prohlašuji, že v termín konání závodu jsem starší 18 let.
@@ -1958,7 +2285,14 @@ const RegistrationForm = () => {
                 </label>
 
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
+                  <input
+                    type="checkbox"
+                    name="consentRules"
+                    checked={formData.consentRules}
+                    onChange={handleInputChange}
+                    className="mt-1 w-5 h-5 accent-[#F4CE14]"
+                    required
+                  />
                   <span className="text-sm">
                     <strong>Souhlas s pravidly: *</strong><br />
                     Čestně prohlašuji, že jsem si přečetl <a href="#pravidla" className="text-black font-bold underline hover:text-[#F4CE14] transition-colors">pravidla závodu</a>, souhlasím s nimi a budu je dodržovat.
@@ -1966,7 +2300,14 @@ const RegistrationForm = () => {
                 </label>
 
                 <label className="flex items-start gap-3 cursor-pointer">
-                  <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
+                  <input
+                    type="checkbox"
+                    name="consentGdpr"
+                    checked={formData.consentGdpr}
+                    onChange={handleInputChange}
+                    className="mt-1 w-5 h-5 accent-[#F4CE14]"
+                    required
+                  />
                   <span className="text-sm">
                     <strong>Ochrana osobních údajů: *</strong><br />
                     Souhlasím se zpracováním osobních údajů pro účely registrace a účasti v závodě.
@@ -1978,8 +2319,48 @@ const RegistrationForm = () => {
                 <Button variant="outline" onClick={() => setStep(3)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
                   <ArrowLeft size={24} />
                 </Button>
-                <Button className="flex-1 bg-green-600 text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
-                  🏁 ZAREGISTROVAT
+                <Button
+                  onClick={handleRegistration}
+                  disabled={loading || !formData.consentGdpr || !formData.consentRules || !formData.consentAge || !formData.password || !formData.photo}
+                  className={`flex-1 ${loading ? 'bg-gray-400' : 'bg-green-600'} text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 font-bold`}
+                >
+                  {loading ? 'ZPRACOVÁVÁM...' : '🏁 ZAREGISTROVAT'}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 5: Success State */}
+          {step === 5 && (
+            <div className="space-y-8 animate-fadeIn py-10 text-center">
+              <div className="flex justify-center mb-8">
+                <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center text-green-600 animate-bounce">
+                  <CheckCircle size={64} strokeWidth={2.5} />
+                </div>
+              </div>
+
+              <h3 className="font-bebas text-5xl text-black tracking-tight uppercase">REGISTRACE ÚSPĚŠNÁ!</h3>
+              <p className="font-tech text-gray-500 max-w-lg mx-auto leading-relaxed">
+                Vaše registrace byla přijata a právě se zpracovává. Na váš e-mail <span className="text-black font-bold">{formData.email}</span> jsme zaslali potvrzení s instrukcemi k platbě.
+              </p>
+
+              <div className="bg-gray-50 p-8 border-2 border-dashed border-gray-200">
+                <p className="font-tech text-xs text-gray-400 uppercase tracking-widest mb-4">Platební rekapitulace</p>
+                <div className="flex flex-col gap-4">
+                  <div className="flex justify-between items-end border-b border-gray-100 pb-2">
+                    <span className="font-tech text-xs text-gray-500 uppercase">Variabilní symbol:</span>
+                    <span className="font-bebas text-2xl">442026</span>
+                  </div>
+                  <div className="flex justify-between items-end border-b border-gray-100 pb-2">
+                    <span className="font-tech text-xs text-gray-500 uppercase">K úhradě:</span>
+                    <span className="font-bebas text-2xl text-red-600">2 000 Kč</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-8">
+                <Button onClick={() => setStep(1)} variant="outline" className="w-full border-2 border-black text-black">
+                  ZPĚT NA ZAČÁTEK
                 </Button>
               </div>
             </div>
@@ -2079,10 +2460,10 @@ const AccreditationAndArticles = () => {
                   <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Vyberte Závod</label>
                   <div className="relative">
                     <select className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none appearance-none cursor-pointer hover:bg-black/10 transition-colors font-bold">
-                      <option>OSTRAVA - 4.4.2026</option>
-                      <option>HRACHOVEC - 27.6.2026</option>
-                      <option>NOVÉ MÍSTO - 22.8.2026</option>
-                      <option>OSTRAVA - 24.10.2026</option>
+                      <option>OSTRAVA - 4.4.</option>
+                      <option>HRACHOVEC - 27.6.</option>
+                      <option>NOVÉ MÍSTO - 22.8.</option>
+                      <option>OSTRAVA - 24.10.</option>
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black/60">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
@@ -2306,6 +2687,64 @@ const MobileApp = () => (
 
 
 export const Home = () => {
+  const [liveStandings, setLiveStandings] = useState<any[]>([]);
+  const [liveEvents, setLiveEvents] = useState<any[]>([]);
+  const [registeredCount, setRegisteredCount] = useState(0);
+  const [paidDrivers, setPaidDrivers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchHomeData = async () => {
+      // 1. Fetch Standings with Profiles
+      const { data: standingsData } = await supabase
+        .from('standings')
+        .select(`
+          total_points,
+          races_count,
+          wins_count,
+          profiles (
+            first_name,
+            last_name,
+            nickname,
+            city,
+            profile_photo_url
+          )
+        `)
+        .eq('season_year', 2026)
+        .order('total_points', { ascending: false });
+
+      if (standingsData && standingsData.length > 0) setLiveStandings(standingsData);
+
+      // 2. Fetch Events
+      const { data: eventsData } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true });
+
+      if (eventsData && eventsData.length > 0) {
+        setLiveEvents(eventsData);
+        // Fetch registered count for the first active event
+        const activeE = eventsData.find((e: any) => e.is_active) || eventsData[0];
+
+        // Fetch paid registered count
+        const { count } = await supabase
+          .from('registrations')
+          .select('*', { count: 'exact', head: true })
+          .eq('event_id', activeE.id)
+          .eq('payment_status', 'paid');
+        if (count !== null) setRegisteredCount(count);
+
+        // Fetch paid drivers for roster
+        const { data: paidData } = await supabase
+          .from('registrations')
+          .select('*, profiles(*)')
+          .eq('event_id', activeE.id)
+          .eq('payment_status', 'paid');
+        if (paidData) setPaidDrivers(paidData);
+      }
+    };
+
+    fetchHomeData();
+  }, []);
   useEffect(() => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
@@ -2326,14 +2765,14 @@ export const Home = () => {
   return (
     <div className="min-h-screen bg-[#111] text-white selection:bg-[#F4CE14] selection:text-black">
       <main>
-        <Hero />
+        <Hero activeEvent={liveEvents[0]} registeredCount={registeredCount} />
         <About />
         <GalleryGrid />
         <SponsorsTicker />
         <Program />
-        <EventGrid />
-        <DriverRoster />
-        <Standings />
+        <EventGrid liveEvents={liveEvents} />
+        <DriverRoster registeredCount={registeredCount} paidDrivers={paidDrivers} liveStandings={liveStandings} />
+        <Standings liveStandings={liveStandings} />
         <RulesAndSpecs />
 
         {/* Caution Tape Separator */}

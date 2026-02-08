@@ -5,13 +5,17 @@ export const Button = ({
     variant = 'primary',
     size = 'default',
     className = '',
-    onClick
+    onClick,
+    disabled = false,
+    type = 'button'
 }: {
     children?: React.ReactNode;
     variant?: 'primary' | 'outline' | 'ghost' | 'engine-start';
     size?: 'default' | 'small' | 'medium';
     className?: string;
-    onClick?: () => void;
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>;
+    disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset';
 }) => {
     const isOutline = variant === 'outline';
     const isEngine = variant === 'engine-start';
@@ -38,7 +42,12 @@ export const Button = ({
     }
 
     return (
-        <button className={`${baseClasses} ${sizeClasses} ${variantClasses} ${className}`} onClick={onClick}>
+        <button
+            type={type}
+            disabled={disabled}
+            className={`${baseClasses} ${sizeClasses} ${variantClasses} ${className} ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
+            onClick={onClick}
+        >
             <span className="block transform skew-x-[15deg]">
                 {children}
             </span>
