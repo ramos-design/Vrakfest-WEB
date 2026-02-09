@@ -33,6 +33,24 @@ const formatEventDate = (dateStr: string, includeYear = false) => {
   return includeYear && year ? `${day}.${month}.${year}` : `${day}.${month}.`;
 };
 
+const AnimatedCTA = ({ ctaIndex, defaultText, alternateText }: { ctaIndex: number, defaultText: string, alternateText: string }) => {
+  return (
+    <div className="relative h-[1.25em] overflow-hidden flex flex-col items-center">
+      <div
+        className="transition-transform duration-700 ease-in-out flex flex-col items-center"
+        style={{ transform: `translateY(-${ctaIndex * 50}%)` }}
+      >
+        <span className="h-[1.25em] flex items-center justify-center whitespace-nowrap px-1 uppercase tracking-wider">
+          {defaultText}
+        </span>
+        <span className="h-[1.25em] flex items-center justify-center whitespace-nowrap px-1 uppercase tracking-wider">
+          {alternateText}
+        </span>
+      </div>
+    </div>
+  );
+};
+
 // --- Components ---
 import { InstagramFeed } from '../components/InstagramFeed';
 import { supabase } from '../supabaseClient';
@@ -46,7 +64,7 @@ import { supabase } from '../supabaseClient';
 // --- Fixed Header with Grid Layout (1fr auto 1fr) ---
 
 
-const Hero = ({ activeEvent, registeredCount }: { activeEvent: any, registeredCount: number }) => {
+const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, registeredCount: number, ctaIndex: number }) => {
   const displayEvent = activeEvent || EVENTS[0];
 
   const targetDate = new Date(displayEvent.date.split('.').reverse().join('-')); // Handle DD.MM.YYYY
@@ -138,7 +156,11 @@ const Hero = ({ activeEvent, registeredCount }: { activeEvent: any, registeredCo
 
         {/* Buttons: Cleaned vertical stacking and narrowed width on mobile */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full mt-6 scale-90 2xl:scale-100 origin-top">
-          <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0">CHCI ZÁVODIT</Button>
+          <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0">
+            <a href="#registrace">
+              <AnimatedCTA ctaIndex={ctaIndex} defaultText="CHCI ZÁVODIT" alternateText="REGISTROVAT SE" />
+            </a>
+          </Button>
           <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 !border-white !text-white hover:!bg-white hover:!text-black hover:!shadow-none">BODOVÉ POŘADÍ</Button>
         </div>
       </div>
@@ -154,7 +176,7 @@ const Hero = ({ activeEvent, registeredCount }: { activeEvent: any, registeredCo
   );
 };
 
-const About = () => {
+const About = ({ ctaIndex }: { ctaIndex: number }) => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
   const [countersStarted, setCountersStarted] = useState(false);
@@ -324,8 +346,10 @@ const About = () => {
                 <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
               </Button>
-              <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center">
-                Chci závodit
+              <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center p-0">
+                <a href="#registrace" className="w-full h-full flex items-center justify-center px-10">
+                  <AnimatedCTA ctaIndex={ctaIndex} defaultText="Chci závodit" alternateText="Registrovat se" />
+                </a>
               </Button>
             </div>
           </div>
@@ -425,8 +449,10 @@ const About = () => {
               <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
               <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
             </Button>
-            <Button variant="outline" className="w-full sm:w-auto btn-race justify-center">
-              Chci závodit
+            <Button variant="outline" className="w-full sm:w-auto btn-race justify-center p-0">
+              <a href="#registrace" className="w-full h-full flex items-center justify-center px-10 py-4">
+                <AnimatedCTA ctaIndex={ctaIndex} defaultText="Chci závodit" alternateText="Registrovat se" />
+              </a>
             </Button>
           </div>
         </div>
@@ -1729,6 +1755,39 @@ const RegistrationForm = () => {
   });
   const [startNumberError, setStartNumberError] = useState('');
 
+  // Debounced start number check
+  useEffect(() => {
+    const checkNumber = async () => {
+      if (!formData.startNumber || !activeEvent) return;
+
+      const num = parseInt(formData.startNumber);
+
+      // 1. Check static standings first (legacy/hardcoded data)
+      const existsInStatic = STANDINGS.some(d => d.startNumber === num);
+      if (existsInStatic) {
+        setStartNumberError('Toto startovní číslo je již obsazené v historických tabulkách!');
+        return;
+      }
+
+      // 2. Check live registrations for the active event
+      const { data, error } = await supabase
+        .from('registrations')
+        .select('id')
+        .eq('event_id', activeEvent.id)
+        .eq('start_number', num)
+        .limit(1);
+
+      if (data && data.length > 0) {
+        setStartNumberError('Toto číslo je už pro tento závod obsazené!');
+      } else {
+        setStartNumberError('');
+      }
+    };
+
+    const timer = setTimeout(checkNumber, 500);
+    return () => clearTimeout(timer);
+  }, [formData.startNumber, activeEvent]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
     const checked = (e.target as HTMLInputElement).checked;
@@ -1737,15 +1796,6 @@ const RegistrationForm = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
-
-    if (name === 'startNumber') {
-      const exists = STANDINGS.some(d => d.startNumber === parseInt(value));
-      if (exists) {
-        setStartNumberError('Toto startovní číslo je již obsazené!');
-      } else {
-        setStartNumberError('');
-      }
-    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1776,6 +1826,11 @@ const RegistrationForm = () => {
     if (formData.websiteUrl) {
       console.warn('Bot detected via honeypot!');
       setStep(5); // Show success to bot so they don't try other ways
+      return;
+    }
+
+    if (startNumberError) {
+      alert(startNumberError);
       return;
     }
 
@@ -1895,6 +1950,9 @@ const RegistrationForm = () => {
 
       if (regError) {
         console.error('Registration Insert Error:', regError);
+        if (regError.code === '23505') {
+          throw new Error('Toto startovní číslo je již pro tento závod obsazené. Prosím, vraťte se o krok zpět a zvolte jiné.');
+        }
         throw regError;
       }
 
@@ -2385,21 +2443,36 @@ const RegistrationForm = () => {
 
 
 
-const AccreditationAndArticles = () => {
-  const articles = [
-    { title: "ZIMNÍ PŘIPRAVA VRCHOLÍ", text: "Týmy dokončují poslední úpravy na svých speciálech pro nadcházející sezónu." },
-    { title: "NOVÁ KATEGORIE PRO ŽENY", text: "Vyslyšeli jsme vaše přání a otevíráme zcela novou kategorii čistě pro závodnice." },
-    { title: "ZETOR CUP ZRUŠEN", text: "Z technických důvodů se letošní ročník Zetor Cupu neuskuteční." }
-  ];
-
+const DriverInfoAndCTA = () => {
   return (
     <section className="py-24 bg-black relative border-t border-white/5">
       <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-stretch">
+          {/* Left Column: CTA */}
+          <div className="bg-[#1a1a1a] p-8 md:p-12 border-2 border-[#F4CE14] relative overflow-hidden group shadow-2xl flex flex-col justify-center">
+            {/* Background Image with Overlay */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src="/media/DSC_7229.jpg"
+                alt="Vrakfest Action"
+                className="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+            </div>
 
-          {/* Left Column: Accreditation */}
+            <div className="relative z-10">
+              <h3 className="font-bebas text-5xl md:text-6xl text-white mb-6 leading-none uppercase">Máš na to <span className="text-[#F4CE14]">koule</span> závodit?</h3>
+              <p className="font-tech text-gray-300 text-lg mb-10 leading-relaxed uppercase tracking-wider max-w-xl">
+                PŘESTAŇ O TOM JEN SNÍT A UKAŽ CO JE V TOBĚ. 90 JEZDCŮ, JEDNA TRAŤ A ČISTÁ DESTRUKCE.
+                ZAREGISTRUJ SE PRÁVĚ TEĎ A BUĎ SOUČÁSTÍ VRAKFESTU.
+              </p>
+              <Button className="w-fit px-8 py-3 text-lg h-auto">
+                <a href="#registrace">ZAREGISTROVAT SE</a>
+              </Button>
+            </div>
+          </div>
 
-          {/* NEW: Driver Information Q&A */}
+          {/* Right Column: Driver Information Q&A */}
           <div id="informace-pro-jezdce">
             <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none mb-8">
               INFORMACE PRO JEZDCE
@@ -2442,11 +2515,75 @@ const AccreditationAndArticles = () => {
               </a>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-          {/* Existing Accreditation Form */}
-          {/* Existing Accreditation Form */}
+const AccreditationAndPartners = () => {
+  return (
+    <section className="py-24 bg-black relative border-t border-white/5">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+          {/* Left Column: Partner Registration */}
+          <div className="space-y-8">
+            {/* Subtle Ticker and Logo loop (No frame) */}
+            <div className="overflow-hidden whitespace-nowrap group py-4">
+              <div className="flex animate-marquee hover:pause-animation">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                  <div key={i} className="flex items-center mx-12 opacity-30 group-hover:opacity-100 transition-all duration-500">
+                    <img
+                      src="/media/partner_logo.png"
+                      alt="Partner"
+                      className="h-10 w-auto object-contain brightness-200 animate-rotate-slow"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div id="partneri" className="bg-white/5 border border-white/10 p-8 md:p-10 shadow-2xl relative overflow-hidden">
+              <div className="flex items-center gap-4 mb-6 relative z-10">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none">STAŇ SE PARTNEREM</h3>
+              </div>
+              <p className="font-tech text-gray-400 mb-8 leading-relaxed font-medium relative z-10">
+                Chcete spojit svou značku s nejbláznivější motoristickou akcí? Ozvěte se nám a domluvíme spolupráci.
+              </p>
+
+              <form className="space-y-4 relative z-10">
+                <div className="grid gap-4">
+                  <div className="space-y-2">
+                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Název Firmy / Jméno</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="VAŠE FIRMA S.R.O." />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Email</label>
+                      <input type="email" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="@" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Telefon</label>
+                      <input type="tel" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="+420" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Zpráva / Představa spolupráce</label>
+                    <textarea className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold min-h-[120px]" placeholder="MÁME ZÁJEM O..."></textarea>
+                  </div>
+                </div>
+
+                <Button className="w-full">
+                  ODESLAT DOTAZ
+                </Button>
+              </form>
+            </div>
+          </div>
+
+          {/* Right Column: Accreditation Form */}
           <div id="akreditace" className="bg-[#F4CE14] p-8 md:p-10 relative overflow-hidden shadow-2xl">
-
             <div className="flex items-center gap-4 mb-6 relative z-10">
               <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-black uppercase tracking-tight font-bold leading-none">AKREDITACE 2026</h3>
             </div>
@@ -2505,7 +2642,6 @@ const AccreditationAndArticles = () => {
                 </div>
               </div>
 
-
               <div className="h-4"></div>
 
               <Button className="w-full bg-black text-white hover:bg-white hover:text-black border-transparent shadow-xl">
@@ -2513,15 +2649,23 @@ const AccreditationAndArticles = () => {
               </Button>
             </form>
           </div>
-
-
-
-
         </div>
+      </div>
+    </section>
+  );
+};
 
-        {/* ROW 2: Articles & Media */}
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start border-t border-white/5 pt-16 mt-24">
+const LatestArticlesAndPress = () => {
+  const articles = [
+    { title: "ZIMNÍ PŘIPRAVA VRCHOLÍ", text: "Týmy dokončují poslední úpravy na svých speciálech pro nadcházející sezónu." },
+    { title: "NOVÁ KATEGORIE PRO ŽENY", text: "Vyslyšeli jsme vaše přání a otevíráme zcela novou kategorii čistě pro závodnice." },
+    { title: "ZETOR CUP ZRUŠEN", text: "Z technických důvodů se letošní ročník Zetor Cupu neuskuteční." }
+  ];
 
+  return (
+    <section className="py-24 bg-[#0a0a0a] relative border-t border-white/5">
+      <div className="container mx-auto px-6">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Left: Articles */}
           <div className="bg-white/5 border border-white/10 p-8 shadow-2xl relative overflow-hidden">
             <div className="flex items-center gap-4 mb-8">
@@ -2530,8 +2674,6 @@ const AccreditationAndArticles = () => {
             <div className="space-y-6">
               {articles.map((article, i) => (
                 <div key={i} className={`group cursor-pointer border-b border-white/10 ${i === 2 ? 'border-b-0 pb-0' : 'pb-6'} hover:border-[#F4CE14] transition-colors`}>
-
-                  {/* Image for first article only */}
                   {i === 0 && (
                     <div className="mb-4 overflow-hidden rounded-sm border border-white/10 group-hover:border-[#F4CE14]/50 transition-colors">
                       <img
@@ -2541,7 +2683,6 @@ const AccreditationAndArticles = () => {
                       />
                     </div>
                   )}
-
                   <div className="flex items-center gap-3 mb-2">
                     <span className="w-2 h-2 bg-[#F4CE14] rounded-full"></span>
                     <span className="font-tech text-xs text-gray-500 uppercase tracking-widest">{new Date().getFullYear()}</span>
@@ -2559,7 +2700,7 @@ const AccreditationAndArticles = () => {
             <div className="flex items-center gap-4 mb-8">
               <h3 className="font-bebas text-3xl text-[#F4CE14] uppercase tracking-tight font-bold leading-none">NAPSALI O NÁS</h3>
             </div>
-            <p className="font-tech text-gray-400 mb-8">Vrakfest se pravidelně objevuje v médiích.</p>
+            <p className="font-tech text-gray-400 mb-8 font-medium">Vrakfest se pravidelně objevuje v médiích.</p>
 
             <div className="grid grid-cols-2 gap-4">
               {['DENIK.CZ', 'VALAŠSKÝ DENÍK', 'PORTAL RIDIČE', 'POLAR TV', 'KURZY.CZ'].map((media, i) => (
@@ -2569,106 +2710,137 @@ const AccreditationAndArticles = () => {
               ))}
             </div>
           </div>
-
         </div>
-
-      </div >
-    </section >
+      </div>
+    </section>
   );
 };
 
-const MobileApp = () => (
-  <section id="aplikace" className="py-32 bg-black overflow-hidden relative text-left">
-    <div className="absolute inset-0 bg-[linear-gradient(rgba(244,206,20,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(244,206,20,0.03)_1px,transparent_1px)] bg-[length:50px_50px] pointer-events-none"></div>
+const MobileApp = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
 
-    <div className="container mx-auto px-6 relative z-10 text-left">
-      <div className="grid lg:grid-cols-3 gap-16 lg:gap-24 items-center">
-        {/* Left Column: Mobile (33%) */}
-        <div className="lg:col-span-1 flex justify-center relative scale-85 md:scale-100 lg:scale-110 origin-center lg:-ml-8">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-[#F4CE14]/10 blur-[140px] rounded-full animate-pulse"></div>
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
 
-          <div className="relative w-[320px] h-[640px] bg-black border-[14px] border-[#222] rounded-[50px] shadow-[0_0_80px_rgba(0,0,0,1)] z-10 p-2 overflow-hidden border-b-[20px]">
-            <div className="h-full rounded-[38px] overflow-hidden bg-[#0a0a0a] p-5 pt-10 flex flex-col font-tech text-left relative">
-              <div className="flex justify-center mb-8 border-b border-white/5 pb-6">
-                <img src="/video/LOGO-Y.png" alt="VRAKAPP" className="h-10 w-auto object-contain brightness-110" />
-              </div>
+  return (
+    <section
+      id="aplikace"
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className="py-32 bg-black overflow-hidden relative text-left"
+    >
+      {/* Base Gray Grid */}
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[length:40px_40px] pointer-events-none"></div>
 
-              <div className="grid grid-cols-2 gap-3 flex-1 overflow-hidden pb-4">
-                {[
-                  { icon: <Clock size={20} />, label: 'TIMING', active: true },
-                  { icon: <ShoppingCart size={20} />, label: 'BAZAR' },
-                  { icon: <Users size={20} />, label: 'HLASOVÁNÍ' },
-                  { icon: <User size={20} />, label: 'PROFILY' },
-                  { icon: <ShoppingBag size={20} />, label: 'MERCH' },
-                  { icon: <MapPin size={20} />, label: 'AKCE' }
-                ].map((tile, tidx) => (
-                  <div
-                    key={tidx}
-                    className={`aspect-square rounded-2xl border flex flex-col items-center justify-center gap-2 transition-all duration-500 ${tile.active
-                      ? 'bg-[#F4CE14]/10 border-[#F4CE14]/30 text-[#F4CE14]'
-                      : 'bg-white/5 border-white/10 text-gray-500'
-                      }`}
-                  >
-                    {tile.icon}
-                    <span className="text-[8px] font-bold tracking-widest leading-none">{tile.label}</span>
-                  </div>
-                ))}
-              </div>
+      {/* Interactive Yellow Grid (Revealed by Mask) */}
+      <div
+        className="absolute inset-0 z-0 bg-[linear-gradient(rgba(244,206,20,0.15)_1px,transparent_1px),linear-gradient(90deg,rgba(244,206,20,0.15)_1px,transparent_1px)] bg-[length:40px_40px] pointer-events-none transition-opacity duration-300"
+        style={{
+          opacity: isHovering ? 1 : 0,
+          WebkitMaskImage: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, black, transparent)`,
+          maskImage: `radial-gradient(circle 250px at ${mousePos.x}px ${mousePos.y}px, black, transparent)`
+        }}
+      ></div>
 
-              <div className="mt-auto flex justify-between gap-3 pb-2">
-                <div className="h-12 flex-1 bg-white/5 rounded-xl border-2 border-white/10 flex items-center justify-center"><Users size={20} className="text-gray-400" /></div>
-                <div className="h-12 flex-1 bg-[#F4CE14] rounded-xl flex items-center justify-center"><Play size={20} className="text-black fill-black" /></div>
-                <div className="h-12 flex-1 bg-white/5 rounded-xl border-2 border-white/10 flex items-center justify-center"><Settings size={20} className="text-gray-400" /></div>
+      <div className="container mx-auto px-6 relative z-10 text-left">
+        <div className="grid lg:grid-cols-3 gap-16 lg:gap-24 items-center">
+          {/* Left Column: Mobile (33%) */}
+          <div className="lg:col-span-1 flex justify-center relative scale-85 md:scale-100 lg:scale-110 origin-center lg:-ml-8">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-[#F4CE14]/10 blur-[140px] rounded-full animate-pulse"></div>
+
+            <div className="relative w-[320px] h-[640px] bg-black border-[14px] border-[#222] rounded-[50px] shadow-[0_0_80px_rgba(0,0,0,1)] z-10 p-2 overflow-hidden border-b-[20px]">
+              <div className="h-full rounded-[38px] overflow-hidden bg-[#0a0a0a] p-5 pt-10 flex flex-col font-tech text-left relative">
+                <div className="flex justify-center mb-8 border-b border-white/5 pb-6">
+                  <img src="/video/LOGO-Y.png" alt="VRAKAPP" className="h-10 w-auto object-contain brightness-110" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 flex-1 overflow-hidden pb-4">
+                  {[
+                    { icon: <Clock size={20} />, label: 'TIMING', active: true },
+                    { icon: <ShoppingCart size={20} />, label: 'BAZAR' },
+                    { icon: <Users size={20} />, label: 'HLASOVÁNÍ' },
+                    { icon: <User size={20} />, label: 'PROFILY' },
+                    { icon: <ShoppingBag size={20} />, label: 'MERCH' },
+                    { icon: <MapPin size={20} />, label: 'AKCE' }
+                  ].map((tile, tidx) => (
+                    <div
+                      key={tidx}
+                      className={`aspect-square rounded-2xl border flex flex-col items-center justify-center gap-2 transition-all duration-500 ${tile.active
+                        ? 'bg-[#F4CE14]/20 border-[#F4CE14]/30 text-[#F4CE14]'
+                        : 'bg-black border-white/10 text-gray-500'
+                        }`}
+                    >
+                      {tile.icon}
+                      <span className="text-[8px] font-bold tracking-widest leading-none">{tile.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-auto flex justify-between gap-3 pb-2">
+                  <div className="h-12 flex-1 bg-black rounded-xl border-2 border-white/10 flex items-center justify-center"><Users size={20} className="text-gray-400" /></div>
+                  <div className="h-12 flex-1 bg-[#F4CE14] rounded-xl flex items-center justify-center"><Play size={20} className="text-black fill-black" /></div>
+                  <div className="h-12 flex-1 bg-black rounded-xl border-2 border-white/10 flex items-center justify-center"><Settings size={20} className="text-gray-400" /></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Right Column: Content (66%) */}
-        <div className="lg:col-span-2 text-left">
-          <SectionHeader title="VRAKFEST APP" subtitle="PŘIPRAVUJEME NĚCO VELKÉHO. PŘIDEJ SE NA WAITING LIST!" />
+          {/* Right Column: Content (66%) */}
+          <div className="lg:col-span-2 text-left">
+            <SectionHeader title="VRAKFEST APP" subtitle="PŘIPRAVUJEME NĚCO VELKÉHO. PŘIDEJ SE NA WAITING LIST!" />
 
-          <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
-            {[
-              { icon: <Clock size={28} />, text: 'LIVE TIMING', desc: 'Sleduj body a časy všech závodníků online v reálném čase.' },
-              { icon: <ShoppingCart size={28} />, text: 'MARKETPLACE', desc: 'Přístup k limitovaným nabídkám náhradních dílů přímo od jezdců.' },
-              { icon: <Users size={28} />, text: 'HLASOVÁNÍ', desc: 'Rozhoduj o nejlepším vraku dne a vyhrávej ceny od sponzorů.' },
-              { icon: <User size={28} />, text: 'PROFILY JEZDCŮ', desc: 'Kompletní statistiky, historie bouraček a týmové info na jednom místě.' },
-              { icon: <ShoppingBag size={28} />, text: 'PRODEJ MERCHE', desc: 'Oficiální Vrakfest trička, mikiny a doplňky přímo v aplikaci.' },
-              { icon: <MapPin size={28} />, text: 'KALENDÁŘ AKCÍ', desc: 'Interaktivní mapa a harmonogram všech plánovaných závodů v sezóně.' }
-            ].map((item, i) => (
-              <div key={i} className="flex gap-6 group">
-                <div className="flex-shrink-0 w-16 h-16 bg-white/5 border-2 border-white/10 flex items-center justify-center text-[#F4CE14] group-hover:bg-[#F4CE14] group-hover:text-black transition-all duration-500 group-hover:-rotate-3 border-b-4 border-black shadow-xl">
-                  {item.icon}
+            <div className="grid md:grid-cols-2 gap-x-12 gap-y-10 mb-16">
+              {[
+                { icon: <Clock size={28} />, text: 'LIVE TIMING', desc: 'Sleduj body a časy všech závodníků online v reálném čase.' },
+                { icon: <ShoppingCart size={28} />, text: 'MARKETPLACE', desc: 'Přístup k limitovaným nabídkám náhradních dílů přímo od jezdců.' },
+                { icon: <Users size={28} />, text: 'HLASOVÁNÍ', desc: 'Rozhoduj o nejlepším vraku dne a vyhrávej ceny od sponzorů.' },
+                { icon: <User size={28} />, text: 'PROFILY JEZDCŮ', desc: 'Kompletní statistiky, historie bouraček a týmové info na jednom místě.' },
+                { icon: <ShoppingBag size={28} />, text: 'PRODEJ MERCHE', desc: 'Oficiální Vrakfest trička, mikiny a doplňky přímo v aplikaci.' },
+                { icon: <MapPin size={28} />, text: 'KALENDÁŘ AKCÍ', desc: 'Interaktivní mapa a harmonogram všech plánovaných závodů v sezóně.' }
+              ].map((item, i) => (
+                <div key={i} className="flex gap-6 group">
+                  <div className="flex-shrink-0 w-16 h-16 bg-black border-2 border-white/10 flex items-center justify-center text-[#F4CE14] group-hover:bg-[#F4CE14] group-hover:text-black transition-all duration-500 group-hover:-rotate-3 border-b-4 border-black shadow-xl">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas tracking-tight group-hover:text-[#F4CE14] transition-colors mb-1 uppercase font-bold leading-none">{item.text}</h4>
+                    <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-500 font-tech leading-snug">{item.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 style={{ fontSize: 'var(--fs-h4)' }} className="font-bebas tracking-tight group-hover:text-[#F4CE14] transition-colors mb-1 uppercase font-bold leading-none">{item.text}</h4>
-                  <p style={{ fontSize: 'var(--fs-p)' }} className="text-gray-500 font-tech leading-snug">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          <div className="max-w-3xl">
-            <p className="font-tech text-[#F4CE14] text-sm uppercase tracking-[0.2em] font-bold mb-4">BUĎ U TOHO JAKO PRVNÍ A PŘIDEJ SE NA WAITING LIST</p>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch pt-2">
-              <div className="flex-[2] min-w-0 relative transform -skew-x-[15deg] bg-white/5 border border-white/20 focus-within:border-[#F4CE14] transition-all duration-300">
-                <input
-                  type="email"
-                  placeholder="TVŮJ E-MAIL"
-                  className="w-full bg-transparent px-6 py-4 text-white font-tech focus:outline-none transform skew-x-[15deg] placeholder:text-white/20"
-                />
+            <div className="max-w-3xl">
+              <p className="font-tech text-[#F4CE14] text-sm uppercase tracking-[0.2em] font-bold mb-4">BUĎ U TOHO JAKO PRVNÍ A PŘIDEJ SE NA WAITING LIST</p>
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch pt-2">
+                <div className="flex-[2] min-w-0 relative transform -skew-x-[15deg] bg-black border border-white/20 focus-within:border-[#F4CE14] transition-all duration-300">
+                  <input
+                    type="email"
+                    placeholder="TVŮJ E-MAIL"
+                    className="w-full bg-transparent px-6 py-4 text-white font-tech focus:outline-none transform skew-x-[15deg] placeholder:text-white/20"
+                  />
+                </div>
+                <Button className="flex-1 whitespace-nowrap !px-8">
+                  PŘIDAT SE NA WAITING LIST
+                </Button>
               </div>
-              <Button className="flex-1 whitespace-nowrap !px-8">
-                PŘIDAT SE NA WAITING LIST
-              </Button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 
 
@@ -2691,6 +2863,14 @@ export const Home = () => {
   const [liveEvents, setLiveEvents] = useState<any[]>([]);
   const [registeredCount, setRegisteredCount] = useState(0);
   const [paidDrivers, setPaidDrivers] = useState<any[]>([]);
+  const [ctaIndex, setCtaIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCtaIndex(prev => (prev === 0 ? 1 : 0));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const fetchHomeData = async () => {
@@ -2765,8 +2945,8 @@ export const Home = () => {
   return (
     <div className="min-h-screen bg-[#111] text-white selection:bg-[#F4CE14] selection:text-black">
       <main>
-        <Hero activeEvent={liveEvents[0]} registeredCount={registeredCount} />
-        <About />
+        <Hero activeEvent={liveEvents[0]} registeredCount={registeredCount} ctaIndex={ctaIndex} />
+        <About ctaIndex={ctaIndex} />
         <GalleryGrid />
         <SponsorsTicker />
         <Program />
@@ -2788,8 +2968,10 @@ export const Home = () => {
           </div>
         </div>
 
-        <AccreditationAndArticles />
+        <DriverInfoAndCTA />
         <RegistrationForm />
+        <LatestArticlesAndPress />
+        <AccreditationAndPartners />
         <MobileApp />
         <InstagramFeed />
       </main>
@@ -2803,6 +2985,13 @@ export const Home = () => {
         @keyframes slideTape {
           0% { transform: translateX(0); }
           100% { transform: translateX(-113.14px); }
+        }
+        @keyframes rotateLogo {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-rotate-slow {
+          animation: rotateLogo 10s linear infinite;
         }
         .animate-fadeIn {
           animation: fadeIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
