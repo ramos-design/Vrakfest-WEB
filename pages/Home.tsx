@@ -94,7 +94,7 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
 
             {/* Stat Card 1 - Upcoming Event */}
             {/* Mobile borders: Right + Bottom */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-b border-white/10 md:border-0">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-b border-[#F4CE14]/50 md:border-0">
               <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 NADCHÁZEJÍCÍ UDÁLOST
               </p>
@@ -109,7 +109,7 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
 
             {/* Stat Card 2 - Date */}
             {/* Mobile borders: Bottom only */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-b border-white/10 md:border-0">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-b border-[#F4CE14]/50 md:border-0">
               <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 KDY TO BUDE?
               </p>
@@ -124,7 +124,7 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
 
             {/* Stat Card 3 - Days to Start */}
             {/* Mobile borders: Right only */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-white/10 md:border-0">
+            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-[#F4CE14]/50 md:border-0">
               <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 POČET DNÍ
               </p>
@@ -2524,12 +2524,12 @@ const DriverInfoAndCTA = () => {
 const AccreditationAndPartners = () => {
   return (
     <section className="py-24 bg-black relative border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-16 lg:gap-24 items-start">
           {/* Left Column: Partner Registration */}
-          <div className="space-y-8">
+          <div className="space-y-8 min-w-0 max-w-full">
             {/* Subtle Ticker and Logo loop (No frame) */}
-            <div className="overflow-hidden whitespace-nowrap group py-4 fade-mask">
+            <div className="overflow-hidden whitespace-nowrap group py-4 fade-mask w-full">
               <div className="flex w-max animate-marquee">
                 {[
                   "/media/sponzors/dvorak.jpg",
@@ -2560,16 +2560,16 @@ const AccreditationAndPartners = () => {
               </div>
             </div>
 
-            <div id="partneri" className="bg-white/5 border border-white/10 p-8 md:p-10 shadow-2xl relative overflow-hidden">
-              <div className="flex items-center gap-4 mb-6 relative z-10">
-                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none">STAŇ SE PARTNEREM</h3>
+            <div id="partneri" className="bg-white/5 border border-white/10 p-4 md:p-10 shadow-2xl relative overflow-hidden w-full">
+              <div className="flex items-center gap-4 mb-6 relative z-10 w-full">
+                <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none break-words">STAŇ SE PARTNEREM</h3>
               </div>
               <p className="font-tech text-gray-400 mb-8 leading-relaxed font-medium relative z-10">
                 Chcete spojit svou značku s nejbláznivější motoristickou akcí? Ozvěte se nám a domluvíme spolupráci.
               </p>
 
-              <form className="space-y-4 relative z-10">
-                <div className="grid gap-4">
+              <form className="space-y-4 relative z-10 w-full">
+                <div className="grid gap-4 w-full">
                   <div className="space-y-2">
                     <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Název Firmy</label>
                     <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="VAŠE FIRMA S.R.O." />
@@ -2605,9 +2605,9 @@ const AccreditationAndPartners = () => {
           </div>
 
           {/* Right Column: Accreditation Form */}
-          <div id="akreditace" className="bg-[#F4CE14] p-8 md:p-10 relative overflow-hidden shadow-2xl">
-            <div className="flex items-center gap-4 mb-6 relative z-10">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-black uppercase tracking-tight font-bold leading-none">AKREDITACE 2026</h3>
+          <div id="akreditace" className="bg-[#F4CE14] p-4 md:p-10 relative overflow-hidden shadow-2xl min-w-0 max-w-full">
+            <div className="flex items-center gap-4 mb-6 relative z-10 w-full">
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-black uppercase tracking-tight font-bold leading-none break-words">AKREDITACE 2026</h3>
             </div>
             <p className="font-tech text-black/70 mb-8 leading-relaxed font-medium relative z-10">
               Jste fotograf, kameraman nebo novinář? Získejte oficiální akreditaci na Vrakfest a přístup do media zóny.
