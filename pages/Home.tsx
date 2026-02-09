@@ -2529,14 +2529,31 @@ const AccreditationAndPartners = () => {
           {/* Left Column: Partner Registration */}
           <div className="space-y-8">
             {/* Subtle Ticker and Logo loop (No frame) */}
-            <div className="overflow-hidden whitespace-nowrap group py-4">
-              <div className="flex animate-marquee hover:pause-animation">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                  <div key={i} className="flex items-center mx-12 opacity-30 group-hover:opacity-100 transition-all duration-500">
+            <div className="overflow-hidden whitespace-nowrap group py-4 fade-mask">
+              <div className="flex w-max animate-marquee">
+                {[
+                  "/media/sponzors/dvorak.jpg",
+                  "/media/sponzors/granex.jpg",
+                  "/media/sponzors/silvie.jpg",
+                  "/media/sponzors/yomax.jpg",
+                  "/media/sponzors/dvorak.jpg",
+                  "/media/sponzors/granex.jpg",
+                  "/media/sponzors/silvie.jpg",
+                  "/media/sponzors/yomax.jpg",
+                  "/media/sponzors/dvorak.jpg",
+                  "/media/sponzors/granex.jpg",
+                  "/media/sponzors/silvie.jpg",
+                  "/media/sponzors/yomax.jpg",
+                  "/media/sponzors/dvorak.jpg",
+                  "/media/sponzors/granex.jpg",
+                  "/media/sponzors/silvie.jpg",
+                  "/media/sponzors/yomax.jpg"
+                ].map((logo, i) => (
+                  <div key={i} className="flex-shrink-0 flex items-center mx-8 opacity-60 transition-all duration-500">
                     <img
-                      src="/media/partner_logo.png"
+                      src={logo}
                       alt="Partner"
-                      className="h-10 w-auto object-contain brightness-200 animate-rotate-slow"
+                      className="h-12 w-auto object-contain grayscale invert mix-blend-screen opacity-80 transition-all duration-300"
                     />
                   </div>
                 ))}
@@ -2554,8 +2571,13 @@ const AccreditationAndPartners = () => {
               <form className="space-y-4 relative z-10">
                 <div className="grid gap-4">
                   <div className="space-y-2">
-                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Název Firmy / Jméno</label>
+                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Název Firmy</label>
                     <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="VAŠE FIRMA S.R.O." />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Kontaktní Jméno a Příjmení</label>
+                    <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="JAN NOVÁK" />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -3008,6 +3030,17 @@ export const Home = () => {
           color: black !important;
           border-color: white !important;
           box-shadow: 0 0 20px rgba(255, 255, 255, 0.5) !important;
+        }
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 40s linear infinite;
+        }
+        .fade-mask {
+          mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
         }
       `}</style>
     </div>
