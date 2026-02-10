@@ -1933,6 +1933,8 @@ const RegistrationForm = () => {
 
       // 4. Create Registration
       console.log('Inserting registration...');
+      const variableSymbol = '44' + Math.floor(Math.random() * 900000 + 100000);
+
       const { error: regError } = await supabase
         .from('registrations')
         .insert({
@@ -1942,7 +1944,7 @@ const RegistrationForm = () => {
           car_model: formData.carModel,
           team_name: formData.teamName,
           category: formData.category, // e.g. 'do1.6L'
-          variable_symbol: '44' + Math.floor(Math.random() * 900000 + 100000),
+          variable_symbol: variableSymbol,
           consent_gdpr: formData.consentGdpr,
           consent_rules: formData.consentRules,
           consent_age: formData.consentAge
@@ -1954,6 +1956,41 @@ const RegistrationForm = () => {
           throw new Error('Toto startovní číslo je již pro tento závod obsazené. Prosím, vraťte se o krok zpět a zvolte jiné.');
         }
         throw regError;
+      }
+
+      // 5. Send data to testing Webhook
+      try {
+        await fetch('https://n8n.srv1004354.hstgr.cloud/webhook-test/4b112680-9384-47ce-b21f-cb0e2ead65a5', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            nickname: formData.nickname,
+            email: normalizedEmail,
+            phone: formData.phone,
+            age: formData.age,
+            city: formData.city,
+            startNumber: formData.startNumber,
+            carModel: formData.carModel,
+            teamName: formData.teamName,
+            category: formData.category,
+            variableSymbol,
+            photoUrl,
+            eventId: activeEvent?.id,
+            eventName: activeEvent?.title,
+            consentGdpr: formData.consentGdpr,
+            consentRules: formData.consentRules,
+            consentAge: formData.consentAge,
+            submittedAt: new Date().toISOString()
+          }),
+        });
+        console.log('Webhook sent successfully');
+      } catch (webhookErr) {
+        console.error('Webhook sending failed:', webhookErr);
       }
 
       console.log('Registration successful!');

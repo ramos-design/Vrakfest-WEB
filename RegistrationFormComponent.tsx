@@ -5,6 +5,87 @@ import { Button } from './components/Button';
 export const RegistrationForm = () => {
     const [step, setStep] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        age: '',
+        email: '',
+        phone: '',
+        startNumber: '',
+        carType: '',
+        location: '',
+        comment: '',
+        websiteUrl: '', // Honeypot field
+        consentAge: false,
+        consentRules: false
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        if (type === 'checkbox') {
+            const checked = (e.target as HTMLInputElement).checked;
+            setFormData(prev => ({ ...prev, [name]: checked }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleSubmit = async () => {
+        // Basic honeypot check
+        if (formData.websiteUrl) {
+            console.log('Bot detected!');
+            return;
+        }
+
+        // Basic validation
+        if (!selectedCategory) {
+            alert('Prosím vyberte kategorii.');
+            return;
+        }
+
+        if (!formData.consentAge || !formData.consentRules) {
+            alert('Pro odeslání musíte souhlasit s prohlášením a pravidly.');
+            return;
+        }
+
+        const submissionData = {
+            ...formData,
+            category: selectedCategory,
+            submittedAt: new Date().toISOString(),
+            formType: 'rider_registration'
+        };
+
+        try {
+            // Production n8n webhook URL
+            const N8N_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook/4b112680-9384-47ce-b21f-cb0e2ead65a5';
+
+            console.log('Sending data to n8n:', submissionData);
+
+            // Real fetch to n8n
+            const response = await fetch(N8N_WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(submissionData),
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            alert('Registrace byla úspěšně odeslána ke zpracování!');
+
+            // Reset form
+            setStep(1);
+            setFormData({
+                firstName: '', lastName: '', age: '', email: '', phone: '',
+                startNumber: '', carType: '', location: '', comment: '',
+                websiteUrl: '', consentAge: false, consentRules: false
+            });
+            setSelectedCategory('');
+
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('Omlouváme se, při odesílání došlo k chybě. Zkuste to prosím znovu nebo nás kontaktujte.');
+        }
+    };
 
     return (
         <section className="py-32 bg-white text-black relative">
@@ -35,11 +116,27 @@ export const RegistrationForm = () => {
                     {/* STEP 1: Personal Information */}
                     {step === 1 && (
                         <div className="space-y-6 animate-fadeIn">
+                            {/* Honeypot field for bot protection */}
+                            <div style={{ display: 'none' }} aria-hidden="true">
+                                <label>Webová stránka</label>
+                                <input
+                                    type="text"
+                                    name="websiteUrl"
+                                    value={formData.websiteUrl}
+                                    onChange={handleInputChange}
+                                    tabIndex={-1}
+                                    autoComplete="off"
+                                />
+                            </div>
+
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Jméno *</label>
                                     <input
                                         type="text"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleInputChange}
                                         className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                                         placeholder="Jméno"
                                     />
@@ -48,6 +145,9 @@ export const RegistrationForm = () => {
                                     <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Příjmení *</label>
                                     <input
                                         type="text"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleInputChange}
                                         className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                                         placeholder="Příjmení"
                                     />
@@ -56,7 +156,12 @@ export const RegistrationForm = () => {
 
                             <div>
                                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Věk *</label>
-                                <select className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base">
+                                <select
+                                    name="age"
+                                    value={formData.age}
+                                    onChange={handleInputChange}
+                                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                                >
                                     <option value="">Věk (musí být 18+)</option>
                                     {Array.from({ length: 63 }, (_, i) => i + 18).map(age => (
                                         <option key={age} value={age}>{age} let</option>
@@ -69,6 +174,9 @@ export const RegistrationForm = () => {
                                     <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">E-mail *</label>
                                     <input
                                         type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
                                         className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                                         placeholder="E-mail"
                                     />
@@ -77,6 +185,9 @@ export const RegistrationForm = () => {
                                     <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Mobil *</label>
                                     <input
                                         type="tel"
+                                        name="phone"
+                                        value={formData.phone}
+                                        onChange={handleInputChange}
                                         className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                                         placeholder="Mobil"
                                     />
@@ -94,7 +205,12 @@ export const RegistrationForm = () => {
                         <div className="space-y-6 animate-fadeIn">
                             <div>
                                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Startovní číslo *</label>
-                                <select className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base">
+                                <select
+                                    name="startNumber"
+                                    value={formData.startNumber}
+                                    onChange={handleInputChange}
+                                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                                >
                                     <option value="">Startovní číslo (vyber volné, viz seznam registrovaných, jinak bude přiděleno)</option>
                                     {Array.from({ length: 100 }, (_, i) => i + 1).map(num => (
                                         <option key={num} value={num}>#{num}</option>
@@ -106,6 +222,9 @@ export const RegistrationForm = () => {
                                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Typ závodního vozu *</label>
                                 <input
                                     type="text"
+                                    name="carType"
+                                    value={formData.carType}
+                                    onChange={handleInputChange}
                                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                                     placeholder="Typ závodního vozu (Škoda Favorit, Ford Mondeo...)"
                                 />
@@ -137,6 +256,9 @@ export const RegistrationForm = () => {
                                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Odkud jsi?</label>
                                 <input
                                     type="text"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleInputChange}
                                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                                     placeholder="Odkud jsi?"
                                 />
@@ -145,6 +267,9 @@ export const RegistrationForm = () => {
                             <div>
                                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Komentář</label>
                                 <textarea
+                                    name="comment"
+                                    value={formData.comment}
+                                    onChange={handleInputChange}
                                     rows={4}
                                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base resize-none"
                                     placeholder="Jak se má moderátor představit? Něco o sobě. Přezdívka."
@@ -226,7 +351,13 @@ export const RegistrationForm = () => {
                             {/* Consent Checkboxes */}
                             <div className="space-y-4">
                                 <label className="flex items-start gap-3 cursor-pointer">
-                                    <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
+                                    <input
+                                        type="checkbox"
+                                        name="consentAge"
+                                        checked={formData.consentAge}
+                                        onChange={handleInputChange}
+                                        className="mt-1 w-5 h-5 accent-[#F4CE14]"
+                                    />
                                     <span className="text-sm">
                                         <strong>Prohlášení o plnoletosti: *</strong><br />
                                         Čestně prohlašuji, že v termín konání závodu jsem starší 18 let.
@@ -234,7 +365,13 @@ export const RegistrationForm = () => {
                                 </label>
 
                                 <label className="flex items-start gap-3 cursor-pointer">
-                                    <input type="checkbox" className="mt-1 w-5 h-5 accent-[#F4CE14]" />
+                                    <input
+                                        type="checkbox"
+                                        name="consentRules"
+                                        checked={formData.consentRules}
+                                        onChange={handleInputChange}
+                                        className="mt-1 w-5 h-5 accent-[#F4CE14]"
+                                    />
                                     <span className="text-sm">
                                         <strong>Souhlas s pravidly: *</strong><br />
                                         Čestně prohlašuji, že jsem si přečetl pravidla závodu (viz níže), souhlasím s nimi a budu je dodržovat.
@@ -246,7 +383,10 @@ export const RegistrationForm = () => {
                                 <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
                                     ← ZPĚT
                                 </Button>
-                                <Button className="flex-1 bg-green-600 text-white hover:bg-green-700 hover:text-white border-0 hover:shadow-[0_0_20px_rgba(22,163,74,0.5)]">
+                                <Button
+                                    onClick={handleSubmit}
+                                    className="flex-1 bg-green-600 text-white hover:bg-green-700 hover:text-white border-0 hover:shadow-[0_0_20px_rgba(22,163,74,0.5)]"
+                                >
                                     🏁 ZAREGISTROVAT
                                 </Button>
                             </div>
