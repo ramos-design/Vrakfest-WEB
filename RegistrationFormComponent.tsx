@@ -51,13 +51,15 @@ export const RegistrationForm = () => {
         const submissionData = {
             ...formData,
             category: selectedCategory,
+            variableSymbol: '442026',
+            isPaid: false,
             submittedAt: new Date().toISOString(),
             formType: 'rider_registration'
         };
 
         try {
-            // Production n8n webhook URL
-            const N8N_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook/4b112680-9384-47ce-b21f-cb0e2ead65a5';
+            // Test n8n webhook URL
+            const N8N_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook-test/4b112680-9384-47ce-b21f-cb0e2ead65a5';
 
             console.log('Sending data to n8n:', submissionData);
 
