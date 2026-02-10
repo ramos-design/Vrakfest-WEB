@@ -1837,167 +1837,43 @@ const RegistrationForm = () => {
     setLoading(true);
     try {
       const normalizedEmail = formData.email.trim().toLowerCase();
-      console.log('Starting registration for address:', normalizedEmail);
 
-      let userId = '';
+      const submissionData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        nickname: formData.nickname,
+        email: normalizedEmail,
+        phone: formData.phone,
+        age: formData.age,
+        city: formData.city,
+        startNumber: formData.startNumber,
+        carModel: formData.carModel,
+        teamName: formData.teamName,
+        category: formData.category,
+        variableSymbol: '44' + Math.floor(Math.random() * 900000 + 100000),
+        submittedAt: new Date().toISOString(),
+        formType: 'rider_registration_production'
+      };
 
-      // 1. Initial Check: Does this email already have a profile?
-      // (This avoids Auth rate limits during testing)
-      const { data: profiles, error: lookupError } = await supabase
-        .from('profiles')
-        .select('id')
-        .ilike('email', normalizedEmail);
+      // Production n8n webhook URL
+      const N8N_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook/4b112680-9384-47ce-b21f-cb0e2ead65a5';
 
-      if (lookupError) {
-        console.error('Profile lookup error:', lookupError);
+      const response = await fetch(N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Nepodařilo se odeslat data na server. Zkuste to prosím znovu.');
       }
 
-      if (profiles && profiles.length > 0) {
-        console.log('Found existing profile, skipping signUp. ID:', profiles[0].id);
-        userId = profiles[0].id;
-      } else {
-        // 2. Sign Up User if they don't exist
-        console.log('Profile not found for', normalizedEmail, '- attempting signUp...');
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email: normalizedEmail,
-          password: formData.password,
-          options: {
-            data: {
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              nickname: formData.nickname,
-            }
-          }
-        });
-
-        if (authError) {
-          console.error('Auth Error during signUp:', authError);
-          // Special handling for rate limit during iterative testing
-          if (authError.message.toLowerCase().includes('rate limit')) {
-            throw new Error(`Limit pro odesílání e-mailů vyčerpán pro: ${normalizedEmail}. Pokud používáte novou adresu, prosím počkejte chvíli nebo VYPNĚTE potvrzování e-mailem v Supabase dashboardu (Authentication -> Providers -> Email -> Confirm email).`);
-          }
-          throw authError;
-        }
-
-        if (authData.user) {
-          userId = authData.user.id;
-        }
-      }
-
-      if (!userId) throw new Error('Registrace se nezdařila - uživatel nebyl vytvořen ani nalezen.');
-      console.log('Using userId:', userId);
-
-      // 2. Upload Photo (if exists)
-      let photoUrl = '';
-      if (formData.photo) {
-        try {
-          const fileExt = formData.photo.name.split('.').pop();
-          const fileName = `${userId}-${Date.now()}.${fileExt}`;
-          const { error: uploadError } = await supabase.storage
-            .from('driver-photos')
-            .upload(fileName, formData.photo);
-
-          if (uploadError) throw uploadError;
-
-          const { data: publicUrlData } = supabase.storage
-            .from('driver-photos')
-            .getPublicUrl(fileName);
-
-          photoUrl = publicUrlData.publicUrl;
-          console.log('Photo uploaded:', photoUrl);
-        } catch (err) {
-          console.error('Photo Upload Error:', err);
-        }
-      }
-
-      // 3. Create/Update Profile
-      console.log('Upserting profile...');
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: userId,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          nickname: formData.nickname,
-          email: normalizedEmail,
-          phone: formData.phone,
-          age: parseInt(formData.age),
-          city: formData.city,
-          profile_photo_url: photoUrl
-        });
-
-      if (profileError) {
-        console.error('Profile Upsert Error:', profileError);
-        throw profileError;
-      }
-
-      // 4. Create Registration
-      console.log('Inserting registration...');
-      const variableSymbol = '44' + Math.floor(Math.random() * 900000 + 100000);
-
-      const { error: regError } = await supabase
-        .from('registrations')
-        .insert({
-          profile_id: userId,
-          event_id: activeEvent?.id || '00000000-0000-0000-0000-000000000000',
-          start_number: parseInt(formData.startNumber),
-          car_model: formData.carModel,
-          team_name: formData.teamName,
-          category: formData.category, // e.g. 'do1.6L'
-          variable_symbol: variableSymbol,
-          consent_gdpr: formData.consentGdpr,
-          consent_rules: formData.consentRules,
-          consent_age: formData.consentAge
-        });
-
-      if (regError) {
-        console.error('Registration Insert Error:', regError);
-        if (regError.code === '23505') {
-          throw new Error('Toto startovní číslo je již pro tento závod obsazené. Prosím, vraťte se o krok zpět a zvolte jiné.');
-        }
-        throw regError;
-      }
-
-      // 5. Send data to testing Webhook
-      try {
-        await fetch('https://n8n.srv1004354.hstgr.cloud/webhook-test/4b112680-9384-47ce-b21f-cb0e2ead65a5', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            userId,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            nickname: formData.nickname,
-            email: normalizedEmail,
-            phone: formData.phone,
-            age: formData.age,
-            city: formData.city,
-            startNumber: formData.startNumber,
-            carModel: formData.carModel,
-            teamName: formData.teamName,
-            category: formData.category,
-            variableSymbol,
-            photoUrl,
-            eventId: activeEvent?.id,
-            eventName: activeEvent?.title,
-            consentGdpr: formData.consentGdpr,
-            consentRules: formData.consentRules,
-            consentAge: formData.consentAge,
-            submittedAt: new Date().toISOString()
-          }),
-        });
-        console.log('Webhook sent successfully');
-      } catch (webhookErr) {
-        console.error('Webhook sending failed:', webhookErr);
-      }
-
-      console.log('Registration successful!');
       setStep(5);
     } catch (error: any) {
       console.error('Registration Process Failed:', error);
-      alert('Chyba: ' + (error.message || 'Něco se nepovedlo při ukládání dat.'));
+      alert('Chyba: ' + (error.message || 'Něco se nepovedlo při odesílání dat.'));
     } finally {
       setLoading(false);
     }
