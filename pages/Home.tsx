@@ -598,7 +598,7 @@ const SponsorsTicker = () => {
           PARTNEŘI AKCE
         </h2>
         <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">
-          CHCEŠ SE STÁT TAKY PARTNEREM? <a href="mailto:info@vrakfest.cz" className="text-[#F4CE14] hover:text-white transition-colors underline decoration-2 underline-offset-4">TAK KLIKNI ZDE</a>
+          CHCEŠ SE STÁT TAKY PARTNEREM? <a href="#registrace-partnera" className="text-[#F4CE14] hover:text-white transition-colors underline decoration-2 underline-offset-4">TAK KLIKNI ZDE</a>
         </p>
         <div className="w-24 h-1 bg-[#F4CE14] mx-auto mt-4 relative">
           <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
@@ -2597,7 +2597,7 @@ const AccreditationAndPartners = () => {
               </div>
             </div>
 
-            <div id="partneri" className="bg-white/5 border border-white/10 p-4 md:p-10 shadow-2xl relative overflow-hidden w-full">
+            <div id="registrace-partnera" className="bg-white/5 border border-white/10 p-4 md:p-10 shadow-2xl relative overflow-hidden w-full">
               <div className="flex items-center gap-4 mb-6 relative z-10 w-full">
                 <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none break-words">STAŇ SE PARTNEREM</h3>
               </div>
