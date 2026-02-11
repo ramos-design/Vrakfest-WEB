@@ -1754,23 +1754,18 @@ const RegistrationForm = () => {
     websiteUrl: '' // Honeypot field (bots will fill this)
   });
   const [startNumberError, setStartNumberError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [validationError, setValidationError] = useState('');
 
   // Debounced start number check
   useEffect(() => {
     const checkNumber = async () => {
       if (!formData.startNumber || !activeEvent) return;
-
       const num = parseInt(formData.startNumber);
 
-      // 1. Check static standings first (legacy/hardcoded data)
-      const existsInStatic = STANDINGS.some(d => d.startNumber === num);
-      if (existsInStatic) {
-        setStartNumberError('Toto startovní číslo je již obsazené v historických tabulkách!');
-        return;
-      }
-
-      // 2. Check live registrations for the active event
-      const { data, error } = await supabase
+      // ONLY check Supabase registrations for the active event
+      const { data } = await supabase
         .from('registrations')
         .select('id')
         .eq('event_id', activeEvent.id)
@@ -1783,10 +1778,59 @@ const RegistrationForm = () => {
         setStartNumberError('');
       }
     };
-
     const timer = setTimeout(checkNumber, 500);
     return () => clearTimeout(timer);
   }, [formData.startNumber, activeEvent]);
+
+  // Debounced Email and Phone check
+  useEffect(() => {
+    const checkDuplicates = async () => {
+      if (formData.email && formData.email.includes('@')) {
+        const { data } = await supabase.from('profiles').select('id').ilike('email', formData.email.trim()).limit(1);
+        if (data && data.length > 0) setEmailError('Tento e-mail je již v systému registrovaný.');
+        else setEmailError('');
+      } else { setEmailError(''); }
+
+      if (formData.phone && formData.phone.length >= 9) {
+        const { data } = await supabase.from('profiles').select('id').eq('phone', formData.phone.trim()).limit(1);
+        if (data && data.length > 0) setPhoneError('Tento telefon je již v systému registrovaný.');
+        else setPhoneError('');
+      } else { setPhoneError(''); }
+    };
+    const timer = setTimeout(checkDuplicates, 600);
+    return () => clearTimeout(timer);
+  }, [formData.email, formData.phone]);
+
+  const validateStep = (currentStep: number) => {
+    setValidationError('');
+    if (currentStep === 1) {
+      if (!formData.firstName || !formData.lastName || !formData.age || !formData.email || !formData.phone) {
+        setValidationError('Prosím vyplňte všechna povinná pole (Jméno, Příjmení, Věk, E-mail, Mobil).');
+        return false;
+      }
+      if (emailError || phoneError) return false;
+    }
+    if (currentStep === 2) {
+      if (!formData.startNumber || !formData.carModel || !formData.category || !formData.city) {
+        setValidationError('Prosím vyplňte povinné údaje o vozidle a bydlišti.');
+        return false;
+      }
+      if (startNumberError) return false;
+    }
+    if (currentStep === 4) {
+      if (!formData.photo || !formData.password || !formData.consentGdpr || !formData.consentRules || !formData.consentAge) {
+        setValidationError('Před dokončením musíte nahrát fotku, zvolit heslo a souhlasit se všemi podmínkami.');
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const nextStep = () => {
+    if (validateStep(step)) {
+      setStep(prev => prev + 1);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
@@ -1822,22 +1866,20 @@ const RegistrationForm = () => {
   }, []);
 
   const handleRegistration = async () => {
-    // 0. Honeypot check: If the hidden field is filled, it's a bot
     if (formData.websiteUrl) {
       console.warn('Bot detected via honeypot!');
-      setStep(5); // Show success to bot so they don't try other ways
+      setStep(5);
       return;
     }
 
-    if (startNumberError) {
-      alert(startNumberError);
+    if (!validateStep(4)) {
+      alert(validationError);
       return;
     }
 
     setLoading(true);
     try {
       const normalizedEmail = formData.email.trim().toLowerCase();
-
       const submissionData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -1943,7 +1985,6 @@ const RegistrationForm = () => {
                     onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Jméno"
-                    required
                   />
                 </div>
                 <div>
@@ -1955,15 +1996,20 @@ const RegistrationForm = () => {
                     onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Příjmení"
-                    required
                   />
                 </div>
               </div>
 
+              {validationError && step === 1 && (
+                <p className="text-red-500 font-bold text-center text-xs uppercase animate-pulse">
+                  {validationError}
+                </p>
+              )}
+
 
               <div className="grid grid-cols-2 gap-4 md:gap-6">
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka *</label>
+                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Tvoje přezdívka (nepovinné)</label>
                   <input
                     type="text"
                     name="nickname"
@@ -1971,7 +2017,6 @@ const RegistrationForm = () => {
                     onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Např. Drtič"
-                    required
                   />
                 </div>
                 <div>
@@ -1985,7 +2030,6 @@ const RegistrationForm = () => {
                     max="99"
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Věk (musí být 18+)"
-                    required
                   />
                 </div>
               </div>
@@ -1998,10 +2042,10 @@ const RegistrationForm = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                    className={`w-full border-2 px-4 py-3 outline-none transition-colors bg-white text-black font-normal text-base ${emailError ? 'border-red-500' : 'border-gray-200 focus:border-[#F4CE14]'}`}
                     placeholder="E-mail"
-                    required
                   />
+                  {emailError && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase leading-tight">{emailError}</p>}
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Mobil *</label>
@@ -2010,14 +2054,14 @@ const RegistrationForm = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
+                    className={`w-full border-2 px-4 py-3 outline-none transition-colors bg-white text-black font-normal text-base ${phoneError ? 'border-red-500' : 'border-gray-200 focus:border-[#F4CE14]'}`}
                     placeholder="Mobil"
-                    required
                   />
+                  {phoneError && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase leading-tight">{phoneError}</p>}
                 </div>
               </div>
 
-              <Button onClick={() => setStep(2)} className="w-full mt-8 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
+              <Button onClick={nextStep} className="w-full mt-8 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                 POKRAČOVAT →
               </Button>
             </div>
@@ -2036,9 +2080,8 @@ const RegistrationForm = () => {
                     onChange={handleInputChange}
                     className={`w-full border-2 px-4 py-3 outline-none transition-colors bg-white text-black font-normal text-base ${startNumberError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-[#F4CE14]'}`}
                     placeholder="Startovní číslo"
-                    required
                   />
-                  {startNumberError && <p className="text-red-500 text-xs font-bold mt-1 uppercase tracking-wider">{startNumberError}</p>}
+                  {startNumberError && <p className="text-red-500 text-[10px] font-bold mt-1 uppercase leading-tight">{startNumberError}</p>}
                 </div>
 
                 <div>
@@ -2050,7 +2093,6 @@ const RegistrationForm = () => {
                     onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Např. Škoda Fabia"
-                    required
                   />
                 </div>
               </div>
@@ -2087,12 +2129,11 @@ const RegistrationForm = () => {
                     onChange={handleInputChange}
                     className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                     placeholder="Odkud jsi?"
-                    required
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Za jaký tým jedeš?</label>
+                  <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Za jaký tým jedeš? (nepovinné)</label>
                   <input
                     type="text"
                     name="teamName"
@@ -2104,11 +2145,17 @@ const RegistrationForm = () => {
                 </div>
               </div>
 
+              {validationError && step === 2 && (
+                <p className="text-red-500 font-bold text-center text-xs uppercase animate-pulse mb-6">
+                  {validationError}
+                </p>
+              )}
+
               <div className="flex gap-4 mt-8">
                 <Button variant="outline" onClick={() => setStep(1)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
                   <ArrowLeft size={24} />
                 </Button>
-                <Button onClick={() => setStep(3)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
+                <Button onClick={nextStep} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                   POKRAČOVAT →
                 </Button>
               </div>
@@ -2171,7 +2218,7 @@ const RegistrationForm = () => {
                 <Button variant="outline" onClick={() => setStep(2)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
                   <ArrowLeft size={24} />
                 </Button>
-                <Button onClick={() => setStep(4)} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
+                <Button onClick={nextStep} className="flex-1 bg-[#F4CE14] text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0">
                   MÁM ZAPLACENO, POKRAČOVAT →
                 </Button>
               </div>
@@ -2228,7 +2275,6 @@ const RegistrationForm = () => {
                         onChange={handleInputChange}
                         className="w-full border-2 border-gray-200 px-4 py-3 outline-none focus:border-[#F4CE14] transition-colors bg-white text-black font-normal text-base"
                         placeholder="Nastavte si heslo"
-                        required
                       />
                       <p className="text-xs text-gray-400 mt-2">
                         Slouží pro přihlášení do mobilní aplikace.
@@ -2247,7 +2293,6 @@ const RegistrationForm = () => {
                     checked={formData.consentAge}
                     onChange={handleInputChange}
                     className="mt-1 w-5 h-5 accent-[#F4CE14]"
-                    required
                   />
                   <span className="text-sm">
                     <strong>Prohlášení o plnoletosti: *</strong><br />
@@ -2262,7 +2307,6 @@ const RegistrationForm = () => {
                     checked={formData.consentRules}
                     onChange={handleInputChange}
                     className="mt-1 w-5 h-5 accent-[#F4CE14]"
-                    required
                   />
                   <span className="text-sm">
                     <strong>Souhlas s pravidly: *</strong><br />
@@ -2277,7 +2321,6 @@ const RegistrationForm = () => {
                     checked={formData.consentGdpr}
                     onChange={handleInputChange}
                     className="mt-1 w-5 h-5 accent-[#F4CE14]"
-                    required
                   />
                   <span className="text-sm">
                     <strong>Ochrana osobních údajů: *</strong><br />
@@ -2286,13 +2329,18 @@ const RegistrationForm = () => {
                 </label>
               </div>
 
+              {validationError && step === 4 && (
+                <p className="text-red-500 font-bold text-center text-xs uppercase animate-pulse mb-6">
+                  {validationError}
+                </p>
+              )}
+
               <div className="flex gap-4 mt-8">
                 <Button variant="outline" onClick={() => setStep(3)} className="w-16 border-2 border-black text-black hover:!bg-black hover:!text-[#F4CE14] transition-colors flex items-center justify-center px-0">
                   <ArrowLeft size={24} />
                 </Button>
                 <Button
                   onClick={handleRegistration}
-                  disabled={loading || !formData.consentGdpr || !formData.consentRules || !formData.consentAge || !formData.password || !formData.photo}
                   className={`flex-1 ${loading ? 'bg-gray-400' : 'bg-green-600'} text-white hover:!bg-black hover:!text-[#F4CE14] transition-colors border-0 font-bold`}
                 >
                   {loading ? 'ZPRACOVÁVÁM...' : '🏁 ZAREGISTROVAT'}
