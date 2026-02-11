@@ -6,7 +6,7 @@ import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
   ChevronDown, ChevronRight, CheckCircle, Info,
-  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User, ShoppingBag
+  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User, ShoppingBag, AlertTriangle
 } from 'lucide-react';
 import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS } from '../constants';
 import { Driver } from '../types';
@@ -1764,11 +1764,11 @@ const RegistrationForm = () => {
       if (!formData.startNumber || !activeEvent) return;
       const num = parseInt(formData.startNumber);
 
-      // ONLY check Supabase registrations for the active event
+      // Check profiles for the active event by name
       const { data } = await supabase
-        .from('registrations')
+        .from('profiles')
         .select('id')
-        .eq('event_id', activeEvent.id)
+        .eq('event_name', activeEvent.title)
         .eq('start_number', num)
         .limit(1);
 
@@ -1782,7 +1782,7 @@ const RegistrationForm = () => {
     return () => clearTimeout(timer);
   }, [formData.startNumber, activeEvent]);
 
-  // Debounced Email and Phone check
+  // Debounced Email check
   useEffect(() => {
     const checkDuplicates = async () => {
       if (formData.email && formData.email.includes('@')) {
@@ -1790,16 +1790,10 @@ const RegistrationForm = () => {
         if (data && data.length > 0) setEmailError('Tento e-mail je již v systému registrovaný.');
         else setEmailError('');
       } else { setEmailError(''); }
-
-      if (formData.phone && formData.phone.length >= 9) {
-        const { data } = await supabase.from('profiles').select('id').eq('phone', formData.phone.trim()).limit(1);
-        if (data && data.length > 0) setPhoneError('Tento telefon je již v systému registrovaný.');
-        else setPhoneError('');
-      } else { setPhoneError(''); }
     };
     const timer = setTimeout(checkDuplicates, 600);
     return () => clearTimeout(timer);
-  }, [formData.email, formData.phone]);
+  }, [formData.email]);
 
   const validateStep = (currentStep: number) => {
     setValidationError('');
@@ -1880,19 +1874,38 @@ const RegistrationForm = () => {
     setLoading(true);
     try {
       const normalizedEmail = formData.email.trim().toLowerCase();
+
+      // Convert photo to base64 if it exists for the webhook
+      let photoBase64 = '';
+      if (formData.photo) {
+        photoBase64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.readAsDataURL(formData.photo as File);
+        });
+      }
+
       const submissionData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         nickname: formData.nickname,
         email: normalizedEmail,
-        phone: formData.phone,
+        phone: formData.phone.trim(),
         age: formData.age,
         city: formData.city,
         startNumber: formData.startNumber,
         carModel: formData.carModel,
         teamName: formData.teamName,
         category: formData.category,
-        variableSymbol: '44' + Math.floor(Math.random() * 900000 + 100000),
+        password: formData.password, // Passed to n8n to be saved in profiles.app_password
+        photoBase64,
+        consentGdpr: formData.consentGdpr,
+        consentRules: formData.consentRules,
+        consentAge: formData.consentAge,
+        eventName: activeEvent?.title,
+        variableSymbol: '442026',
+        isPaid: false,
+        websiteUrl: formData.websiteUrl,
         submittedAt: new Date().toISOString(),
         formType: 'rider_registration_production'
       };
@@ -1935,30 +1948,31 @@ const RegistrationForm = () => {
       ></div>
 
       <div className="container mx-auto px-6 max-w-4xl text-left">
-        <div className="mb-8 md:mb-20 text-center">
-          <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas mb-12 tracking-tight leading-none uppercase font-semibold text-black">REGISTRACE JEZDCE</h2>
+        {step < 5 && (
+          <div className="mb-8 md:mb-20 text-center">
+            <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas mb-12 tracking-tight leading-none uppercase font-semibold text-black">REGISTRACE JEZDCE</h2>
 
-          {/* Progress Bar */}
-          <div className="relative flex items-center justify-center gap-10 md:gap-24 px-4 md:px-16">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[calc(100%-110px)] md:w-[calc(100%-128px)] h-1 bg-gray-100 -z-10 -translate-y-1/2"></div>
-            <div className="absolute top-1/2 left-[55px] md:left-[64px] h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `calc(${(step - 1) * 33.333}% - ${step === 1 ? 0 : 0}px)` }}></div>
+            {/* Progress Bar */}
+            <div className="relative flex items-center justify-center gap-10 md:gap-24 px-4 md:px-16">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[calc(100%-110px)] md:w-[calc(100%-128px)] h-1 bg-gray-100 -z-10 -translate-y-1/2"></div>
+              <div className="absolute top-1/2 left-[55px] md:left-[64px] h-1 bg-[#F4CE14] transition-all duration-700 -z-10 -translate-y-1/2" style={{ width: `calc(${(step - 1) * 33.333}% - ${step === 1 ? 0 : 0}px)` }}></div>
 
-            {[
-              { num: 1, label: 'OSOBNÍ ÚDAJE' },
-              { num: 2, label: 'VOZIDLO' },
-              { num: 3, label: 'PLATBA' },
-              { num: 4, label: 'DOKONČENÍ' },
-              { num: 5, label: 'HOTOVO' }
-            ].map(item => (
-              <div key={item.num} className="flex flex-col items-center">
-                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center font-tech font-semibold text-lg md:text-xl transition-all duration-500 ${step >= item.num ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
-                  {step > item.num || step === 5 && item.num === 5 ? <CheckCircle className="w-6 h-6 md:w-7 md:h-7" /> : item.num}
+              {[
+                { num: 1, label: 'OSOBNÍ ÚDAJE' },
+                { num: 2, label: 'VOZIDLO' },
+                { num: 3, label: 'PLATBA' },
+                { num: 4, label: 'DOKONČENÍ' }
+              ].map(item => (
+                <div key={item.num} className="flex flex-col items-center">
+                  <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center font-tech font-semibold text-lg md:text-xl transition-all duration-500 ${step >= item.num ? 'bg-[#F4CE14] scale-110 shadow-[0_0_30px_rgba(244,206,20,0.6)] border-4 border-white' : 'bg-gray-100 text-gray-400'}`}>
+                    {step > item.num ? <CheckCircle className="w-6 h-6 md:w-7 md:h-7" /> : item.num}
+                  </div>
+                  <span className="mt-4 font-tech text-[10px] md:text-xs text-gray-400 tracking-wider md:tracking-[0.4em] uppercase font-bold text-center max-w-[90px] md:max-w-none">{item.label}</span>
                 </div>
-                <span className="mt-4 font-tech text-[10px] md:text-xs text-gray-400 tracking-wider md:tracking-[0.4em] uppercase font-bold text-center max-w-[90px] md:max-w-none">{item.label}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="font-tech text-xl">
           {/* STEP 1: Personal Information */}
@@ -2359,28 +2373,32 @@ const RegistrationForm = () => {
               </div>
 
               <h3 className="font-bebas text-5xl text-black tracking-tight uppercase">REGISTRACE ÚSPĚŠNÁ!</h3>
-              <p className="font-tech text-gray-500 max-w-lg mx-auto leading-relaxed">
-                Vaše registrace byla přijata a právě se zpracovává. Na váš e-mail <span className="text-black font-bold">{formData.email}</span> jsme zaslali potvrzení s instrukcemi k platbě.
-              </p>
 
-              <div className="bg-gray-50 p-8 border-2 border-dashed border-gray-200">
-                <p className="font-tech text-xs text-gray-400 uppercase tracking-widest mb-4">Platební rekapitulace</p>
-                <div className="flex flex-col gap-4">
-                  <div className="flex justify-between items-end border-b border-gray-100 pb-2">
-                    <span className="font-tech text-xs text-gray-500 uppercase">Variabilní symbol:</span>
-                    <span className="font-bebas text-2xl">442026</span>
+              <div className="grid md:grid-cols-2 gap-8 md:gap-12 text-left mt-12 pt-8 border-t-2 border-gray-100">
+                <div className="font-tech text-gray-500 leading-relaxed">
+                  <p>
+                    Tvoje registrace byla přijata a právě se zpracovává. Na tvůj e-mail <span className="text-black font-bold">{formData.email}</span> jsme zaslali potvrzení s instrukcemi i k platbě v případě že jsi ještě nezaplatil. Jakmile tvoje platba bude schválená, zařadíme tě mezi jezdce do následujícího závodu.
+                  </p>
+                </div>
+
+                <div className="bg-[#F4CE14] p-8 md:p-10 space-y-8 relative overflow-hidden">
+                  <div className="space-y-4">
+                    <p className="font-bebas text-2xl md:text-3xl text-black leading-[0.9] uppercase tracking-normal">
+                      <AlertTriangle className="inline-block w-6 h-6 md:w-8 md:h-8 mr-2 -mt-1 text-black" />
+                      Startovné lze zaplatit pouze předem.
+                    </p>
+
+                    <p className="font-tech font-bold text-black leading-relaxed uppercase tracking-wider text-sm">
+                      Počet startujících závodníků je omezený – platbou předem rezervuješ své místo v závodě.
+                    </p>
                   </div>
-                  <div className="flex justify-between items-end border-b border-gray-100 pb-2">
-                    <span className="font-tech text-xs text-gray-500 uppercase">K úhradě:</span>
-                    <span className="font-bebas text-2xl text-red-600">2 000 Kč</span>
+
+                  <div className="bg-red-600 p-4 md:p-5 shadow-sm">
+                    <p className="font-tech text-[10px] md:text-xs font-black text-white uppercase tracking-[0.2em] leading-tight text-center">
+                      Platba startovného hotově na místě nebude možná!
+                    </p>
                   </div>
                 </div>
-              </div>
-
-              <div className="pt-8">
-                <Button onClick={() => setStep(1)} variant="outline" className="w-full border-2 border-black text-black">
-                  ZPĚT NA ZAČÁTEK
-                </Button>
               </div>
             </div>
           )}
@@ -2885,28 +2903,50 @@ export const Home = () => {
 
       if (eventsData && eventsData.length > 0) {
         setLiveEvents(eventsData);
-        // Fetch registered count for the first active event
         const activeE = eventsData.find((e: any) => e.is_active) || eventsData[0];
 
-        // Fetch paid registered count
-        const { count } = await supabase
-          .from('registrations')
-          .select('*', { count: 'exact', head: true })
-          .eq('event_id', activeE.id)
-          .eq('payment_status', 'paid');
-        if (count !== null) setRegisteredCount(count);
+        // Fetch paid registered count from the SECURE STATS table
+        const { data: statsData } = await supabase
+          .from('event_stats')
+          .select('paid_count')
+          .eq('event_name', activeE.title)
+          .single();
 
-        // Fetch paid drivers for roster
+        if (statsData) setRegisteredCount(statsData.paid_count);
+
+        // Fetch paid drivers for roster (only necessary public fields)
         const { data: paidData } = await supabase
-          .from('registrations')
-          .select('*, profiles(*)')
-          .eq('event_id', activeE.id)
-          .eq('payment_status', 'paid');
+          .from('profiles')
+          .select('first_name, last_name, nickname, profile_photo_url, city, car_model, start_number')
+          .eq('event_name', activeE.title)
+          .eq('payment_status', true);
+
         if (paidData) setPaidDrivers(paidData);
       }
     };
 
     fetchHomeData();
+
+    // Subscribe to REALTIME updates for the SECURE STATS table
+    const channel = supabase
+      .channel('realtime_event_stats')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'event_stats'
+        },
+        () => {
+          // Refresh statistics when the stats table changes
+          fetchHomeData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
   useEffect(() => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
