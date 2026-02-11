@@ -536,7 +536,7 @@ const GalleryGrid = () => {
           >
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
-                src="/media/DSC_0871.jpg"
+                src="/media/VFzavodník2-felicie.jpg"
                 className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(1) ? 'grayscale-0' : 'grayscale'
                   } group-hover:grayscale-0`}
                 alt="Závod"
@@ -1410,7 +1410,7 @@ const TriviaSlider = () => {
   const slides = [
     {
       text: "Výhra v Demolition Derby je 10 000 Kč pro posledního v pohybu!",
-      image: "/media/DSC_0871.jpg"
+      image: "/media/VFzavodník2-felicie.jpg"
     },
     {
       text: "Vrakfestu se může zúčastnit každý starší 18 let se svým upraveným vrakem.",

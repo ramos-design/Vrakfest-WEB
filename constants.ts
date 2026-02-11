@@ -40,7 +40,7 @@ export const DRIVERS: Driver[] = [
 
 export const EVENTS: EventItem[] = [
   { id: '1', title: 'OSTRAVA', date: '04.04.2026', location: 'VŘESÍNSKÁ STRŽ', image: '/media/DSC_7229.jpg' },
-  { id: '2', title: 'HRACHOVEC', date: '27.06.2026', location: 'AREÁL EKOREMA', image: '/media/DSC_0871.jpg' },
+  { id: '2', title: 'HRACHOVEC', date: '27.06.2026', location: 'AREÁL EKOREMA', image: '/media/VFzavodník2-felicie.jpg' },
   { id: '3', title: 'PŘEKVAPENÍ', date: '22.08.2026', location: 'NOVÉ MÍSTO', image: '/media/DSC_0655.jpg' },
   { id: '4', title: 'OSTRAVA', date: '24.10.2026', location: 'VŘESÍNSKÁ STRŽ', image: '/media/DSC_4209.jpg' }
 ];
