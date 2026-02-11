@@ -936,6 +936,18 @@ const Program = () => {
 const EventGrid = ({ liveEvents }: { liveEvents: any[] }) => {
   const eventsToDisplay = liveEvents.length > 0 ? liveEvents : EVENTS;
   const [activeId, setActiveId] = useState(eventsToDisplay[0]?.id || '1');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
 
   // Sync activeId when liveEvents are loaded
   useEffect(() => {
@@ -945,8 +957,63 @@ const EventGrid = ({ liveEvents }: { liveEvents: any[] }) => {
   }, [liveEvents]);
 
   return (
-    <section id="kalendar" className="py-32 bg-[#111] relative">
-      <div className="container mx-auto px-6">
+    <section
+      id="kalendar"
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+      className="py-32 bg-[#050505] relative overflow-hidden"
+    >
+      {/* --- Interactive Organic Map Background --- */}
+
+      {/* Static Faint Topo Layer */}
+      <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="static-topo" width="800" height="800" patternUnits="userSpaceOnUse">
+              <path d="M0 400C150 300 300 500 450 400S750 300 800 400" fill="none" stroke="#F4CE14" strokeWidth="1" />
+              <path d="M0 300C200 200 400 400 600 300S750 200 800 300" fill="none" stroke="#F4CE14" strokeWidth="1" />
+              <path d="M0 500C100 600 300 400 500 500S700 600 800 500" fill="none" stroke="#F4CE14" strokeWidth="1" />
+              <circle cx="400" cy="400" r="150" fill="none" stroke="#F4CE14" strokeWidth="1" strokeDasharray="5 5" />
+              <circle cx="400" cy="400" r="250" fill="none" stroke="#F4CE14" strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#static-topo)" />
+        </svg>
+      </div>
+
+      {/* Interactive Bright Topo Layer (Revealed by Mask) */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-300"
+        style={{
+          opacity: isHovering ? 0.4 : 0,
+          WebkitMaskImage: `radial-gradient(circle 350px at ${mousePos.x}px ${mousePos.y}px, black, transparent)`,
+          maskImage: `radial-gradient(circle 350px at ${mousePos.x}px ${mousePos.y}px, black, transparent)`
+        }}
+      >
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="url(#static-topo)" />
+        </svg>
+      </div>
+
+      {/* Tactical UI Highlights (Dots/Crosshairs) */}
+      <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-1 h-1 bg-[#F4CE14] rounded-full shadow-[0_0_10px_#F4CE14]"></div>
+        <div className="absolute top-3/4 left-1/2 w-1 h-1 bg-[#F4CE14] rounded-full shadow-[0_0_10px_#F4CE14]"></div>
+        <div className="absolute top-1/3 left-2/3 w-1 h-1 bg-[#F4CE14] rounded-full shadow-[0_0_10px_#F4CE14]"></div>
+      </div>
+
+      {/* Global Glow */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-500"
+        style={{
+          opacity: isHovering ? 1 : 0,
+          background: `radial-gradient(circle 450px at ${mousePos.x}px ${mousePos.y}px, rgba(244,206,20,0.05), transparent 80%)`
+        }}
+      ></div>
+
+      <div className="container mx-auto px-6 relative z-10">
         <div className="mb-20 text-center">
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
             KALENDÁŘ AKCÍ 2026
@@ -2428,26 +2495,37 @@ const DriverInfoAndCTA = () => {
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-stretch">
           {/* Left Column: CTA */}
-          <div className="bg-[#1a1a1a] p-8 md:p-12 border-2 border-[#F4CE14] relative overflow-hidden group shadow-2xl flex flex-col justify-center">
-            {/* Background Image with Overlay */}
-            <div className="absolute inset-0 z-0">
+          <div className="flex flex-col gap-6">
+            {/* Racer Image Above */}
+            <div className="shadow-2xl overflow-hidden h-[300px] md:h-[350px]">
               <img
-                src="/media/DSC_7229.jpg"
-                alt="Vrakfest Action"
-                className="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
+                src="/media/VFzavodník-felicie.jpg"
+                alt="Vrakfest Jezdec"
+                className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
             </div>
 
-            <div className="relative z-10">
-              <h3 className="font-bebas text-5xl md:text-6xl text-white mb-6 leading-none uppercase">Máš na to <span className="text-[#F4CE14]">koule</span> závodit?</h3>
-              <p className="font-tech text-gray-300 text-lg mb-10 leading-relaxed uppercase tracking-wider max-w-xl">
-                PŘESTAŇ O TOM JEN SNÍT A UKAŽ CO JE V TOBĚ. 90 JEZDCŮ, JEDNA TRAŤ A ČISTÁ DESTRUKCE.
-                ZAREGISTRUJ SE PRÁVĚ TEĎ A BUĎ SOUČÁSTÍ VRAKFESTU.
-              </p>
-              <Button className="w-fit px-8 py-3 text-lg h-auto">
-                <a href="#registrace">ZAREGISTROVAT SE</a>
-              </Button>
+            <div className="bg-[#1a1a1a] p-8 md:p-10 border-2 border-[#F4CE14] relative overflow-hidden group shadow-2xl flex flex-col justify-center">
+              {/* Background Image with Overlay */}
+              <div className="absolute inset-0 z-0">
+                <img
+                  src="/media/DSC_7229.jpg"
+                  alt="Vrakfest Action"
+                  className="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+              </div>
+
+              <div className="relative z-10">
+                <h3 className="font-bebas text-4xl md:text-5xl text-white mb-6 leading-none uppercase tracking-tight">Máš na to <span className="text-[#F4CE14]">koule</span> závodit?</h3>
+                <p className="font-tech text-gray-300 text-sm md:text-base mb-8 leading-relaxed uppercase tracking-wider max-w-xl">
+                  PŘESTAŇ O TOM JEN SNÍT A UKAŽ CO JE V TOBĚ. 90 JEZDCŮ, JEDNA TRAŤ A ČISTÁ DESTRUKCE.
+                  ZAREGISTRUJ SE PRÁVĚ TEĎ A BUĎ SOUČÁSTÍ VRAKFESTU.
+                </p>
+                <Button className="w-fit px-8 py-3 text-lg h-auto">
+                  <a href="#registrace">ZAREGISTROVAT SE</a>
+                </Button>
+              </div>
             </div>
           </div>
 
