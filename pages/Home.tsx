@@ -8,7 +8,7 @@ import {
   ChevronDown, ChevronRight, CheckCircle, Info,
   Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User, ShoppingBag, AlertTriangle
 } from 'lucide-react';
-import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS } from '../constants';
+import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS, N8N_RIDER_REGISTRATION_WEBHOOK_URL } from '../constants';
 import { Driver } from '../types';
 
 
@@ -1977,8 +1977,8 @@ const RegistrationForm = () => {
         formType: 'rider_registration_production'
       };
 
-      // Production n8n webhook URL
-      const N8N_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook/4b112680-9384-47ce-b21f-cb0e2ead65a5';
+      // Test n8n webhook URL
+      const N8N_WEBHOOK_URL = N8N_RIDER_REGISTRATION_WEBHOOK_URL;
 
       const response = await fetch(N8N_WEBHOOK_URL, {
         method: 'POST',
@@ -1989,7 +1989,7 @@ const RegistrationForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Nepodařilo se odeslat data na server. Zkuste to prosím znovu.');
+        throw new Error(`Server vrátil chybu ${response.status}. Ujistěte se, že v n8n máte spuštěné 'Execute Workflow'.`);
       }
 
       setStep(5);

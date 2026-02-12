@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Button } from './components/Button';
+import { N8N_RIDER_REGISTRATION_WEBHOOK_URL } from './constants';
 
 export const RegistrationForm = () => {
     const [step, setStep] = useState(1);
@@ -59,7 +60,7 @@ export const RegistrationForm = () => {
 
         try {
             // Test n8n webhook URL
-            const N8N_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook-test/4b112680-9384-47ce-b21f-cb0e2ead65a5';
+            const N8N_WEBHOOK_URL = N8N_RIDER_REGISTRATION_WEBHOOK_URL;
 
             console.log('Sending data to n8n:', submissionData);
 

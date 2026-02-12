@@ -3,6 +3,8 @@
 import { Driver, EventItem, ProgramStep, MarketItem, StandingsDriver } from './types';
 
 
+export const N8N_RIDER_REGISTRATION_WEBHOOK_URL = 'https://n8n.srv1004354.hstgr.cloud/webhook-test/4b112680-9384-47ce-b21f-cb0e2ead65a5';
+
 export const DRIVERS: Driver[] = [
   {
     id: 'v1',
