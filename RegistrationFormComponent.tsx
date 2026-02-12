@@ -55,11 +55,11 @@ export const RegistrationForm = () => {
             variableSymbol: '442026',
             isPaid: false,
             submittedAt: new Date().toISOString(),
-            formType: 'rider_registration'
+            formType: 'rider_registration_production'
         };
 
         try {
-            // Test n8n webhook URL
+            // Production n8n webhook URL
             const N8N_WEBHOOK_URL = N8N_RIDER_REGISTRATION_WEBHOOK_URL;
 
             console.log('Sending data to n8n:', submissionData);
@@ -330,13 +330,12 @@ export const RegistrationForm = () => {
                                     <div className="w-full md:w-auto flex flex-col items-center">
                                         <div className="bg-white p-4 shadow-xl border-2 border-gray-100 group-hover:border-[#F4CE14] transition-colors duration-500 relative">
                                             <img
-                                                src="/qr_payment_demo_1770476385305.png"
-                                                alt="QR Platba Demo"
+                                                src="/media/VF_Ostrava_442026.png"
+                                                alt="QR Platba"
                                                 className="w-40 h-40 md:w-48 md:h-48"
                                             />
                                             <div className="absolute inset-0 border-4 border-transparent group-hover:border-[#F4CE14]/20 pointer-events-none transition-all duration-500"></div>
                                         </div>
-                                        <p className="font-tech text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em] font-bold">QR PLATBA (DEMO)</p>
                                     </div>
                                 </div>
                             </div>
