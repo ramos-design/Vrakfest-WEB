@@ -6,7 +6,7 @@ import {
   Menu, X, Play, Clock, Users, Shield,
   MapPin, ShoppingCart, UserPlus, Phone,
   ChevronDown, ChevronRight, CheckCircle, Info,
-  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, User, ShoppingBag, AlertTriangle
+  Search, ExternalLink, Settings, Cpu, ArrowRight, ArrowLeft, ArrowDown, User, ShoppingBag, AlertTriangle
 } from 'lucide-react';
 import { DRIVERS, EVENTS, PROGRAM, MARKET_ITEMS, SPONSORS, STANDINGS, N8N_RIDER_REGISTRATION_WEBHOOK_URL } from '../constants';
 import { Driver } from '../types';
@@ -536,7 +536,7 @@ const GalleryGrid = () => {
           >
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
-                src="/media/VFzavodník2-felicie.jpg"
+                src="/media/DSC_0871.jpg"
                 className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(1) ? 'grayscale-0' : 'grayscale'
                   } group-hover:grayscale-0`}
                 alt="Závod"
@@ -1129,18 +1129,32 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
             }
           />
 
-          {/* Dynamic Driver Count Badge */}
-          <div className="w-full md:w-auto relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
-            <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="flex flex-col md:flex-row-reverse items-center gap-8 w-full md:w-auto mt-8 md:mt-0">
+            {/* Dynamic Driver Count Badge */}
+            <div className="w-full md:w-auto relative bg-black/40 backdrop-blur-md border border-white/10 px-10 py-8 flex flex-col items-center group overflow-hidden hover:-translate-y-2 transition-transform duration-300">
+              <div className="absolute top-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute bottom-0 inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F4CE14] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-            <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-sm group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
-              PŘIHLÁŠENÝCH
-            </p>
-            <p className="font-bebas text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-              {registeredCount}<span className="text-white/30 text-6xl ml-2">/ 90</span>
-            </p>
-            <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-4 text-sm group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+                PŘIHLÁŠENÝCH
+              </p>
+              <p className="font-bebas text-7xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+                {registeredCount}<span className="text-white/30 text-6xl ml-2">/ 90</span>
+              </p>
+              <p className="font-tech text-xs text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">JEZDCŮ</p>
+            </div>
+
+            <div className="flex items-center gap-4 text-center md:text-right">
+              <div className="flex flex-col items-center md:items-end">
+                <p className="font-tech text-[10px] text-[#F4CE14] uppercase tracking-[0.3em] font-bold mb-1">DEMO UKÁZKA</p>
+                <p className="font-tech text-[10px] text-gray-500 uppercase tracking-widest leading-none">
+                  JEZDCI BUDOU BRZY VIDITELNÍ V KARTÁCH NÍŽE
+                </p>
+              </div>
+              <div className="bg-[#F4CE14]/10 p-2 border border-[#F4CE14]/20 rounded-full">
+                <ArrowDown size={20} className="text-[#F4CE14] animate-bounce" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1288,6 +1302,7 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
 
 const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
   const [activeCategory, setActiveCategory] = useState<'do1.6L' | 'nad1.6L' | 'zeny'>('do1.6L');
+  const [selectedYear, setSelectedYear] = useState<2025 | 2026>(2025);
 
   const categoryLabels = {
     'do1.6L': 'DO 1.6 L',
@@ -1296,14 +1311,14 @@ const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
   };
 
   // Filter and sort drivers by category and points (highest first)
-  const filteredDrivers = (liveStandings && liveStandings.length > 0)
-    ? liveStandings
+  const filteredDrivers = selectedYear === 2026
+    ? (liveStandings || [])
       .map(s => ({
-        startNumber: 0, // Placeholder
-        name: `${s.profiles?.first_name} ${s.profiles?.last_name}`.toUpperCase(),
-        car: 'VRAK', // Placeholder
+        startNumber: s.profiles?.start_number || 0,
+        name: `${s.profiles?.first_name || ''} ${s.profiles?.last_name || ''}`.trim().toUpperCase(),
+        car: s.profiles?.car_model || 'VRAK',
         points: s.total_points,
-        category: 'do1.6L' // Placeholder
+        category: s.profiles?.category || 'do1.6L'
       }))
       .filter(driver => driver.category === activeCategory)
       .sort((a, b) => b.points - a.points)
@@ -1319,8 +1334,29 @@ const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
           <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
             BODOVÉ POŘADÍ
           </h2>
-          <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">STAV SEZÓNY 2025</p>
-          <div className="w-24 h-1 bg-[#F4CE14] mt-4 relative mx-auto">
+
+          <div className="flex flex-col items-center">
+            <div className="flex items-center gap-6 mb-4">
+              <button
+                onClick={() => setSelectedYear(2025)}
+                className={`font-tech text-base md:text-lg tracking-[0.2em] uppercase transition-all font-bold ${selectedYear === 2025 ? 'text-[#F4CE14] border-b-2 border-[#F4CE14] pb-1' : 'text-gray-500 hover:text-white'}`}
+              >
+                SEZÓNA 2025
+              </button>
+              <div className="w-px h-6 bg-white/10 hidden md:block"></div>
+              <button
+                onClick={() => setSelectedYear(2026)}
+                className={`font-tech text-base md:text-lg tracking-[0.2em] uppercase transition-all font-bold ${selectedYear === 2026 ? 'text-[#F4CE14] border-b-2 border-[#F4CE14] pb-1' : 'text-gray-500 hover:text-white'}`}
+              >
+                SEZÓNA 2026
+              </button>
+            </div>
+            <p className="font-tech text-gray-400 tracking-[0.15em] uppercase text-xs md:text-sm font-bold opacity-80">
+              {selectedYear === 2025 ? 'KONEČNÉ POŘADÍ MINULÉ SEZÓNY' : 'PRŮBĚŽNÝ STAV AKTUÁLNÍ SEZÓNY'}
+            </p>
+          </div>
+
+          <div className="w-24 h-1 bg-[#F4CE14] mt-6 relative mx-auto">
             <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
           </div>
         </div>
@@ -1357,47 +1393,54 @@ const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
 
           {/* Scrollable Table Rows - Max 10 visible */}
           <div className="space-y-2 max-h-[700px] overflow-y-auto pr-2 custom-scrollbar" data-lenis-prevent>
-            {filteredDrivers.map((driver, index) => (
-              <div
-                key={driver.startNumber}
-                className={`grid grid-cols-[50px_1.5fr_1.5fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-2 md:px-8 py-3 md:py-6 transition-all duration-300 border mb-2 md:mb-0 md:border-2 ${index === 0
-                  ? 'bg-[#F4CE14]/10 border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.2)]'
-                  : index === 1
-                    ? 'bg-white/5 border-white/20'
-                    : index === 2
-                      ? 'bg-white/[0.03] border-white/15'
-                      : 'bg-black/40 border-white/5 hover:bg-white/[0.02] hover:border-white/10'
-                  }`}
-              >
-                {/* Start Number */}
-                <div className="flex items-center">
-                  <span className={`font-bebas text-xl md:text-3xl ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
-                    #{driver.startNumber}
-                  </span>
-                </div>
+            {filteredDrivers.length > 0 ? (
+              filteredDrivers.map((driver, index) => (
+                <div
+                  key={`${driver.startNumber}-${index}`}
+                  className={`grid grid-cols-[50px_1.5fr_1.5fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-2 md:px-8 py-3 md:py-6 transition-all duration-300 border mb-2 md:mb-0 md:border-2 ${index === 0
+                    ? 'bg-[#F4CE14]/10 border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.2)]'
+                    : index === 1
+                      ? 'bg-white/5 border-white/20'
+                      : index === 2
+                        ? 'bg-white/[0.03] border-white/15'
+                        : 'bg-black/40 border-white/5 hover:bg-white/[0.02] hover:border-white/10'
+                    }`}
+                >
+                  {/* Start Number */}
+                  <div className="flex items-center">
+                    <span className={`font-bebas text-xl md:text-3xl ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
+                      #{driver.startNumber}
+                    </span>
+                  </div>
 
-                {/* Driver Name */}
-                <div className="flex items-center overflow-hidden">
-                  <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>
-                    {driver.name}
-                  </span>
-                </div>
+                  {/* Driver Name */}
+                  <div className="flex items-center overflow-hidden">
+                    <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>
+                      {driver.name}
+                    </span>
+                  </div>
 
-                {/* Car */}
-                <div className="flex items-center">
-                  <span className="font-tech text-[10px] md:text-sm text-gray-400 uppercase tracking-wider">
-                    {driver.car}
-                  </span>
-                </div>
+                  {/* Car */}
+                  <div className="flex items-center">
+                    <span className="font-tech text-[10px] md:text-sm text-gray-400 uppercase tracking-wider">
+                      {driver.car}
+                    </span>
+                  </div>
 
-                {/* Points */}
-                <div className="flex items-center justify-center md:justify-end">
-                  <span className={`font-bebas text-lg md:text-4xl text-center md:text-right w-full ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
-                    {driver.points}
-                  </span>
+                  {/* Points */}
+                  <div className="flex items-center justify-center md:justify-end">
+                    <span className={`font-bebas text-lg md:text-4xl text-center md:text-right w-full ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
+                      {driver.points}
+                    </span>
+                  </div>
                 </div>
+              ))
+            ) : (
+              <div className="py-20 text-center border-2 border-dashed border-white/10 bg-white/[0.02]">
+                <p className="font-tech text-gray-500 uppercase tracking-[0.3em] font-bold mb-2">ZATÍM ŽÁDNÁ DATA</p>
+                <p className="font-tech text-xs text-gray-600 uppercase tracking-widest">TABULKA ČEKÁ NA PRVNÍ SCHVÁLENÉ JEZDCE SEZÓNY 2026</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -1522,58 +1565,23 @@ const RulesAndSpecs = () => {
           content: [
             "Do 1600ccm",
             "Nad 1600ccm",
-            "Ženy"
+            "Ženy",
+            "Hobby"
           ],
           image: "https://picsum.photos/seed/categories/700/500"
         },
         {
           title: "CÍL ZÁVODU",
           content: [
-            "Cílem závodu je nasbírat co nejvíce bodů za umístění v jednotlivých rozjížďkách: 6-8 a více vraků v rozjížďce, 4 rozjížďky (cca 5 kol).",
-            "Během těchto 4 rozjížděk musí závodník nasbírat co nejvíce body aby postupil do semifinále. po 4 závodech se body sčítají a postupuje polovina nejlepších. Závodníci se shodným počtem bodů se porovnají v čí více jízděch (dle účastníků) o postup do semifinále.",
-            "SEMIFINÁLE: Postupuje polovina jezdců s každé kategorie s největším počtem bodů.",
-            "FINÁLE: Vítězí první 3 s každé kategorie.",
-            "Bodování: 1. Místo (3 body), 2. Místo (2 body), 3. Místo (1 bod)",
-            "Po ukončení závodu kategorie RACE se zbylé pojízdné vraky mohou zúčastnit DEMOLITION DERBY, kde vítězí poslední pojízdný vrak a může si tak vybojit výhru 10000kč.",
-            "Auta budou rozděleny do jednotlivých rozjížděk. Do finálové jízdy postupují vraky s největším počtem bodů.",
-            "V případě, že jezdec nebude schopný pokračovat v rozjížďce, ale bude mít pojízdné auto, nastoupí do buňáku po skončení této rozjížďky.",
-            "Auta, která se podaří opravit, budou bojovat v bárži o další účast v závodě.",
-            "Po rozjížďkách bude následovat přestávka na opravení aut.",
-            "Nařazení do dveří řidiče je přísně zakázáno. Dále je zakázáno úmyslné bourání do stojícího vozu v trati. Pokud toto závodník poruší, bude disqualifikován.",
-            "Závodník nesmí opouštět auto během závodu pořadí.",
-            "Pořadatel může kdykoli závod přerušit nebo pozastavit (červená vlajka).",
-            "Pokud nebude závodník 'aktivní', bude se opakovně vyřadit střetem, bude disqualifikován.",
-            "Při závodě nesmí být ohrožen žádný divák!",
-            "První tři závodníci kategorie RACE budou odměněni věcnými cenami a poháry. – Kategorie DERBY Pohár DEMOLITION MAN + 10 000,-"
+            "Cílem závodu je nasbírat co nejvíce bodů v rozjížďkách (6-8 vraků, 4 rozjížďky po cca 5 kolech).",
+            "Body se sčítají a polovina nejlepších jezdců postupuje do semifinále.",
+            "SEMIFINÁLE: Postupuje polovina jezdců z každé kategorie dle bodů.",
+            "FINÁLE: Vítězí první 3 z každé kategorie.",
+            "DEMOLITION DERBY: Zbylé pojízdné vraky mohou bojovat o výhru 10 000 Kč (vítězí poslední pojízdný vrak).",
+            "Při porušení pravidel (náraz do dveří řidiče, úmyslné bourání do stojícího vozu) následuje diskvalifikace.",
+            "Závodník nesmí opouštět auto během závodu. Při závodě nesmí být ohrožen žádný divák!"
           ],
           image: "https://picsum.photos/seed/goal/700/500"
-        },
-        {
-          title: "DERBY AUTO",
-          content: [
-            "Jedná se o závod sériových vozů s úpravami povolenými pro daný závod.",
-            "Možnost vystužení karoserie pouze v motorovém prostoru (tzn. od přední výstuhy sériového automobilu a v prostorech okolo motoru).",
-            "V lévé části karoserie (u řidiče/sedadla řidiče atrana) může být zpevněna plátem železa, jeklem, pásovinou apod.",
-            "Povoleno je volnění dveří řidiče prozkoumanou na technické přejímce.",
-            "Vozidlo které nebude splňovat požadavky nebude připuštěno do závodu bez možnosti odvolání.",
-            "Do závodu mohou startovat vozidla pouze s jednou hnanou nápravou. Ne auta 4×4. (Při velkém zájmu bude zvlášť kategorie 4×4)",
-            "Úpravy vozu mohou být minimální a nesmějí ohrožovat diváky nebo ostatní závodníky.",
-            "Povoluje se pouze vnitřní ochranný rám (ochranný rám konzultovat s pořadatelem).",
-            "Povoluje se změna umístění chladiče.",
-            "Lyžina pod motor je povolena.",
-            "Závodní může jen osobní automobil, kategorie SUV, MPV a VAN podle účastí a dohodě s pořadatelem. (v případě většího zájmu vypíšeme pro tyto vozy samostatnou kategorii).",
-            "Vozidlo musí být vybaveno bezpečnostním pásem!! (doporučujeme 4bodový pás).",
-            "Každé Derby Auto musí mít své číslo. To bude přiděleno pořadatelem nebo si ho zvolí závodník sám při vyplňování přihlášky na webových stránkách.",
-            "Každé závodní auto musí být na střeše vybaveno 'plovitř' se startovním číslem.",
-            "Auta na plyn se závodu účastní nemohou (jen v případě, že bude LPG nádrž odstraněna).",
-            "Veškerá skla kromě čelního musí být z vozu odstraněna.",
-            "Boční okna u řidiče musí být odstraněno a vybaveno ochranou sítí.",
-            "Z vozu musí být odstraněno tažné zařízení (pokud jim disponuje).",
-            "Pokud má vozidlo skleněné střešní okno, musí být z vozu odstraněno a otvor zavřený plechem.",
-            "Z vozidla mohou být odstraněny pouze 5/4 dveře.",
-            "Palivo do vozidla tankujte před každou jízdou na vyznačeném místě."
-          ],
-          image: "https://picsum.photos/seed/derbycar/700/500"
         },
         {
           title: "BODOVÁNÍ",
@@ -1581,12 +1589,9 @@ const RulesAndSpecs = () => {
             "1. Místo (3 body)",
             "2. Místo (2 body)",
             "3. Místo (1 bod)",
-            "Po rozjížďkách bude následovat přestávka na opravení aut.",
-            "Nařazení do dveří řidiče je přísně zakázáno. Dále je zakázáno úmyslné bourání do stojícího vozu v trati.",
-            "Pokud toto závodník poruší, bude disqualifikován.",
+            "Po rozjížďkách následuje přestávka na opravu vozů.",
             "Pořadatel může kdykoli závod přerušit nebo pozastavit (červená vlajka).",
-            "Pokud nebude závodník 'aktivní', bude se opakovně vyřadit střetem, bude disqualifikován.",
-            "Při závodě nesmí být ohrožen žádný divák!",
+            "Pokud nebude závodník 'aktivní', může být po opakovaném vyřazení diskvalifikován.",
             "První tři závodníci kategorie RACE budou odměněni věcnými cenami a poháry."
           ],
           image: "https://picsum.photos/seed/scoring/700/500"
@@ -1596,6 +1601,42 @@ const RulesAndSpecs = () => {
     {
       category: "POVOLENÉ ÚPRAVY",
       items: [
+        {
+          title: "KATEGORIE HOBBY",
+          content: [
+            "AUTOMOBILY BEZ ÚPRAV!",
+            "Povoleny jsou pouze tyto změny:",
+            "Demontovaná světla",
+            "Ochranná síť v okně řidiče",
+            "Sportovní sedačka a bezpečnostní pásy",
+            "Pneu bez omezení / Bez rozdílu obsahu motoru",
+            "NEJSOU POVOLENY ŽÁDNÉ ÚPRAVY ZASAHUJÍCÍ DO KONSTRUKCE VOZIDLA!!"
+          ],
+          image: "/media/VF-goout.jpg"
+        },
+        {
+          title: "KATEGORIE PRO: KOMPLETNÍ PRAVIDLA",
+          content: [
+            "Možnost vystužení karoserie pouze v motorovém prostoru (tzn. od přední výstuhy sériového automobilu a v prostorech okolo motoru)",
+            "V lévé části vozu (u řidiče, venkovní strana) může být zpevněna plátem železa, jeklem, pásovinou apod.",
+            "Povoleno je vyplnění dveří řidiče montážní pěnou a předek vozu, ale není nutností.",
+            "Vozidlo bude prozkoumáno na technické přejímce (při nesplnění nebude připuštěno bez možnosti odvolání).",
+            "Do závodu mohou startovat vozidla pouze s jednou hnanou nápravou. Ne auta 4×4 (při velkém zájmu bude samostatná kategorie).",
+            "Úpravy vozu mohou být minimální a nesmějí ohrožovat diváky nebo ostatní závodníky.",
+            "Povoluje se pouze VNITŘNÍ ochranný rám (konzultovat s pořadateli).",
+            "Povoluje se změna umístění chladiče a lyžina pod motor.",
+            "Závodit může jen osobní automobil, SUV, MPV a VAN po dohodě s pořadatelem.",
+            "Vozidlo musí být vybaveno bezpečnostním pásem! (doporučujeme 4bodový pás).",
+            "Každé auto musí mít na střeše vybaveno „ploutví“ se svým startovním číslem.",
+            "Auta na plyn se závodu účastnit nemohou (pouze po úplném odstranění LPG nádrže).",
+            "Veškerá skla kromě čelního musí být z vozu odstraněna (včetně skleněných střešních oken - otvor zavřen plechem).",
+            "Boční okno u řidiče musí být odstraněno a vybaveno ochranou sítí.",
+            "Z vozu musí být odstraněno tažné zařízení.",
+            "Z vozidla mohou být odstraněny pouze 5tě dveře.",
+            "Palivo do vozidla tankujte před každou jízdou na vyhrazeném místě."
+          ],
+          image: "/media/DSC_0655.jpg"
+        },
         {
           title: "ZPEVNĚNÍ ČI UCHYCENÍ KAPOTY",
           content: [
@@ -1678,15 +1719,18 @@ const RulesAndSpecs = () => {
                   {/* Rules/Specs List */}
                   <div className={`space-y-3 ${!isImageRight ? 'lg:order-2' : 'lg:order-1'}`}>
                     {section.items.map((item, itemIdx) => {
-                      // Show first item of each category as active, or the clicked item
                       const isActive = activeCategory === categoryIdx && activeItem === itemIdx;
+                      const isSpecialCategory = item.title.includes("KATEGORIE HOBBY") || item.title.includes("KATEGORIE PRO");
+
                       return (
                         <div
                           key={itemIdx}
                           id={`rule-item-${categoryIdx}-${itemIdx}`}
                           className={`border-2 transition-all duration-300 shadow-xl cursor-pointer ${isActive
                             ? 'bg-white/5 border-[#F4CE14]/40'
-                            : 'bg-black/60 border-white/5 hover:bg-white/[0.04] hover:border-white/10'
+                            : isSpecialCategory
+                              ? 'bg-white/[0.02] border-[#F4CE14]/20'
+                              : 'bg-black/60 border-white/5 hover:bg-white/[0.04] hover:border-white/10'
                             }`}
                         >
                           <button
@@ -1695,13 +1739,15 @@ const RulesAndSpecs = () => {
                           >
                             <div className="flex items-center gap-6">
                               <div
-                                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-tech shrink-0 transition-all duration-300 ${isActive ? 'bg-[#F4CE14] text-black shadow-[0_0_10px_#F4CE14]' : 'bg-white/10 text-gray-500 group-hover:bg-white/20 group-hover:text-gray-300'
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold font-tech shrink-0 transition-all duration-300 ${isActive || isSpecialCategory
+                                  ? 'bg-[#F4CE14] text-black shadow-[0_0_10px_#F4CE14]'
+                                  : 'bg-white/10 text-gray-500 group-hover:bg-white/20 group-hover:text-gray-300'
                                   }`}
                               >
                                 {String(itemIdx + 1).padStart(2, '0')}
                               </div>
                               <span
-                                className={`group-hover:text-[#F4CE14] transition-colors ${isActive ? 'text-white' : 'text-gray-400'
+                                className={`group-hover:text-[#F4CE14] transition-colors ${isActive || isSpecialCategory ? 'text-[#F4CE14]' : 'text-gray-400'
                                   }`}
                               >
                                 {item.title}
@@ -1710,7 +1756,9 @@ const RulesAndSpecs = () => {
                             <div
                               className={`transition-all duration-500 p-1.5 border-2 border-white/10 rounded-full ${isActive
                                 ? 'rotate-90 text-[#F4CE14] border-[#F4CE14]/30 bg-[#F4CE14]/10'
-                                : 'text-gray-600 group-hover:text-white'
+                                : isSpecialCategory
+                                  ? 'text-[#F4CE14] border-[#F4CE14]/20'
+                                  : 'text-gray-600 group-hover:text-white'
                                 }`}
                             >
                               <ChevronRight size={24} />
@@ -2676,7 +2724,7 @@ const AccreditationAndPartners = () => {
                   <div className="relative">
                     <select className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none appearance-none cursor-pointer hover:bg-black/10 transition-colors font-bold">
                       <option>OSTRAVA - 4.4.</option>
-                      <option>HRACHOVEC - 27.6.</option>
+                      <option>HRACHOVEC - 23.5.</option>
                       <option>NOVÉ MÍSTO - 22.8.</option>
                       <option>OSTRAVA - 24.10.</option>
                     </select>
@@ -2964,7 +3012,10 @@ export const Home = () => {
             last_name,
             nickname,
             city,
-            profile_photo_url
+            profile_photo_url,
+            start_number,
+            category,
+            car_model
           )
         `)
         .eq('season_year', 2026)
@@ -2979,7 +3030,14 @@ export const Home = () => {
         .order('date', { ascending: true });
 
       if (eventsData && eventsData.length > 0) {
-        setLiveEvents(eventsData);
+        // Fix Hrachovec date if it's wrong in DB
+        const fixedEvents = eventsData.map((e: any) => {
+          if (e.title === 'HRACHOVEC') {
+            return { ...e, date: '23.05.2026' };
+          }
+          return e;
+        });
+        setLiveEvents(fixedEvents);
         const activeE = eventsData.find((e: any) => e.is_active) || eventsData[0];
 
         // Fetch paid registered count from the SECURE STATS table

@@ -65,7 +65,7 @@ export const InstagramFeed = () => {
             <div className="container mx-auto px-6 mb-24 flex items-end justify-between">
                 <SectionHeader title="SLEDUJ NÁŠ INSTAGRAM" subtitle="#VRAKFEST #CARNAGE" />
                 <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/vrakfest.cz_official/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hidden md:flex items-center gap-2 text-[#F4CE14] font-bebas text-xl hover:text-white transition-colors group mb-8"
@@ -142,7 +142,7 @@ export const InstagramFeed = () => {
             {/* Mobile CTA */}
             <div className="md:hidden flex justify-center mt-12">
                 <a
-                    href="https://instagram.com"
+                    href="https://www.instagram.com/vrakfest.cz_official/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 text-[#F4CE14] font-bebas text-xl hover:text-white transition-colors group"

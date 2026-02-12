@@ -138,13 +138,13 @@ export const Footer = () => (
                     </div>
 
                     <div className="flex gap-4 pt-4 border-t border-white/5 justify-start">
-                        <a href="https://facebook.com" className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F4CE14] hover:text-black transition-all group">
+                        <a href="https://www.facebook.com/VRAKFEST" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F4CE14] hover:text-black transition-all group">
                             <Facebook size={18} className="group-hover:scale-110 transition-transform" />
                         </a>
-                        <a href="https://instagram.com" className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F4CE14] hover:text-black transition-all group">
+                        <a href="https://www.instagram.com/vrakfest.cz_official/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F4CE14] hover:text-black transition-all group">
                             <Instagram size={18} className="group-hover:scale-110 transition-transform" />
                         </a>
-                        <a href="https://youtube.com" className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F4CE14] hover:text-black transition-all group">
+                        <a href="https://www.youtube.com/@vrakfesttv409" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#F4CE14] hover:text-black transition-all group">
                             <Youtube size={18} className="group-hover:scale-110 transition-transform" />
                         </a>
                     </div>
