@@ -2490,8 +2490,11 @@ const RegistrationForm = () => {
                     Tvoje registrace byla přijata a právě se zpracovává. Na tvůj e-mail <span className="text-black font-bold">{formData.email}</span> jsme zaslali potvrzení s instrukcemi i k platbě v případě že jsi ještě nezaplatil. Jakmile tvoje platba bude schválená, zařadíme tě mezi jezdce do následujícího závodu.
                   </p>
                   <div className="mt-8 p-6 bg-gray-50 border-l-4 border-gray-200">
-                    <p className="font-tech text-gray-600 leading-relaxed" style={{ fontSize: '18px' }}>
+                    <p className="font-tech text-gray-600 leading-relaxed mb-4" style={{ fontSize: '18px' }}>
                       Pokud ti nedorazil e-mail, zkontroluj prosím složky <strong>hromadné</strong> nebo <strong>spam</strong>. V případě, že e-mail nedorazil vůbec, napiš nám na <a href="mailto:info@vrakfest.cz" className="text-black font-bold hover:underline">info@vrakfest.cz</a>.
+                    </p>
+                    <p className="font-tech text-red-600 font-bold leading-relaxed" style={{ fontSize: '18px' }}>
+                      Momentálně máme trochu problémy s odesíláním emailů. Kdyby někomu hned nedorazil, později vám je rozešleme. Děkujeme za pochopení.
                     </p>
                   </div>
                 </div>
