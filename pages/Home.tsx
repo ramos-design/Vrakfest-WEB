@@ -900,9 +900,11 @@ const Program = () => {
 
               <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
                 <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[44px] md:text-6xl text-[#F4CE14] tracking-tighter font-black">{feeCounts.registration} <span className="text-2xl md:text-3xl">KČ</span></span>
-                  <span className="font-tech text-white text-xl uppercase font-bold ml-2">ZA ZÁVODNÍKA</span>
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-4">
+                  <span className="font-bebas text-[44px] md:text-6xl text-[#F4CE14] tracking-tighter font-black whitespace-nowrap">
+                    {feeCounts.registration} <span className="text-2xl md:text-3xl">KČ</span>
+                  </span>
+                  <span className="font-tech text-white text-sm md:text-xl uppercase font-bold sm:ml-2 opacity-80">ZA ZÁVODNÍKA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm italic border-t border-white/10 pt-4">
                   Platba možná <span className="text-white font-bold not-italic decoration-[#F4CE14] underline decoration-2 underline-offset-4">pouze předem na účet</span>.
@@ -919,9 +921,11 @@ const Program = () => {
               <div className="bg-[#F4CE14]/5 border-2 border-[#F4CE14]/30 p-8 hover:border-[#F4CE14] transition-all shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
                 <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[44px] md:text-6xl text-white tracking-tighter font-black">10 000 <span className="text-2xl md:text-3xl font-tech">KČ</span></span>
-                  <span className="font-tech text-[#F4CE14] text-xl uppercase font-bold ml-2">VÝHRA</span>
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-4">
+                  <span className="font-bebas text-[44px] md:text-6xl text-white tracking-tighter font-black whitespace-nowrap">
+                    10 000 <span className="text-2xl md:text-3xl font-tech">KČ</span>
+                  </span>
+                  <span className="font-tech text-[#F4CE14] text-sm md:text-xl uppercase font-bold sm:ml-2">VÝHRA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm border-t border-white/10 pt-4">
                   Tuto finanční odměnu získá jezdec, jehož vrak zůstane <span className="text-white font-bold">jako poslední v pohybu</span>.
