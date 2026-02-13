@@ -849,7 +849,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">DOSPĚLÉ</span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.adult} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.adult} KČ</span>
                     </div>
 
                     {/* Child Ticket */}
@@ -858,7 +858,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">DĚTI <span className="text-sm md:text-lg opacity-60 align-top ml-1 font-tech tracking-normal">(6-15 LET)</span></span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.child} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.child} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+1 */}
@@ -867,7 +867,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">RODINA 2+1</span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.family21} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.family21} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+2 */}
@@ -876,7 +876,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">RODINA 2+2</span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.family22} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.family22} KČ</span>
                     </div>
                   </div>
                 </div>
@@ -887,7 +887,7 @@ const Program = () => {
                     <span className="font-tech text-white/40 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                     <span className="font-bebas text-white text-[28px] md:text-5xl uppercase tracking-tight leading-none whitespace-nowrap">DĚTI DO 6 LET</span>
                   </div>
-                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 font-black whitespace-nowrap">ZDARMA</span>
+                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 font-bold whitespace-nowrap">ZDARMA</span>
                 </div>
               </div>
             </div>
@@ -901,7 +901,7 @@ const Program = () => {
               <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
                 <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
                 <div className="flex flex-row items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[36px] md:text-6xl text-[#F4CE14] tracking-tighter font-black whitespace-nowrap">
+                  <span className="font-bebas text-[36px] md:text-6xl text-[#F4CE14] tracking-tighter font-bold whitespace-nowrap">
                     {feeCounts.registration} <span className="text-xl md:text-3xl">KČ</span>
                   </span>
                   <span className="font-tech text-white text-[12px] md:text-xl uppercase font-bold ml-2 opacity-80">ZA ZÁVODNÍKA</span>
@@ -922,7 +922,7 @@ const Program = () => {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
                 <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
                 <div className="flex flex-row items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[36px] md:text-6xl text-white tracking-tighter font-black whitespace-nowrap">
+                  <span className="font-bebas text-[36px] md:text-6xl text-white tracking-tighter font-bold whitespace-nowrap">
                     10 000 <span className="text-xl md:text-3xl font-tech">KČ</span>
                   </span>
                   <span className="font-tech text-[#F4CE14] text-[12px] md:text-xl uppercase font-bold ml-2">VÝHRA</span>
@@ -1778,7 +1778,7 @@ const RulesAndSpecs = () => {
                             className={`overflow-hidden transition-all duration-500 ease-in-out ${isActive ? 'max-h-[6000px] opacity-100' : 'max-h-0 opacity-0'
                               }`}
                           >
-                            <div className="px-16 pb-8 text-gray-400 font-tech text-sm leading-relaxed border-t border-white/5 pt-6">
+                            <div className="px-6 md:px-16 pb-8 text-gray-400 font-tech text-sm leading-relaxed border-t border-white/5 pt-6">
                               <ul className="space-y-3">
                                 {item.content.map((line, idx) => (
                                   <li key={idx} className="flex gap-3">
