@@ -122,10 +122,10 @@ export const TechNavBar = () => {
             </header>
 
             {/* FULL SCREEN MOBILE MENU OVERLAY - Slide from Top */}
-            <div className={`fixed inset-0 bg-[#F4CE14] z-[998] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-24 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`fixed inset-0 bg-[#F4CE14] z-[998] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-20 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
 
                 {/* Mobile Menu Content */}
-                <nav className="flex-1 flex flex-col justify-start items-center gap-4 p-8 overflow-y-auto">
+                <nav className="flex-1 flex flex-col justify-start items-center gap-3 p-6 overflow-y-auto">
                     {mobileNavLinks.map((item, i) => (
                         <a
                             key={item.label}
@@ -147,7 +147,7 @@ export const TechNavBar = () => {
 
                     {/* Expandable CTA */}
                     <div
-                        className="w-full max-w-[240px] flex flex-col gap-4 mt-8 pb-2"
+                        className="flex flex-col items-center gap-3 mt-6 pb-2"
                         style={{
                             transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 1) * 50 : 0}ms`,
                             opacity: mobileMenuOpen ? 1 : 0,
@@ -159,16 +159,16 @@ export const TechNavBar = () => {
                     >
                         <Button
                             variant="primary"
-                            className="w-full bg-black text-white hover:bg-white hover:text-black border-none text-[13px] py-3.5 shadow-2xl uppercase tracking-widest"
+                            className="inline-flex bg-black text-white hover:bg-white hover:text-black border-none text-[9.5px] py-2 px-8 shadow-2xl uppercase tracking-widest whitespace-nowrap"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             KOUPIT VSTUPENKU
                         </Button>
 
-                        <a href="#registrace" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                        <a href="#registrace" className="inline-flex" onClick={() => setMobileMenuOpen(false)}>
                             <Button
                                 variant="outline"
-                                className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-[13px] py-3.5 uppercase tracking-widest"
+                                className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-[9.5px] py-2 px-8 uppercase tracking-widest whitespace-nowrap"
                             >
                                 REGISTRACE JEZDCE
                             </Button>
@@ -177,7 +177,7 @@ export const TechNavBar = () => {
                 </nav>
 
                 <div
-                    className="p-8 text-center pb-4"
+                    className="p-6 text-center pb-4"
                     style={{
                         transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 2) * 50 : 0}ms`,
                         opacity: mobileMenuOpen ? 1 : 0,
@@ -187,7 +187,7 @@ export const TechNavBar = () => {
                         transitionTimingFunction: 'ease-out'
                     }}
                 >
-                    <p className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold mb-4">SLEDUJTE NÁS NA SÍTÍCH</p>
+                    <p className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold mb-2">SLEDUJTE NÁS NA SÍTÍCH</p>
                     <div className="flex justify-center gap-6 mb-2">
                         <a href="https://www.facebook.com/VRAKFEST" target="_blank" rel="noopener noreferrer" className="text-black hover:text-white transition-colors">
                             <Facebook size={28} />
