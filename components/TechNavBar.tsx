@@ -180,7 +180,7 @@ export const TechNavBar = () => {
                 </div>
 
                 <div
-                    className="mt-auto p-6 text-center pb-8"
+                    className="mt-12 p-6 text-center pb-4"
                     style={{
                         transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 2) * 50 : 0}ms`,
                         opacity: mobileMenuOpen ? 1 : 0,
