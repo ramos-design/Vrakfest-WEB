@@ -887,7 +887,7 @@ const Program = () => {
                     <span className="font-tech text-white/40 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                     <span className="font-bebas text-white text-[28px] md:text-5xl uppercase tracking-tight leading-none whitespace-nowrap">DĚTI DO 6 LET</span>
                   </div>
-                  <span className="font-bebas text-[44px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 font-black whitespace-nowrap">ZDARMA</span>
+                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 font-black whitespace-nowrap">ZDARMA</span>
                 </div>
               </div>
             </div>
