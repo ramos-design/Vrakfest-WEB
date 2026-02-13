@@ -446,7 +446,7 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
           </div>
 
           <div className="flex lg:hidden flex-col sm:flex-row justify-center items-center gap-4 w-full mt-6 scale-90 origin-top">
-            <Button className="w-auto min-w-[240px] bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center px-8 py-4 whitespace-nowrap !text-[14px]">
+            <Button className="w-auto min-w-[240px] bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center px-8 py-4 whitespace-nowrap !text-[17px]">
               <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
               <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
             </Button>
@@ -1085,10 +1085,10 @@ const EventGrid = ({ liveEvents }: { liveEvents: any[] }) => {
 
                     {event.id === '1' ? (
                       <div className="flex flex-row gap-2 md:gap-4">
-                        <Button size="medium" className="bg-transparent border border-white text-white hover:bg-white hover:text-black flex-1 md:flex-none md:w-auto px-2 md:px-8 whitespace-nowrap">
+                        <Button size="medium" className="bg-transparent border border-white text-white hover:bg-white hover:text-black flex-1 md:flex-none md:w-auto px-2 md:px-8 whitespace-nowrap !text-[17px] md:!text-[15px]">
                           Více o akci
                         </Button>
-                        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden flex-1 md:flex-none md:w-auto px-2 md:px-8 whitespace-nowrap">
+                        <Button size="medium" className="bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden flex-1 md:flex-none md:w-auto px-2 md:px-8 whitespace-nowrap !text-[17px] md:!text-[15px]">
                           <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                           <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
                         </Button>
@@ -1284,10 +1284,10 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
       </div>
 
       <div className="container mx-auto px-6 mt-6 flex flex-col sm:flex-row justify-center items-center gap-4 scale-90 origin-top">
-        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[13px]">
+        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[17px]">
           ZOBRAZIT VŠECHNY JEZDCE
         </Button>
-        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[13px]">
+        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[17px]">
           CHCI TAKY ZÁVODIT
         </Button>
       </div>
