@@ -445,16 +445,10 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
             )}
           </div>
 
-          {/* Buttons - Mobile Only (at the bottom) */}
           <div className="flex lg:hidden flex-col sm:flex-row justify-center items-center gap-4 w-full mt-6 scale-90 origin-top">
             <Button className="w-auto min-w-[240px] bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center px-8 py-4 whitespace-nowrap !text-[14px]">
               <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
               <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
-            </Button>
-            <Button variant="outline" className="w-auto min-w-[240px] btn-race justify-center p-0 overflow-hidden whitespace-nowrap !text-[14px]">
-              <a href="#registrace" className="w-full h-full flex items-center justify-center px-8 py-4">
-                <AnimatedCTA ctaIndex={ctaIndex} defaultText="Chci závodit" alternateText="Registrovat se" />
-              </a>
             </Button>
           </div>
         </div>
