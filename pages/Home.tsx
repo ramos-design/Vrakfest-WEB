@@ -458,66 +458,24 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
 };
 
 const GalleryGrid = () => {
-  const [visibleCards, setVisibleCards] = useState<number[]>([]);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    const observers = cardRefs.current.map((card, index) => {
-      if (!card) return null;
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              // Add card to visible when scrolling in
-              setTimeout(() => {
-                setVisibleCards((prev) => {
-                  if (!prev.includes(index)) {
-                    return [...prev, index];
-                  }
-                  return prev;
-                });
-              }, index * 200);
-            } else {
-              // Remove card from visible when scrolling out
-              setVisibleCards((prev) => prev.filter((i) => i !== index));
-            }
-          });
-        },
-        { threshold: 0.3 }
-      );
-
-      observer.observe(card);
-      return observer;
-    });
-
-    return () => {
-      observers.forEach((observer) => observer?.disconnect());
-    };
-  }, []);
-
   return (
     <section className="pb-32 bg-[#0a0a0a] relative">
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-8">
           {/* Box 1 */}
-          <div
-            ref={(el) => (cardRefs.current[0] = el)}
-            className={`flex flex-col gap-6 group transition-all duration-1000 ${visibleCards.includes(0) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-          >
+          <div className="flex flex-col gap-6 group scale-100 opacity-100 translate-y-0 transition-all duration-1000">
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
                 src="/media/DSC_4209.jpg"
-                className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(0) ? 'grayscale-0' : 'grayscale'
-                  } group-hover:grayscale-0`}
+                className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 grayscale-0"
                 alt="Rodina"
               />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
             </div>
             <div className="text-left">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(0) ? 'text-[#F4CE14]' : 'text-white'
-                } group-hover:text-[#F4CE14]`}>Den plný adrenalinu pro celou rodinu!</h3>
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 text-[#F4CE14]">
+                Den plný adrenalinu pro celou rodinu!
+              </h3>
               <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-400 leading-relaxed font-medium">
                 Vrakfest není jen o bourání. Je to festival zážitků pro malé i velké. Od doprovodných show pro děti až po vyhlášenou gastro sekci – u nás si den užije celá rodina.
               </p>
@@ -525,23 +483,19 @@ const GalleryGrid = () => {
           </div>
 
           {/* Box 2 */}
-          <div
-            ref={(el) => (cardRefs.current[1] = el)}
-            className={`flex flex-col gap-6 group md:mt-24 transition-all duration-1000 ${visibleCards.includes(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-          >
+          <div className="flex flex-col gap-6 group md:mt-24 scale-100 opacity-100 translate-y-0 transition-all duration-1000">
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
                 src="/media/DSC_0871.jpg"
-                className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(1) ? 'grayscale-0' : 'grayscale'
-                  } group-hover:grayscale-0`}
+                className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 grayscale-0"
                 alt="Závod"
               />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
             </div>
             <div className="text-left">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(1) ? 'text-[#F4CE14]' : 'text-white'
-                } group-hover:text-[#F4CE14]`}>Přijď si zazávodit, zabourat a vyhrát 10000 Kč! a víc!</h3>
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 text-[#F4CE14]">
+                Přijď si zazávodit, zabourat a vyhrát 10000 Kč! a víc!
+              </h3>
               <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-400 leading-relaxed font-medium">
                 Máš staré auto a chuť na pořádnou porci destrukce? Přihlas se do naší arény. Bojuj o čest, slávu a tučnou finanční odměnu, která čeká na posledního vítěze.
               </p>
@@ -549,23 +503,19 @@ const GalleryGrid = () => {
           </div>
 
           {/* Box 3 */}
-          <div
-            ref={(el) => (cardRefs.current[2] = el)}
-            className={`flex flex-col gap-6 group md:mt-48 transition-all duration-1000 ${visibleCards.includes(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-              }`}
-          >
+          <div className="flex flex-col gap-6 group md:mt-48 scale-100 opacity-100 translate-y-0 transition-all duration-1000">
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
                 src="/media/DSC_0655.jpg"
-                className={`w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 ${visibleCards.includes(2) ? 'grayscale-0' : 'grayscale'
-                  } group-hover:grayscale-0`}
+                className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 grayscale-0"
                 alt="Zábava"
               />
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
             </div>
             <div className="text-left">
-              <h3 style={{ fontSize: 'var(--fs-h3)' }} className={`font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 ${visibleCards.includes(2) ? 'text-[#F4CE14]' : 'text-white'
-                } group-hover:text-[#F4CE14]`}>Užijte si srandu se starými vraky.</h3>
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas uppercase leading-tight tracking-tight transition-colors font-bold mb-4 text-[#F4CE14]">
+                Užijte si srandu se starými vraky.
+              </h3>
               <p style={{ fontSize: 'var(--fs-p)' }} className="font-tech text-gray-400 leading-relaxed font-medium">
                 Sledujte, jak se plechy kroutí v dechberoucích soubojích. Čekají vás tvrdé nárazy a atmosféra, kterou jinde nezažijete. Tohle je čistý adrenalin bez pravidel!
               </p>
@@ -1284,11 +1234,8 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
       </div>
 
       <div className="container mx-auto px-6 mt-6 flex flex-col sm:flex-row justify-center items-center gap-4 scale-90 origin-top">
-        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[17px]">
-          ZOBRAZIT VŠECHNY JEZDCE
-        </Button>
         <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[17px]">
-          CHCI TAKY ZÁVODIT
+          <a href="#registrace">CHCI TAKY ZÁVODIT</a>
         </Button>
       </div>
 
