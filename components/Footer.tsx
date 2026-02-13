@@ -21,15 +21,15 @@ export const Footer = () => (
                             className="h-16 w-auto object-contain"
                         />
                     </div>
-                    <p className="text-gray-500 font-tech text-sm leading-relaxed max-w-xs mx-auto md:mx-0">
+                    <p className="text-gray-500 font-tech text-[12px] leading-relaxed max-w-xs mx-auto md:mx-0">
                         Největší středoevropský festival destrukce a motorismu. Adrenalin, skřípění plechů a komunita, která se nebojí žádné výzvy.
                     </p>
                 </div>
 
                 {/* Column 2: Quick Links */}
                 <div className="text-left">
-                    <h4 className="font-bebas text-2xl text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">NAVIGACE</h4>
-                    <ul className="space-y-4 font-tech text-gray-500 text-sm uppercase font-bold">
+                    <h4 className="font-bebas text-[20px] text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">NAVIGACE</h4>
+                    <ul className="space-y-4 font-tech text-gray-500 text-[12px] uppercase font-bold">
                         <li>
                             <a href="#ovrakfestu" className="hover:text-[#F4CE14] transition-all flex items-center justify-start gap-2 group">
                                 <ChevronRight size={14} className="text-[#F4CE14] opacity-0 group-hover:opacity-100 hidden md:block -ml-4 group-hover:ml-0 transition-all" />
@@ -59,8 +59,8 @@ export const Footer = () => (
 
                 {/* Column 3: Informuj se */}
                 <div className="text-left">
-                    <h4 className="font-bebas text-2xl text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">INFORMUJ SE</h4>
-                    <ul className="space-y-4 font-tech text-gray-500 text-sm uppercase font-bold">
+                    <h4 className="font-bebas text-[20px] text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">INFORMUJ SE</h4>
+                    <ul className="space-y-4 font-tech text-gray-500 text-[12px] uppercase font-bold">
                         <li>
                             <a href="#poradi" className="hover:text-[#F4CE14] transition-all flex items-center justify-start gap-2 group">
                                 <ChevronRight size={14} className="text-[#F4CE14] opacity-0 group-hover:opacity-100 hidden md:block -ml-4 group-hover:ml-0 transition-all" />
@@ -90,8 +90,8 @@ export const Footer = () => (
 
                 {/* Column 4: Important Links */}
                 <div className="text-left">
-                    <h4 className="font-bebas text-2xl text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">DŮLEŽITÉ</h4>
-                    <ul className="space-y-4 font-tech text-gray-500 text-sm uppercase font-bold">
+                    <h4 className="font-bebas text-[20px] text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">DŮLEŽITÉ</h4>
+                    <ul className="space-y-4 font-tech text-gray-500 text-[12px] uppercase font-bold">
                         <li>
                             <a href="#registrace" className="hover:text-[#F4CE14] transition-all flex items-center justify-start gap-2 group text-[#F4CE14]">
                                 <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 hidden md:block -ml-4 group-hover:ml-0 transition-all" />
@@ -121,8 +121,8 @@ export const Footer = () => (
 
                 {/* Column 5: Contact */}
                 <div className="space-y-8 text-left">
-                    <h4 className="font-bebas text-2xl text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">KONTAKT</h4>
-                    <div className="space-y-4 font-tech text-sm">
+                    <h4 className="font-bebas text-[20px] text-white mb-8 uppercase tracking-wider font-bold border-l-4 border-[#F4CE14] pl-4">KONTAKT</h4>
+                    <div className="space-y-4 font-tech text-[12px]">
                         <a href="mailto:info@VrakFest.cz" className="flex items-center justify-start gap-3 text-gray-400 hover:text-white transition-colors group">
                             <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center group-hover:bg-[#F4CE14]/20 transition-colors">
                                 <Mail size={16} className="text-[#F4CE14]" />

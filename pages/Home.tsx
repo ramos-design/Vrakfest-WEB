@@ -155,13 +155,13 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
         </div>
 
         {/* Buttons: Cleaned vertical stacking and narrowed width on mobile */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4 md:gap-6 w-full mt-6 scale-90 2xl:scale-100 origin-top">
-          <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6 w-full mt-6 scale-90 2xl:scale-100 origin-top">
+          <Button className="w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[17px] md:!text-[18px]">
             <a href="#registrace">
               <AnimatedCTA ctaIndex={ctaIndex} defaultText="CHCI ZÁVODIT" alternateText="REGISTROVAT SE" />
             </a>
           </Button>
-          <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 !border-white !text-white hover:!bg-white hover:!text-black hover:!shadow-none !duration-0">
+          <Button variant="outline" className="w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !border-white !text-white hover:!bg-white hover:!text-black hover:!shadow-none !duration-0 !text-[17px] md:!text-[18px]">
             <a href="#ovrakfestu">Chci to zažít!</a>
           </Button>
         </div>
@@ -1481,7 +1481,7 @@ const TriviaSlider = () => {
       {slides.map((slide, idx) => (
         <div
           key={idx}
-          className={`absolute inset-0 p-8 md:p-12 flex flex-col justify-center items-center text-center transition-all duration-[1200ms] cubic-bezier(0.4, 0, 0.2, 1) will-change-[opacity,transform] ${currentSlide === idx
+          className={`absolute inset-0 p-6 md:p-12 flex flex-col justify-center items-center text-center transition-all duration-[1200ms] cubic-bezier(0.4, 0, 0.2, 1) will-change-[opacity,transform] ${currentSlide === idx
             ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-105 translate-y-4 pointer-events-none'
             }`}
@@ -1495,13 +1495,13 @@ const TriviaSlider = () => {
           <div className="relative z-10 w-full">
             <div className={`transition-all duration-[1200ms] delay-200 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : '-translate-y-6 opacity-0'
               }`}>
-              <span className="font-bebas text-[#F4CE14] text-5xl md:text-5xl lg:text-7xl tracking-tight uppercase drop-shadow-[0_0_15px_rgba(244,206,20,0.4)] font-bold block mb-2">
+              <span className="font-bebas text-[#F4CE14] text-[32px] md:text-6xl lg:text-7xl tracking-tight uppercase drop-shadow-[0_0_15px_rgba(244,206,20,0.4)] font-bold block mb-1">
                 Věděli jste, že...?
               </span>
-              <div className="w-16 h-1 bg-[#F4CE14] mx-auto mb-8 shadow-[0_0_10px_#F4CE14]"></div>
+              <div className="w-16 h-1 bg-[#F4CE14] mx-auto mb-6 shadow-[0_0_10px_#F4CE14]"></div>
             </div>
 
-            <p className={`font-tech text-white text-xl md:text-2xl uppercase font-bold tracking-tight leading-snug max-w-sm mx-auto transition-all duration-[1200ms] delay-400 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            <p className={`font-tech text-white text-base md:text-2xl uppercase font-bold tracking-tight leading-snug max-w-sm mx-auto transition-all duration-[1200ms] delay-400 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
               }`}>
               {slide.text}
             </p>
