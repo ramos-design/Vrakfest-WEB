@@ -6,8 +6,11 @@ import { Home } from './pages/Home';
 import { TechNavBar } from './components/TechNavBar';
 import { Footer } from './components/Footer';
 import { ThemeController } from './components/ThemeController';
+import { LockScreen } from './components/LockScreen';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -31,6 +34,14 @@ export default function App() {
       lenis.destroy();
     };
   }, []);
+
+  const handleAuth = () => {
+    setIsAuthenticated(true);
+  };
+
+  if (!isAuthenticated) {
+    return <LockScreen onAuthenticate={handleAuth} />;
+  }
 
   return (
     <BrowserRouter>
