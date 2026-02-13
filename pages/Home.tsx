@@ -446,12 +446,12 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
           </div>
 
           {/* Buttons - Mobile Only (at the bottom) */}
-          <div className="flex lg:hidden flex-col sm:flex-row justify-center gap-4 w-full mt-0">
-            <Button className="w-full sm:w-auto bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center">
+          <div className="flex lg:hidden flex-col sm:flex-row justify-center gap-4 w-full mt-6 scale-90 origin-top">
+            <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center px-10 py-4">
               <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
               <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
             </Button>
-            <Button variant="outline" className="w-full sm:w-auto btn-race justify-center p-0">
+            <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center p-0 overflow-hidden">
               <a href="#registrace" className="w-full h-full flex items-center justify-center px-10 py-4">
                 <AnimatedCTA ctaIndex={ctaIndex} defaultText="Chci závodit" alternateText="Registrovat se" />
               </a>
@@ -867,7 +867,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">RODINA 2+1</span>
                       </div>
-                      <span className="font-bebas text-[40px] md:text-6xl text-black tracking-tighter">{feeCounts.family21} KČ</span>
+                      <span className="font-bebas text-[32px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.family21} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+2 */}
@@ -876,7 +876,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">RODINA 2+2</span>
                       </div>
-                      <span className="font-bebas text-[40px] md:text-6xl text-black tracking-tighter">{feeCounts.family22} KČ</span>
+                      <span className="font-bebas text-[32px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.family22} KČ</span>
                     </div>
                   </div>
                 </div>
@@ -887,7 +887,7 @@ const Program = () => {
                     <span className="font-tech text-gray-500 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                     <span className="font-bebas text-white text-4xl md:text-5xl uppercase tracking-tight leading-none">DĚTI DO 6 LET</span>
                   </div>
-                  <span className="font-bebas text-[40px] md:text-6xl text-[#F4CE14] tracking-tighter z-10">ZDARMA</span>
+                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 font-black">ZDARMA</span>
                 </div>
               </div>
             </div>
@@ -901,7 +901,7 @@ const Program = () => {
               <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
                 <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[40px] md:text-6xl text-[#F4CE14] tracking-tighter">{feeCounts.registration} <span className="text-2xl md:text-3xl">KČ</span></span>
+                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter font-black">{feeCounts.registration} <span className="text-2xl md:text-3xl">KČ</span></span>
                   <span className="font-tech text-white text-xl uppercase font-bold ml-2">ZA ZÁVODNÍKA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm italic border-t border-white/10 pt-4">
@@ -920,7 +920,7 @@ const Program = () => {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
                 <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[40px] md:text-6xl text-white tracking-tighter">10 000 <span className="text-2xl md:text-3xl font-tech">KČ</span></span>
+                  <span className="font-bebas text-[32px] md:text-6xl text-white tracking-tighter font-black">10 000 <span className="text-2xl md:text-3xl font-tech">KČ</span></span>
                   <span className="font-tech text-[#F4CE14] text-xl uppercase font-bold ml-2">VÝHRA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm border-t border-white/10 pt-4">
@@ -1285,11 +1285,11 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
         </div>
       </div>
 
-      <div className="container mx-auto px-6 mt-16 flex flex-col sm:flex-row justify-center gap-6">
-        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-full sm:w-auto">
+      <div className="container mx-auto px-6 mt-6 flex flex-col sm:flex-row justify-center gap-4 scale-90 origin-top">
+        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 px-10 py-4">
           ZOBRAZIT VŠECHNY JEZDCE
         </Button>
-        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto">
+        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 px-10 py-4">
           CHCI TAKY ZÁVODIT
         </Button>
       </div>
