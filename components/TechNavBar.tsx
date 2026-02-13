@@ -38,7 +38,7 @@ export const TechNavBar = () => {
         { label: 'PROGRAM', href: isHome ? '#program' : '/#program' },
         { label: 'KALENDÁŘ', href: isHome ? '#kalendar' : '/#kalendar' },
         { label: 'JEZDCI', href: isHome ? '#jezdci' : '/#jezdci' },
-        { label: 'BODOVÉ POŘADÍ', href: isHome ? '#poradi' : '/#poradi' },
+        { label: 'BODY', href: isHome ? '#poradi' : '/#poradi' },
         { label: 'PRAVIDLA', href: isHome ? '#pravidla' : '/#pravidla' },
         { label: 'ČLÁNKY', href: isHome ? '#posledniclanky' : '/#posledniclanky' },
         { label: 'APLIKACE', href: isHome ? '#aplikace' : '/#aplikace' },
@@ -125,13 +125,13 @@ export const TechNavBar = () => {
             <div className={`fixed inset-0 bg-[#F4CE14] z-[998] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-20 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
 
                 {/* Mobile Menu Content */}
-                <nav className="flex-1 flex flex-col justify-start items-center gap-3 p-6 overflow-y-auto">
+                <nav className="grid grid-cols-2 gap-x-8 gap-y-4 px-12 pt-8 overflow-y-auto w-full items-start">
                     {mobileNavLinks.map((item, i) => (
                         <a
                             key={item.label}
                             href={item.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="font-bebas text-2xl text-black hover:text-white uppercase tracking-tight font-black transition-colors duration-75"
+                            className="font-bebas text-2xl text-black hover:text-white uppercase tracking-tight font-black transition-colors duration-75 text-left w-full"
                             style={{
                                 transitionDelay: `${mobileMenuOpen ? 200 + i * 50 : 0}ms`,
                                 opacity: mobileMenuOpen ? 1 : 0,
@@ -145,39 +145,42 @@ export const TechNavBar = () => {
                         </a>
                     ))}
 
-                    {/* Expandable CTA */}
-                    <div
-                        className="flex flex-col items-center gap-3 mt-6 pb-2"
-                        style={{
-                            transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 1) * 50 : 0}ms`,
-                            opacity: mobileMenuOpen ? 1 : 0,
-                            transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
-                            transitionProperty: 'opacity, transform',
-                            transitionDuration: '0.5s',
-                            transitionTimingFunction: 'ease-out'
-                        }}
-                    >
-                        <Button
-                            variant="primary"
-                            className="inline-flex bg-black text-white hover:bg-white hover:text-black border-none text-[9.5px] py-2 px-8 shadow-2xl uppercase tracking-widest whitespace-nowrap"
-                            onClick={() => setMobileMenuOpen(false)}
-                        >
-                            KOUPIT VSTUPENKU
-                        </Button>
-
-                        <a href="#registrace" className="inline-flex" onClick={() => setMobileMenuOpen(false)}>
-                            <Button
-                                variant="outline"
-                                className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-[9.5px] py-2 px-8 uppercase tracking-widest whitespace-nowrap"
-                            >
-                                REGISTRACE JEZDCE
-                            </Button>
-                        </a>
-                    </div>
                 </nav>
 
+                {/* Expandable CTA */}
                 <div
-                    className="p-6 text-center pb-4"
+                    className="w-full mt-12 scale-90 origin-top flex flex-col items-center gap-4 pb-4"
+                    style={{
+                        transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 1) * 50 : 0}ms`,
+                        opacity: mobileMenuOpen ? 1 : 0,
+                        transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
+                        transitionProperty: 'opacity, transform',
+                        transitionDuration: '0.5s',
+                        transitionTimingFunction: 'ease-out'
+                    }}
+                >
+                    <Button
+                        variant="primary"
+                        className="!bg-black !text-white !border-black !py-3 !text-[17px] shadow-2xl uppercase tracking-widest whitespace-nowrap"
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        KOUPIT VSTUPENKU
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        className="!border-black !text-black !bg-transparent !py-3 !text-[17px] uppercase tracking-widest whitespace-nowrap"
+                        onClick={() => {
+                            setMobileMenuOpen(false);
+                            window.location.hash = 'registrace';
+                        }}
+                    >
+                        REGISTRACE JEZDCE
+                    </Button>
+                </div>
+
+                <div
+                    className="mt-auto p-6 text-center pb-8"
                     style={{
                         transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 2) * 50 : 0}ms`,
                         opacity: mobileMenuOpen ? 1 : 0,
