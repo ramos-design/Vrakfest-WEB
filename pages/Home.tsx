@@ -849,7 +849,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">DOSPĚLÉ</span>
                       </div>
-                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.adult} KČ</span>
+                      <span className="font-bebas text-[32px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.adult} KČ</span>
                     </div>
 
                     {/* Child Ticket */}
@@ -858,7 +858,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">DĚTI <span className="text-lg opacity-60 align-top ml-1 font-tech tracking-normal">(6-15 LET)</span></span>
                       </div>
-                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.child} KČ</span>
+                      <span className="font-bebas text-[32px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.child} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+1 */}
