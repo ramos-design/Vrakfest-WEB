@@ -82,7 +82,7 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
 
       <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
         {/* Mobile: Block layout with <br/> and leading-[1.25] for consistent spacing. Desktop: Flex column with gap. */}
-        <h1 className="font-bebas font-semibold leading-[1.25] md:leading-[0.9] mb-6 md:mb-10 animate-fadeIn uppercase tracking-tight block md:flex md:flex-col md:items-center md:gap-4 lg:gap-6 text-center">
+        <h1 className="text-[48px] md:text-6xl lg:text-7xl xl:text-8xl font-bebas font-bold leading-[1.1] md:leading-[0.9] mb-6 md:mb-10 animate-fadeIn uppercase tracking-tighter block md:flex md:flex-col md:items-center md:gap-4 lg:gap-6 text-center">
           <span className="text-white">ZÁVODY VRAKŮ</span>
           <br className="md:hidden" />
           <span className="text-[#F4CE14] drop-shadow-[0_0_40px_rgba(244,206,20,0.6)] no-underline">A DEMOLIČNÍ DERBY</span>

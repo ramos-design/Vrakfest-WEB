@@ -83,7 +83,7 @@ export const LockScreen = ({ onAuthenticate }: { onAuthenticate: () => void }) =
             alt="VRAKFEST Logo"
             className="h-20 md:h-28 w-auto mb-8 animate-fadeIn"
           />
-          <h1 className="text-[38px] md:text-6xl lg:text-7xl xl:text-8xl font-bebas font-bold leading-[1.1] md:leading-[0.9] mb-8 md:mb-12 animate-fadeIn uppercase tracking-tighter flex flex-col items-center gap-2 text-center px-4">
+          <h1 className="text-[48px] md:text-6xl lg:text-7xl xl:text-8xl font-bebas font-bold leading-[1.1] md:leading-[0.9] mb-8 md:mb-12 animate-fadeIn uppercase tracking-tighter flex flex-col items-center gap-2 text-center px-4">
             <span className="text-white">NOVÁ KAPITOLA PŘICHÁZÍ.</span>
             <span className="text-[#F4CE14] drop-shadow-[0_0_20px_rgba(244,206,20,0.5)] md:drop-shadow-[0_0_50px_rgba(244,206,20,0.8)]">BUĎTE U TOHO S NÁMI!</span>
           </h1>
