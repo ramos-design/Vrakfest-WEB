@@ -446,13 +446,13 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
           </div>
 
           {/* Buttons - Mobile Only (at the bottom) */}
-          <div className="flex lg:hidden flex-col sm:flex-row justify-center gap-4 w-full mt-6 scale-90 origin-top">
-            <Button className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center px-10 py-4">
+          <div className="flex lg:hidden flex-col sm:flex-row justify-center items-center gap-4 w-full mt-6 scale-90 origin-top">
+            <Button className="w-auto min-w-[240px] bg-[#F4CE14] text-black hover:bg-white border-0 group relative overflow-hidden justify-center px-8 py-4 whitespace-nowrap !text-[14px]">
               <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
               <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
             </Button>
-            <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center p-0 overflow-hidden">
-              <a href="#registrace" className="w-full h-full flex items-center justify-center px-10 py-4">
+            <Button variant="outline" className="w-auto min-w-[240px] btn-race justify-center p-0 overflow-hidden whitespace-nowrap !text-[14px]">
+              <a href="#registrace" className="w-full h-full flex items-center justify-center px-8 py-4">
                 <AnimatedCTA ctaIndex={ctaIndex} defaultText="Chci závodit" alternateText="Registrovat se" />
               </a>
             </Button>
@@ -849,7 +849,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">DOSPĚLÉ</span>
                       </div>
-                      <span className="font-bebas text-[44px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.adult} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.adult} KČ</span>
                     </div>
 
                     {/* Child Ticket */}
@@ -858,7 +858,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">DĚTI <span className="text-sm md:text-lg opacity-60 align-top ml-1 font-tech tracking-normal">(6-15 LET)</span></span>
                       </div>
-                      <span className="font-bebas text-[44px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.child} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.child} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+1 */}
@@ -867,7 +867,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">RODINA 2+1</span>
                       </div>
-                      <span className="font-bebas text-[44px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.family21} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.family21} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+2 */}
@@ -876,7 +876,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">RODINA 2+2</span>
                       </div>
-                      <span className="font-bebas text-[44px] md:text-6xl text-black tracking-tighter font-black">{feeCounts.family22} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-black whitespace-nowrap">{feeCounts.family22} KČ</span>
                     </div>
                   </div>
                 </div>
@@ -900,11 +900,11 @@ const Program = () => {
 
               <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
                 <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
-                <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-4">
-                  <span className="font-bebas text-[44px] md:text-6xl text-[#F4CE14] tracking-tighter font-black whitespace-nowrap">
-                    {feeCounts.registration} <span className="text-2xl md:text-3xl">KČ</span>
+                <div className="flex flex-row items-baseline gap-2 mb-4">
+                  <span className="font-bebas text-[36px] md:text-6xl text-[#F4CE14] tracking-tighter font-black whitespace-nowrap">
+                    {feeCounts.registration} <span className="text-xl md:text-3xl">KČ</span>
                   </span>
-                  <span className="font-tech text-white text-sm md:text-xl uppercase font-bold sm:ml-2 opacity-80">ZA ZÁVODNÍKA</span>
+                  <span className="font-tech text-white text-[12px] md:text-xl uppercase font-bold ml-2 opacity-80">ZA ZÁVODNÍKA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm italic border-t border-white/10 pt-4">
                   Platba možná <span className="text-white font-bold not-italic decoration-[#F4CE14] underline decoration-2 underline-offset-4">pouze předem na účet</span>.
@@ -921,11 +921,11 @@ const Program = () => {
               <div className="bg-[#F4CE14]/5 border-2 border-[#F4CE14]/30 p-8 hover:border-[#F4CE14] transition-all shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
                 <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
-                <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2 mb-4">
-                  <span className="font-bebas text-[44px] md:text-6xl text-white tracking-tighter font-black whitespace-nowrap">
-                    10 000 <span className="text-2xl md:text-3xl font-tech">KČ</span>
+                <div className="flex flex-row items-baseline gap-2 mb-4">
+                  <span className="font-bebas text-[36px] md:text-6xl text-white tracking-tighter font-black whitespace-nowrap">
+                    10 000 <span className="text-xl md:text-3xl font-tech">KČ</span>
                   </span>
-                  <span className="font-tech text-[#F4CE14] text-sm md:text-xl uppercase font-bold sm:ml-2">VÝHRA</span>
+                  <span className="font-tech text-[#F4CE14] text-[12px] md:text-xl uppercase font-bold ml-2">VÝHRA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm border-t border-white/10 pt-4">
                   Tuto finanční odměnu získá jezdec, jehož vrak zůstane <span className="text-white font-bold">jako poslední v pohybu</span>.
@@ -1030,7 +1030,7 @@ const EventGrid = ({ liveEvents }: { liveEvents: any[] }) => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 h-[850px] lg:h-[600px] items-stretch">
+        <div className="flex flex-col lg:flex-row gap-4 h-[620px] lg:h-[600px] items-stretch">
           {eventsToDisplay.map((event) => {
             const isActive = activeId === event.id;
             return (
@@ -1289,11 +1289,11 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
         </div>
       </div>
 
-      <div className="container mx-auto px-6 mt-6 flex flex-col sm:flex-row justify-center gap-4 scale-90 origin-top">
-        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 px-10 py-4">
+      <div className="container mx-auto px-6 mt-6 flex flex-col sm:flex-row justify-center items-center gap-4 scale-90 origin-top">
+        <Button className="bg-[#F4CE14] text-black hover:bg-white border-0 transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[13px]">
           ZOBRAZIT VŠECHNY JEZDCE
         </Button>
-        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 px-10 py-4">
+        <Button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 w-auto min-w-[240px] px-8 py-4 whitespace-nowrap !text-[13px]">
           CHCI TAKY ZÁVODIT
         </Button>
       </div>
