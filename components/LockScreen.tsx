@@ -74,7 +74,7 @@ export const LockScreen = ({ onAuthenticate }: { onAuthenticate: () => void }) =
           onCanPlay={(e) => (e.currentTarget.style.opacity = '1')}
           style={{ opacity: 0, transition: 'opacity 1s' }}
         >
-          <source src="/video/BRANKY%20VF-web.mp4" type="video/mp4" />
+          <source src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/BRANKY%20VF-web.mp4" type="video/mp4" />
         </video>
 
         <div className="container mx-auto px-6 relative z-30 text-center flex flex-col items-center">

@@ -12,7 +12,7 @@ export const TransitionOverlay = () => {
       >
         {/* Tire Tracks - Left */}
         <img
-          src="/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
+          src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
           alt=""
           className="absolute -left-10 top-1/2 -translate-y-1/2 h-[40%] w-auto opacity-5 rotate-180"
           style={{ filter: 'brightness(0)' }}
@@ -20,7 +20,7 @@ export const TransitionOverlay = () => {
 
         {/* Tire Tracks - Right */}
         <img
-          src="/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
+          src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
           alt=""
           className="absolute -right-10 top-1/2 -translate-y-1/2 h-[40%] w-auto opacity-5"
           style={{ filter: 'brightness(0)' }}

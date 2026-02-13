@@ -77,7 +77,7 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
         autoPlay loop muted playsInline
         className="absolute inset-0 w-full h-full object-cover"
       >
-        <source src="/video/BRANKY%20VF-web.mp4" type="video/mp4" />
+        <source src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/BRANKY%20VF-web.mp4" type="video/mp4" />
       </video>
 
       <div className="container mx-auto px-6 relative z-20 text-center flex flex-col items-center">
@@ -261,7 +261,7 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
       {/* Tire Track Background */}
       <div className="hidden lg:block absolute top-0 right-0 w-full h-full pointer-events-none select-none opacity-15 overflow-hidden">
         <img
-          src="/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
+          src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/grunge-tire-track-wheel-braking-marks-truck-car-motorcycle-tread-pattern-silhouette-auto-race.png"
           alt=""
           className="absolute -top-10 -right-10 w-[140%] h-auto rotate-[8deg] origin-top-right"
           style={{ mixBlendMode: 'screen', filter: 'brightness(1.5) contrast(1.2)' }}
@@ -348,11 +348,7 @@ const About = ({ ctaIndex }: { ctaIndex: number }) => {
                 <span className="block transition-transform duration-300 group-hover:-translate-y-[150%]">Koupit vstupenku</span>
                 <span className="absolute inset-0 flex items-center justify-center transition-transform duration-300 translate-y-[150%] group-hover:translate-y-0 text-black">JIŽ BRZY</span>
               </Button>
-              <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 btn-race justify-center p-0">
-                <a href="#registrace" className="w-full h-full flex items-center justify-center px-10">
-                  <AnimatedCTA ctaIndex={ctaIndex} defaultText="Chci závodit" alternateText="Registrovat se" />
-                </a>
-              </Button>
+
             </div>
           </div>
 
@@ -466,7 +462,7 @@ const GalleryGrid = () => {
           <div className="flex flex-col gap-6 group scale-100 opacity-100 translate-y-0 transition-all duration-1000">
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
-                src="/media/DSC_4209.jpg"
+                src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_4209.jpg"
                 className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 grayscale-0"
                 alt="Rodina"
               />
@@ -486,7 +482,7 @@ const GalleryGrid = () => {
           <div className="flex flex-col gap-6 group md:mt-24 scale-100 opacity-100 translate-y-0 transition-all duration-1000">
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
-                src="/media/DSC_0871.jpg"
+                src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0871.jpg"
                 className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 grayscale-0"
                 alt="Závod"
               />
@@ -506,7 +502,7 @@ const GalleryGrid = () => {
           <div className="flex flex-col gap-6 group md:mt-48 scale-100 opacity-100 translate-y-0 transition-all duration-1000">
             <div className="aspect-[4/3] overflow-hidden border-2 border-white/5 group-hover:border-[#F4CE14] transition-all duration-500 relative shadow-2xl">
               <img
-                src="/media/DSC_0655.jpg"
+                src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0655.jpg"
                 className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 grayscale-0"
                 alt="Zábava"
               />
@@ -1100,8 +1096,8 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
           <SectionHeader
             title="STARTOVNÍ ROŠT"
             subtitle={
-              <span>
-                PŘIHLÁŠENÍ JEZDCI DO <Typewriter words={['AKTUÁLNÍHO ZÁVODU', 'VRAKFESTU 4.4. V OSTRAVĚ']} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+              <span className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                PŘIHLÁŠENÍ JEZDCI DO VRAKFESTU 4.4. V OSTRAVĚ
               </span>
             }
           />
@@ -1404,15 +1400,15 @@ const TriviaSlider = () => {
   const slides = [
     {
       text: "Výhra v Demolition Derby je 10 000 Kč pro posledního v pohybu!",
-      image: "/media/VFzavodník2-felicie.jpg"
+      image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VFzavodník2-felicie.jpg"
     },
     {
       text: "Vrakfestu se může zúčastnit každý starší 18 let se svým upraveným vrakem.",
-      image: "/media/DSC_4209.jpg"
+      image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_4209.jpg"
     },
     {
       text: "Po hlavním závodu následuje hromadná demolice zbylých pojízdných aut.",
-      image: "/media/DSC_0655.jpg"
+      image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0655.jpg"
     }
   ];
 
@@ -1563,7 +1559,7 @@ const RulesAndSpecs = () => {
             "Pneu bez omezení / Bez rozdílu obsahu motoru",
             "NEJSOU POVOLENY ŽÁDNÉ ÚPRAVY ZASAHUJÍCÍ DO KONSTRUKCE VOZIDLA!!"
           ],
-          image: "/media/VF-goout.jpg"
+          image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VF-goout.jpg"
         },
         {
           title: "KATEGORIE PRO: KOMPLETNÍ PRAVIDLA",
@@ -1586,14 +1582,14 @@ const RulesAndSpecs = () => {
             "Z vozidla mohou být odstraněny pouze 5tě dveře.",
             "Palivo do vozidla tankujte před každou jízdou na vyhrazeném místě."
           ],
-          image: "/media/DSC_0655.jpg"
+          image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0655.jpg"
         },
         {
           title: "ZPEVNĚNÍ ČI UCHYCENÍ KAPOTY",
           content: [
             "Zpevnění či uchycení kapoty pro zvýšení tuhosti (řetězy, nebo šrouby či sváry)."
           ],
-          image: "/media/povolene%20upravy/kapota-768x480.png"
+          image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/povolene%20upravy/kapota-768x480.png"
         },
         {
           title: "DOPORUČENÉ VYSTUŽENÍ INTERIÉRU",
@@ -1601,14 +1597,14 @@ const RulesAndSpecs = () => {
             "Doporučené vystužení interiéru vozu, použití rámu (viz foto).",
             "Možnost omotání A,B sloupků pro zvýšení tuhosti karoserie."
           ],
-          image: "/media/povolene%20upravy/R%C3%A1m-sloupky-768x507.png"
+          image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/povolene%20upravy/ramsloupky.png"
         },
         {
           title: "POVOLENÁ VÝZTUHA BOČNÍ",
           content: [
             "Povolená výztuha boční (Řidičovy strany!) Např.: hardox, jekl, roxor apod."
           ],
-          image: "/media/povolene%20upravy/vystuha-dve%C5%99e-1024x682.png"
+          image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/povolene%20upravy/vystuhadvere.png"
         },
         {
           title: "POVOLENÉ ÚPRAVY V MOTOROVÉM PROSTORU",
@@ -1617,7 +1613,7 @@ const RulesAndSpecs = () => {
             "Za nárazníkem a blatníky nesmí být umístěno nic.",
             "Všechny skla kromě čelního musí být odstraněny!"
           ],
-          image: "/media/povolene%20upravy/Motorovy-prostor.png"
+          image: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/povolene%20upravy/Motorovy-prostor.png"
         }
       ]
     }
@@ -2275,7 +2271,7 @@ const RegistrationForm = () => {
                   <div className="w-full md:w-auto flex flex-col items-center">
                     <div className="bg-white p-4 shadow-xl border-2 border-gray-100 group-hover:border-[#F4CE14] transition-colors duration-500 relative">
                       <img
-                        src="/media/VF_Ostrava_442026.png"
+                        src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VF_Ostrava_442026.png"
                         alt="QR Platba"
                         className="w-40 h-40 md:w-48 md:h-48"
                       />
@@ -2512,7 +2508,7 @@ const DriverInfoAndCTA = () => {
             {/* Racer Image Above */}
             <div className="shadow-2xl overflow-hidden h-[300px] md:h-[350px]">
               <img
-                src="/media/VFzavodník-felicie.jpg"
+                src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VFfelicie.jpg"
                 alt="Vrakfest Jezdec"
                 className="w-full h-full object-cover"
               />
@@ -2522,7 +2518,7 @@ const DriverInfoAndCTA = () => {
               {/* Background Image with Overlay */}
               <div className="absolute inset-0 z-0">
                 <img
-                  src="/media/DSC_7229.jpg"
+                  src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_7229.jpg"
                   alt="Vrakfest Action"
                   className="w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0"
                 />
@@ -2601,22 +2597,22 @@ const AccreditationAndPartners = () => {
             <div className="overflow-hidden whitespace-nowrap group py-4 fade-mask w-full">
               <div className="flex w-max animate-marquee">
                 {[
-                  "/media/sponzors/dvorak.jpg",
-                  "/media/sponzors/granex.jpg",
-                  "/media/sponzors/silvie.jpg",
-                  "/media/sponzors/yomax.jpg",
-                  "/media/sponzors/dvorak.jpg",
-                  "/media/sponzors/granex.jpg",
-                  "/media/sponzors/silvie.jpg",
-                  "/media/sponzors/yomax.jpg",
-                  "/media/sponzors/dvorak.jpg",
-                  "/media/sponzors/granex.jpg",
-                  "/media/sponzors/silvie.jpg",
-                  "/media/sponzors/yomax.jpg",
-                  "/media/sponzors/dvorak.jpg",
-                  "/media/sponzors/granex.jpg",
-                  "/media/sponzors/silvie.jpg",
-                  "/media/sponzors/yomax.jpg"
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/dvorak.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/granex.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/silvie.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/yomax.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/dvorak.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/granex.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/silvie.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/yomax.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/dvorak.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/granex.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/silvie.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/yomax.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/dvorak.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/granex.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/silvie.jpg",
+                  "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/sponzors/yomax.jpg"
                 ].map((logo, i) => (
                   <div key={i} className="flex-shrink-0 flex items-center mx-8 opacity-60 transition-all duration-500">
                     <img
@@ -2693,7 +2689,7 @@ const LatestArticlesAndPress = () => {
                   {i === 0 && (
                     <div className="mb-4 overflow-hidden rounded-sm border border-white/10 group-hover:border-[#F4CE14]/50 transition-colors">
                       <img
-                        src="/articles/winter_prep.png"
+                        src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_7229.jpg"
                         alt="Zimní příprava"
                         className="w-full h-80 object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
                       />
@@ -2742,13 +2738,13 @@ const SponsorBannerSlider = () => {
     {
       title: "VRAKOVIŠTĚ SILVIE OSTRAVA",
       subtitle: "EKOLOGICKÁ LIKVIDACE AUTOVRAKŮ PŘÍMO NA ZÁVODECH. O VÁŠ VRAK SE PO BOJI PROFESIONÁLNĚ POSTARÁME.",
-      bgImage: "/media/DSC_0655.jpg",
+      bgImage: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0655.jpg",
       tag: "PARTNER VRAKFESTU"
     },
     {
       title: "YOMAX UNIKÁTNÍ POHÁRY",
       subtitle: "RUČNĚ VYRÁBĚNÉ TROFEJE PRO VÍTĚZE VRAKFESTU. KAŽDÝ POHÁR JE SYMBOLEM ODVAHY A TVRDÉHO BOJE NA NAŠÍ TRATI.",
-      bgImage: "/media/VFzavodník-felicie.jpg",
+      bgImage: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VFzavodník-felicie.jpg",
       tag: "PARTNER VRAKFESTU"
     }
   ];
@@ -3062,12 +3058,19 @@ export const Home = () => {
         .order('date', { ascending: true });
 
       if (eventsData && eventsData.length > 0) {
-        // Fix Hrachovec date if it's wrong in DB
-        const fixedEvents = eventsData.map((e: any) => {
-          if (e.title === 'HRACHOVEC') {
-            return { ...e, date: '23.05.2026' };
+        // Fix Hrachovec date if it's wrong in DB & Override images from local constants
+        const fixedEvents = eventsData.map((e: any, index: number) => {
+          let event = { ...e };
+
+          // Override image from local constants if available (to ensure updated Supabase URLs are used)
+          if (EVENTS[index] && EVENTS[index].image) {
+            event.image = EVENTS[index].image;
           }
-          return e;
+
+          if (event.title === 'HRACHOVEC') {
+            event.date = '23.05.2026';
+          }
+          return event;
         });
         setLiveEvents(fixedEvents);
         const activeE = eventsData.find((e: any) => e.is_active) || eventsData[0];
@@ -3162,7 +3165,7 @@ export const Home = () => {
         <LatestArticlesAndPress />
         <AccreditationAndPartners />
         <MobileApp />
-        <InstagramFeed />
+        {/* <InstagramFeed /> */}
       </main>
 
 

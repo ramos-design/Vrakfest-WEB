@@ -7,14 +7,14 @@ export const InstagramFeed = () => {
 
     // Local videos from public/video
     const reels = [
-        { id: 1, video: '/video/Vrakfest OSTRAVA - REEL.mp4' },
-        { id: 2, video: '/video/VF-Hrachovec-REEL.mp4' },
-        { id: 3, video: '/video/VRESINA 2.mp4' },
-        { id: 4, video: '/video/BRANKY VF-web.mp4' },
+        { id: 1, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/Vrakfest%20OSTRAVA%20-%20REEL.mp4' },
+        { id: 2, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/VF-Hrachovec-REEL.mp4' },
+        { id: 3, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/VRESINA%202.mp4' },
+        { id: 4, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/BRANKY%20VF-web.mp4' },
         // Duplicates for infinite loop effect
-        { id: 5, video: '/video/Vrakfest OSTRAVA - REEL.mp4' },
-        { id: 6, video: '/video/VF-Hrachovec-REEL.mp4' },
-        { id: 7, video: '/video/VRESINA 2.mp4' },
+        { id: 5, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/Vrakfest%20OSTRAVA%20-%20REEL.mp4' },
+        { id: 6, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/VF-Hrachovec-REEL.mp4' },
+        { id: 7, video: 'https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/videos/VRESINA%202.mp4' },
     ];
 
     // Auto-rotate every 10 seconds
