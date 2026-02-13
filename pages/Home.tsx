@@ -161,7 +161,9 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
               <AnimatedCTA ctaIndex={ctaIndex} defaultText="CHCI ZÁVODIT" alternateText="REGISTROVAT SE" />
             </a>
           </Button>
-          <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 !border-white !text-white hover:!bg-white hover:!text-black hover:!shadow-none">BODOVÉ POŘADÍ</Button>
+          <Button variant="outline" className="w-10/12 sm:w-auto max-w-sm mx-auto sm:mx-0 !border-white !text-white hover:!bg-white hover:!text-black hover:!shadow-none !duration-0">
+            <a href="#ovrakfestu">Chci to zažít!</a>
+          </Button>
         </div>
       </div>
 
@@ -610,9 +612,9 @@ const SponsorsTicker = () => {
           {[...SPONSORS, ...SPONSORS].map((s, i) => (
             <span
               key={i}
-              onClick={() => setSelectedSponsor(s)}
+              // onClick={() => setSelectedSponsor(s)}
               style={{ fontSize: 'var(--fs-h3)' }}
-              className="font-bebas text-black mx-20 font-semibold hover:scale-110 inline-block transition-transform cursor-pointer select-none tracking-tight uppercase hover:text-white"
+              className="font-bebas text-black mx-20 font-semibold hover:scale-110 inline-block transition-transform select-none tracking-tight uppercase hover:text-white"
             >
               {s.name}
             </span>
@@ -1110,11 +1112,38 @@ const EventGrid = ({ liveEvents }: { liveEvents: any[] }) => {
   );
 };
 
-const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registeredCount: number, paidDrivers: any[], liveStandings: any[] }) => {
-  const [selectedDriver, setSelectedDriver] = useState<Driver | null>(null);
+const getSupabaseImageUrl = (path: string | null) => {
+  if (!path) return 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=800';
+  if (path.startsWith('http')) return path;
 
-  // Fallback to static DRIVERS if no paid drivers yet
-  const driversToDisplay = paidDrivers && paidDrivers.length > 0 ? paidDrivers : DRIVERS;
+  const projectUrl = 'https://kneyhirbfnbukjyadogn.supabase.co';
+  // Just trim the extreme ends, but keep internal structure
+  let fullPath = path.trim();
+
+  // If the path already includes the bucket name, remove it to avoid doubling
+  if (fullPath.startsWith('driver-photos/')) {
+    fullPath = fullPath.substring('driver-photos/'.length);
+  }
+
+  // Ensure we don't have leading slashes
+  fullPath = fullPath.replace(/^\/+/, '');
+
+  // Encode the path but keep slashes
+  const encodedPath = fullPath.split('/').map(part => encodeURIComponent(part)).join('/');
+
+  return `${projectUrl}/storage/v1/object/public/driver-photos/${encodedPath}`;
+};
+
+const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registeredCount: number, paidDrivers: any[], liveStandings: any[] }) => {
+
+  // ONLY use paid drivers from the database, no more static fallbacks
+  const driversToDisplay = paidDrivers || [];
+
+  // Marquee logic - only repeat if we have enough items to loop (at least 4)
+  const isMarqueeMode = driversToDisplay.length >= 4;
+  const listToRender = isMarqueeMode
+    ? [...driversToDisplay, ...driversToDisplay, ...driversToDisplay]
+    : driversToDisplay;
 
   return (
     <section id="jezdci" className="py-32 bg-black overflow-hidden relative">
@@ -1146,9 +1175,9 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
 
             <div className="flex items-center gap-4 text-center md:text-right">
               <div className="flex flex-col items-center md:items-end">
-                <p className="font-tech text-[10px] text-[#F4CE14] uppercase tracking-[0.3em] font-bold mb-1">DEMO UKÁZKA</p>
+                <p className="font-tech text-[10px] text-[#F4CE14] uppercase tracking-[0.3em] font-bold mb-1">LIVE DATA</p>
                 <p className="font-tech text-[10px] text-gray-500 uppercase tracking-widest leading-none">
-                  JEZDCI BUDOU BRZY VIDITELNÍ V KARTÁCH NÍŽE
+                  SEZNAM POTVRZENÝCH JEZDCŮ
                 </p>
               </div>
               <div className="bg-[#F4CE14]/10 p-2 border border-[#F4CE14]/20 rounded-full">
@@ -1160,10 +1189,14 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
       </div>
 
       <div className="w-full relative overflow-hidden">
-        <div className="flex gap-6 px-6 w-max animate-driver-scroll hover:pause-off">
-          {/* We repeat the drivers 3 times to ensure smooth infinite looping */}
-          {[...driversToDisplay, ...driversToDisplay, ...driversToDisplay].map((driver, i) => {
-            const isDynamic = 'profiles' in driver;
+        <div className={`flex gap-6 px-6 w-max ${isMarqueeMode ? 'animate-driver-scroll' : 'mx-auto'} hover:pause-off`}>
+          {/* We repeat the drivers only for marquee effect */}
+          {listToRender.map((driver, i) => {
+            if (!driver) return null;
+
+            const isDynamic = typeof driver === 'object' && driver !== null && 'profiles' in driver;
+            const isDirectProfile = typeof driver === 'object' && driver !== null && 'first_name' in driver;
+
             let nickname = '';
             let displayName = '';
             let image = '';
@@ -1174,24 +1207,35 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
 
             if (isDynamic) {
               const d = driver as any;
-              displayName = `${d.profiles?.first_name} ${d.profiles?.last_name}`;
+              displayName = `${d.profiles?.first_name || ''} ${d.profiles?.last_name || ''}`.trim();
               nickname = d.profiles?.nickname || '';
-              image = d.profiles?.profile_photo_url || 'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=800';
-              startNumber = d.start_number;
-              car = d.car_model;
-              // Try to find points for this driver from liveStandings if available
+              image = getSupabaseImageUrl(d.profiles?.profile_photo_url);
+              startNumber = d.profiles?.start_number || d.start_number || 0;
+              car = d.profiles?.car_model || d.car_model || '';
+
               const standing = liveStandings.find(s => s.profiles?.id === d.profiles?.id || s.profiles?.email === d.profiles?.email);
               points = standing?.total_points || 0;
               wins = standing?.wins_count || 0;
+            } else if (isDirectProfile) {
+              const d = driver as any;
+              // Proper trimming to remove newlines or extra spaces from DB
+              displayName = `${(d.first_name || '').trim()} ${(d.last_name || '').trim()}`.trim();
+              nickname = (d.nickname || '').trim();
+              image = getSupabaseImageUrl(d.profile_photo_url);
+              startNumber = d.start_number || 0;
+              car = (d.car_model || '').trim();
+
+              points = d.points || 0;
+              wins = d.wins || 0;
             } else {
               const d = driver as Driver;
-              displayName = d.name;
-              image = d.image;
+              displayName = d.name || '';
+              image = getSupabaseImageUrl(d.image);
               startNumber = 0;
-              car = d.car;
-              points = d.stats.points || 0;
-              wins = d.stats.wins || 0;
-              const parts = d.name.split('"');
+              car = d.car || '';
+              points = d.stats?.points || 0;
+              wins = d.stats?.wins || 0;
+              const parts = (d.name || '').split('"');
               if (parts.length >= 3) {
                 nickname = parts[1];
                 displayName = (parts[0] + parts[2]).replace(/\s+/g, ' ').trim();
@@ -1201,12 +1245,11 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
             return (
               <div
                 key={`${(driver as any).id || i}-${i}`}
-                className="min-w-[280px] w-[280px] aspect-[4/6] relative group cursor-pointer bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
-                onClick={() => !isDynamic && setSelectedDriver(driver as Driver)}
+                className="min-w-[280px] w-[280px] aspect-[4/6] relative group bg-[#111] border border-white/10 hover:border-[#F4CE14] transition-all duration-300 overflow-hidden flex flex-col shadow-2xl"
               >
                 {/* Car Slide-In Badge */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-[#F4CE14] px-4 py-1.5 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-500 z-30 shadow-xl rounded-b-md border-x border-b border-black/10 min-w-[120px] text-center">
-                  <span className="font-tech text-black text-[9px] font-black uppercase tracking-widest whitespace-nowrap leading-none block">{car}</span>
+                  <span className="font-tech text-black text-[12px] font-black uppercase tracking-widest whitespace-nowrap leading-none block">{car}</span>
                 </div>
 
                 <div className="flex-1 relative overflow-hidden">
@@ -1225,7 +1268,7 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
                 <div className="p-4 grid grid-cols-3 gap-1 border-t border-white/10 bg-[#0a0a0a] group-hover:bg-[#F4CE14] transition-colors duration-300 group-hover:text-black">
                   <div className="text-center border-r border-white/10 group-hover:border-black/10">
                     <p className="font-tech min-h-[1.5em] text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold leading-tight">ČÍSLO</p>
-                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">{startNumber}</p>
+                    <p className="font-bebas text-xl text-white group-hover:text-black font-bold">#{startNumber}</p>
                   </div>
                   <div className="text-center border-r border-white/10 group-hover:border-black/10">
                     <p className="font-tech min-h-[1.5em] text-[9px] text-gray-500 group-hover:text-black/60 uppercase tracking-wider font-bold leading-tight">BODY</p>
@@ -1251,41 +1294,6 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
         </Button>
       </div>
 
-      {selectedDriver && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 backdrop-blur-3xl bg-black/90 animate-fadeIn">
-          <div className="bg-[#111] border-2 border-[#F4CE14] border-b-[12px] border-b-yellow-700 max-w-6xl w-full relative grid md:grid-cols-2 shadow-[0_0_120px_rgba(244,206,20,0.4)]">
-            <button onClick={() => setSelectedDriver(null)} className="absolute -top-16 right-0 text-white hover:text-[#F4CE14] flex items-center gap-3 font-tech text-sm tracking-[0.4em] uppercase font-bold">CLOSE_SYSTEM [ESC] <X size={28} /></button>
-            <div className="h-full relative overflow-hidden bg-black">
-              <img src={selectedDriver.image} className="w-full h-full object-cover grayscale transition-all duration-1000 hover:grayscale-0 hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#111]"></div>
-            </div>
-            <div className="p-16 flex flex-col justify-center text-left">
-              <div className="mb-12">
-                <span className="font-tech text-[#F4CE14] tracking-[0.6em] text-sm mb-4 block uppercase font-bold">{selectedDriver.category}</span>
-                <h2 className="text-8xl font-bebas leading-[1.1] mb-6 uppercase tracking-tight font-semibold">{selectedDriver.name}</h2>
-                <div className="w-32 h-2 bg-[#F4CE14] shadow-[0_0_20px_#F4CE14]"></div>
-              </div>
-
-              <div className="space-y-6 mb-16 font-tech">
-                <div className="flex justify-between items-end border-b-2 border-white/5 pb-4 group cursor-default">
-                  <span className="text-gray-500 text-sm uppercase tracking-widest font-bold">SPEC_VEHICLE_MODEL</span>
-                  <span className="text-2xl group-hover:text-[#F4CE14] transition-colors uppercase font-bold tracking-tight">{selectedDriver.car}</span>
-                </div>
-                <div className="flex justify-between items-end border-b-2 border-white/5 pb-4 group cursor-default">
-                  <span className="text-gray-500 text-sm uppercase tracking-widest font-bold">HISTORIC_DESTRUCTION</span>
-                  <span className="text-2xl group-hover:text-[#F4CE14] transition-colors uppercase font-bold tracking-tight">{selectedDriver.stats.wrecks} UNITS</span>
-                </div>
-                <div className="flex justify-between items-end border-b-2 border-white/5 pb-4 group cursor-default">
-                  <span className="text-gray-500 text-sm uppercase tracking-widest font-bold">CHAMPION_TIER_STATUS</span>
-                  <span className="text-2xl text-[#F4CE14] group-hover:animate-pulse uppercase font-bold tracking-tight">{selectedDriver.stats.wins} VICTORIES</span>
-                </div>
-              </div>
-
-              <Button size="medium" className="w-full">PROHLÉDNOUT TÝM</Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <style>{`
         @keyframes driverScroll {
@@ -1300,25 +1308,26 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
   );
 };
 
-const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
-  const [activeCategory, setActiveCategory] = useState<'do1.6L' | 'nad1.6L' | 'zeny'>('do1.6L');
+const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidDrivers: any[] }) => {
+  const [activeCategory, setActiveCategory] = useState<'do1.6L' | 'nad1.6L' | 'hobby' | 'zeny'>('do1.6L');
   const [selectedYear, setSelectedYear] = useState<2025 | 2026>(2025);
 
   const categoryLabels = {
     'do1.6L': 'DO 1.6 L',
     'nad1.6L': 'NAD 1.6 L',
-    'zeny': 'ŽENY'
+    'zeny': 'ŽENY',
+    'hobby': 'HOBBY'
   };
 
   // Filter and sort drivers by category and points (highest first)
   const filteredDrivers = selectedYear === 2026
-    ? (liveStandings || [])
-      .map(s => ({
-        startNumber: s.profiles?.start_number || 0,
-        name: `${s.profiles?.first_name || ''} ${s.profiles?.last_name || ''}`.trim().toUpperCase(),
-        car: s.profiles?.car_model || 'VRAK',
-        points: s.total_points,
-        category: s.profiles?.category || 'do1.6L'
+    ? (paidDrivers || [])
+      .map(p => ({
+        startNumber: p.start_number || 0,
+        name: `${(p.first_name || '').trim()} ${(p.last_name || '').trim()}`.trim().toUpperCase(),
+        car: p.car_model || 'VRAK',
+        points: p.points || 0,
+        category: p.category || 'do1.6L'
       }))
       .filter(driver => driver.category === activeCategory)
       .sort((a, b) => b.points - a.points)
@@ -1331,29 +1340,26 @@ const Standings = ({ liveStandings }: { liveStandings: any[] }) => {
       <div className="absolute left-0 top-0 h-full w-px bg-white/5"></div>
       <div className="container mx-auto px-6">
         <div className="mb-20 text-center">
-          <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-2 uppercase">
+          <h2 style={{ fontSize: 'var(--fs-h2)' }} className="font-bebas font-semibold text-[#F4CE14] tracking-tight leading-none mb-6 uppercase">
             BODOVÉ POŘADÍ
           </h2>
 
           <div className="flex flex-col items-center">
-            <div className="flex items-center gap-6 mb-4">
+            <div className="flex items-center gap-6">
               <button
                 onClick={() => setSelectedYear(2025)}
-                className={`font-tech text-base md:text-lg tracking-[0.2em] uppercase transition-all font-bold ${selectedYear === 2025 ? 'text-[#F4CE14] border-b-2 border-[#F4CE14] pb-1' : 'text-gray-500 hover:text-white'}`}
+                className={`font-tech text-base md:text-lg tracking-[0.2em] uppercase transition-all font-bold ${selectedYear === 2025 ? 'text-[#FF6B00] border-b-2 border-[#FF6B00] pb-1' : 'text-gray-500 hover:text-white'}`}
               >
                 SEZÓNA 2025
               </button>
               <div className="w-px h-6 bg-white/10 hidden md:block"></div>
               <button
                 onClick={() => setSelectedYear(2026)}
-                className={`font-tech text-base md:text-lg tracking-[0.2em] uppercase transition-all font-bold ${selectedYear === 2026 ? 'text-[#F4CE14] border-b-2 border-[#F4CE14] pb-1' : 'text-gray-500 hover:text-white'}`}
+                className={`font-tech text-base md:text-lg tracking-[0.2em] uppercase transition-all font-bold ${selectedYear === 2026 ? 'text-[#FF6B00] border-b-2 border-[#FF6B00] pb-1' : 'text-gray-500 hover:text-white'}`}
               >
                 SEZÓNA 2026
               </button>
             </div>
-            <p className="font-tech text-gray-400 tracking-[0.15em] uppercase text-xs md:text-sm font-bold opacity-80">
-              {selectedYear === 2025 ? 'KONEČNÉ POŘADÍ MINULÉ SEZÓNY' : 'PRŮBĚŽNÝ STAV AKTUÁLNÍ SEZÓNY'}
-            </p>
           </div>
 
           <div className="w-24 h-1 bg-[#F4CE14] mt-6 relative mx-auto">
@@ -1491,13 +1497,13 @@ const TriviaSlider = () => {
           <div className="relative z-10 w-full">
             <div className={`transition-all duration-[1200ms] delay-200 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : '-translate-y-6 opacity-0'
               }`}>
-              <span className="font-bebas text-[#F4CE14] text-4xl md:text-5xl lg:text-7xl tracking-tight uppercase drop-shadow-[0_0_15px_rgba(244,206,20,0.4)] font-bold block mb-2">
+              <span className="font-bebas text-[#F4CE14] text-5xl md:text-5xl lg:text-7xl tracking-tight uppercase drop-shadow-[0_0_15px_rgba(244,206,20,0.4)] font-bold block mb-2">
                 Věděli jste, že...?
               </span>
               <div className="w-16 h-1 bg-[#F4CE14] mx-auto mb-8 shadow-[0_0_10px_#F4CE14]"></div>
             </div>
 
-            <p className={`font-tech text-white text-lg md:text-2xl uppercase font-bold tracking-tight leading-snug max-w-sm mx-auto transition-all duration-[1200ms] delay-400 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            <p className={`font-tech text-white text-xl md:text-2xl uppercase font-bold tracking-tight leading-snug max-w-sm mx-auto transition-all duration-[1200ms] delay-400 will-change-[opacity,transform] ${currentSlide === idx ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
               }`}>
               {slide.text}
             </p>
@@ -2019,25 +2025,16 @@ const RegistrationForm = () => {
         consentAge: formData.consentAge,
         eventName: activeEvent?.title,
         variableSymbol: '442026',
-        isPaid: false,
-        websiteUrl: formData.websiteUrl,
-        submittedAt: new Date().toISOString(),
-        formType: 'rider_registration_production'
+        websiteUrl: formData.websiteUrl
       };
 
-      // Production n8n webhook URL
-      const N8N_WEBHOOK_URL = N8N_RIDER_REGISTRATION_WEBHOOK_URL;
-
-      const response = await fetch(N8N_WEBHOOK_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submissionData),
+      console.log('Sending data to Supabase Proxy...');
+      const { data, error: functionError } = await supabase.functions.invoke('process-registration', {
+        body: submissionData
       });
 
-      if (!response.ok) {
-        throw new Error(`Server vrátil chybu ${response.status}. Ujistěte se, že v n8n máte spuštěné 'Execute Workflow'.`);
+      if (functionError) {
+        throw new Error(functionError.message || 'Chyba při odesílání přes Supabase Proxy');
       }
 
       setStep(5);
@@ -2228,16 +2225,17 @@ const RegistrationForm = () => {
 
               <div>
                 <label className="block text-xs font-bold text-gray-600 uppercase mb-2 tracking-wider">Kategorie *</label>
-                <div className="grid grid-cols-3 gap-2 md:gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
                   {[
                     { value: 'do1.6L', label: 'DO 1,6L' },
                     { value: 'nad1.6L', label: 'NAD 1,6L' },
-                    { value: 'zeny', label: 'ŽENY' }
+                    { value: 'zeny', label: 'ŽENY' },
+                    { value: 'hobby', label: 'HOBBY' }
                   ].map(cat => (
                     <div
                       key={cat.value}
                       onClick={() => setFormData(prev => ({ ...prev, category: cat.value }))}
-                      className={`border-2 py-2 px-1 md:p-4 cursor-pointer transition-all text-center font-bold text-[14px] md:text-base ${formData.category === cat.value
+                      className={`border-2 py-3 px-1 md:p-4 cursor-pointer transition-all text-center font-bold text-[13px] md:text-base ${formData.category === cat.value
                         ? 'border-[#F4CE14] bg-[#F4CE14]/10'
                         : 'border-gray-200 hover:border-[#F4CE14]/50'
                         }`}
@@ -2566,8 +2564,7 @@ const DriverInfoAndCTA = () => {
               <div className="relative z-10">
                 <h3 className="font-bebas text-4xl md:text-5xl text-white mb-6 leading-none uppercase tracking-tight">Máš na to <span className="text-[#F4CE14]">koule</span> závodit?</h3>
                 <p className="font-tech text-gray-300 text-sm md:text-base mb-8 leading-relaxed uppercase tracking-wider max-w-xl">
-                  PŘESTAŇ O TOM JEN SNÍT A UKAŽ CO JE V TOBĚ. 90 JEZDCŮ, JEDNA TRAŤ A ČISTÁ DESTRUKCE.
-                  ZAREGISTRUJ SE PRÁVĚ TEĎ A BUĎ SOUČÁSTÍ VRAKFESTU.
+                  PŘESTAŇ O TOM JEN SNÍT A UKAŽ VŠEM, CO SE V TOBĚ SKRÝVÁ. ZKROT NÁROČNOU TRAŤ, OVLÁDNI TOTÁLNÍ CHAOS A ROZDRŤ SOUPEŘE V NEKOMPROMISNÍCH SOUBOJÍCH NA KREV. TVŮJ VRAK, TVOJE ODVAHA A JEDINEČNÁ ŠANCE STÁT SE LEGENDOU DESTRUKCE, NA KTEROU SE BUDE DLOUHO VZPOMÍNAT. ZAREGISTRUJ SE PRÁVĚ TEĎ, VYBOJUJ SI SVÉ MÍSTO NA STARTOVNÍM ROŠTU A DOKAŽ VŠEM, ŽE NA TO OPRAVDU MÁŠ!
                 </p>
                 <Button className="w-fit px-8 py-3 text-lg h-auto">
                   <a href="#registrace">ZAREGISTROVAT SE</a>
@@ -2783,13 +2780,14 @@ const AccreditationAndPartners = () => {
 
 const LatestArticlesAndPress = () => {
   const articles = [
-    { title: "ZIMNÍ PŘIPRAVA VRCHOLÍ", text: "Týmy dokončují poslední úpravy na svých speciálech pro nadcházející sezónu." },
-    { title: "NOVÁ KATEGORIE PRO ŽENY", text: "Vyslyšeli jsme vaše přání a otevíráme zcela novou kategorii čistě pro závodnice." },
-    { title: "ZETOR CUP ZRUŠEN", text: "Z technických důvodů se letošní ročník Zetor Cupu neuskuteční." }
+    {
+      title: "VRAKFEST SE ŘÍTÍ DO OSTRAVY: VŘESÍNSKÁ STRŽ ZAŽIJE TOTÁLNÍ DESTRUKCI JIŽ 4. DUBNA!",
+      text: "Připravte se na největší motoristický masakr sezóny! Už 4. dubna se prach zvíří v legendárním areálu Vřesínské strže, kde se desítky odvážných jezdců postaví proti sobě v nelítostných soubojích plech na plech. Ostrava zažije den plný nekontrolované destrukce, ohlušujícího řevu motorů a nefalšovaného adrenalinu. Přijďte sledovat, jak se staré vraky mění v hromady šrotu v boji o vítězství a uznání fanoušků. Tohle nebude jen závod, tohle bude boj o přežití, kde přežijí jen ti nejtvrdší!"
+    }
   ];
 
   return (
-    <section className="py-24 bg-[#0a0a0a] relative border-t border-white/5">
+    <section id="posledniclanky" className="py-24 bg-[#0a0a0a] relative border-t border-white/5">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
           {/* Left: Articles */}
@@ -2805,7 +2803,7 @@ const LatestArticlesAndPress = () => {
                       <img
                         src="/articles/winter_prep.png"
                         alt="Zimní příprava"
-                        className="w-full h-48 object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
+                        className="w-full h-80 object-cover grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700"
                       />
                     </div>
                   )}
@@ -2813,12 +2811,11 @@ const LatestArticlesAndPress = () => {
                     <span className="w-2 h-2 bg-[#F4CE14] rounded-full"></span>
                     <span className="font-tech text-xs text-gray-500 uppercase tracking-widest">{new Date().getFullYear()}</span>
                   </div>
-                  <h4 className="font-bebas text-xl text-white group-hover:text-[#F4CE14] transition-colors mb-2 tracking-wide">{article.title}</h4>
-                  <p className="font-tech text-gray-400 text-sm leading-relaxed line-clamp-2">{article.text}</p>
+                  <h4 className="font-bebas text-2xl md:text-4xl text-white group-hover:text-[#F4CE14] transition-colors mb-4 tracking-wide leading-tight">{article.title}</h4>
+                  <p className="font-tech text-gray-400 text-base md:text-lg leading-relaxed">{article.text}</p>
                 </div>
               ))}
             </div>
-            <Button variant="outline" className="mt-8 w-full">VŠECHNY ČLÁNKY</Button>
           </div>
 
           {/* Right: Media Logos */}
@@ -2828,17 +2825,86 @@ const LatestArticlesAndPress = () => {
             </div>
             <p className="font-tech text-gray-400 mb-8 font-medium">Vrakfest se pravidelně objevuje v médiích.</p>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 mb-12">
               {['DENIK.CZ', 'VALAŠSKÝ DENÍK', 'PORTAL RIDIČE', 'POLAR TV', 'KURZY.CZ'].map((media, i) => (
                 <div key={i} className="h-24 bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-[#F4CE14]/30 transition-all cursor-default group">
                   <span className="font-bebas text-2xl text-gray-600 group-hover:text-white transition-colors">{media}</span>
                 </div>
               ))}
             </div>
+
+            {/* Sponsor Banner Slider */}
+            <div className="mt-8">
+              <SponsorBannerSlider />
+            </div>
           </div>
         </div>
       </div>
     </section>
+  );
+};
+
+const SponsorBannerSlider = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const banners = [
+    {
+      title: "VRAKOVIŠTĚ SILVIE OSTRAVA",
+      subtitle: "EKOLOGICKÁ LIKVIDACE AUTOVRAKŮ PŘÍMO NA ZÁVODECH. O VÁŠ VRAK SE PO BOJI PROFESIONÁLNĚ POSTARÁME.",
+      bgImage: "/media/DSC_0655.jpg",
+      tag: "PARTNER VRAKFESTU"
+    },
+    {
+      title: "YOMAX UNIKÁTNÍ POHÁRY",
+      subtitle: "RUČNĚ VYRÁBĚNÉ TROFEJE PRO VÍTĚZE VRAKFESTU. KAŽDÝ POHÁR JE SYMBOLEM ODVAHY A TVRDÉHO BOJE NA NAŠÍ TRATI.",
+      bgImage: "/media/VFzavodník-felicie.jpg",
+      tag: "PARTNER VRAKFESTU"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % banners.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative h-[400px] overflow-hidden border border-white/10 group cursor-pointer shadow-2xl">
+      {banners.map((banner, idx) => (
+        <div
+          key={idx}
+          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${currentSlide === idx ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-110 translate-x-full'
+            }`}
+        >
+          {/* Background Image - COLORIZED */}
+          <img src={banner.bgImage} className="absolute inset-0 w-full h-full object-cover brightness-[0.4]" alt={banner.title} />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
+
+          <div className="relative h-full flex flex-col justify-center p-12 z-10">
+            <div className="mb-6 flex">
+              <span className="font-tech bg-[#F4CE14] text-black text-[10px] md:text-xs tracking-[0.2em] font-black px-3 py-1 uppercase">{banner.tag}</span>
+            </div>
+            <h4 className="font-bebas text-4xl md:text-6xl text-white mb-4 tracking-wide leading-tight group-hover:text-[#F4CE14] transition-colors">{banner.title}</h4>
+            <p className="font-tech text-gray-200 text-sm md:text-lg tracking-wider max-w-md leading-relaxed">{banner.subtitle}</p>
+          </div>
+        </div>
+      ))}
+
+      {/* Progress Indicators */}
+      <div className="absolute bottom-4 left-8 flex gap-2 z-20">
+        {banners.map((_, idx) => (
+          <div
+            key={idx}
+            className={`h-1 transition-all duration-500 ${currentSlide === idx ? 'w-8 bg-[#F4CE14]' : 'w-4 bg-white/20'}`}
+          />
+        ))}
+      </div>
+
+      {/* Corner Brackets Style */}
+      <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="w-8 h-8 border-t-2 border-r-2 border-[#F4CE14]"></div>
+      </div>
+    </div>
   );
 };
 
@@ -3049,12 +3115,11 @@ export const Home = () => {
 
         if (statsData) setRegisteredCount(statsData.paid_count);
 
-        // Fetch paid drivers for roster (only necessary public fields)
+        // Fetch paid drivers from the new public drivers_stats table
         const { data: paidData } = await supabase
-          .from('profiles')
-          .select('first_name, last_name, nickname, profile_photo_url, city, car_model, start_number')
-          .eq('event_name', activeE.title)
-          .eq('payment_status', true);
+          .from('drivers_stats')
+          .select('*')
+          .eq('event_name', activeE.title);
 
         if (paidData) setPaidDrivers(paidData);
       }
@@ -3110,7 +3175,7 @@ export const Home = () => {
         <Program />
         <EventGrid liveEvents={liveEvents} />
         <DriverRoster registeredCount={registeredCount} paidDrivers={paidDrivers} liveStandings={liveStandings} />
-        <Standings liveStandings={liveStandings} />
+        <Standings liveStandings={liveStandings} paidDrivers={paidDrivers} />
         <RulesAndSpecs />
 
         {/* Caution Tape Separator */}

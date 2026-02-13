@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { Button } from './components/Button';
 import { N8N_RIDER_REGISTRATION_WEBHOOK_URL } from './constants';
+import { supabase } from './supabaseClient';
 
 export const RegistrationForm = () => {
     const [step, setStep] = useState(1);
@@ -52,26 +53,16 @@ export const RegistrationForm = () => {
         const submissionData = {
             ...formData,
             category: selectedCategory,
-            variableSymbol: '442026',
-            isPaid: false,
-            submittedAt: new Date().toISOString(),
-            formType: 'rider_registration_production'
+            variableSymbol: '442026'
         };
 
         try {
-            // Production n8n webhook URL
-            const N8N_WEBHOOK_URL = N8N_RIDER_REGISTRATION_WEBHOOK_URL;
-
-            console.log('Sending data to n8n:', submissionData);
-
-            // Real fetch to n8n
-            const response = await fetch(N8N_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(submissionData),
+            console.log('Sending data to Supabase Proxy...');
+            const { data, error } = await supabase.functions.invoke('process-registration', {
+                body: submissionData
             });
 
-            if (!response.ok) throw new Error('Network response was not ok');
+            if (error) throw error;
 
             alert('Registrace byla úspěšně odeslána ke zpracování!');
 
@@ -239,7 +230,8 @@ export const RegistrationForm = () => {
                                     {[
                                         { value: 'do1.6L', label: 'DO 1,6L' },
                                         { value: 'nad1.6L', label: 'NAD 1,6L' },
-                                        { value: 'zeny', label: 'ŽENY' }
+                                        { value: 'zeny', label: 'ŽENY' },
+                                        { value: 'hobby', label: 'HOBBY' }
                                     ].map(cat => (
                                         <div
                                             key={cat.value}

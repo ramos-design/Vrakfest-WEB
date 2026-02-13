@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from './Button';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, Facebook, Instagram, Youtube } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 export const TechNavBar = () => {
@@ -25,24 +25,22 @@ export const TechNavBar = () => {
         return () => { document.body.style.overflow = 'auto'; };
     }, [mobileMenuOpen]);
 
-    const navLinks = [
-        {
-            label: 'O VRAKFESTU',
-            href: isHome ? '#ovrakfestu' : '/#ovrakfestu',
-            subItems: [
-                { label: 'PARTNEŘI', href: '#partneri' },
-                { label: 'VSTUPNÉ', href: '#vstupne' }
-            ]
-        },
+    const desktopNavLinks = [
+        { label: 'O VRAKFESTU', href: isHome ? '#ovrakfestu' : '/#ovrakfestu' },
         { label: 'KALENDÁŘ', href: isHome ? '#kalendar' : '/#kalendar' },
-        {
-            label: 'JEZDCI',
-            href: isHome ? '#jezdci' : '/#jezdci',
-            subItems: [
-                { label: 'BODOVÉ POŘADÍ', href: '#poradi' }
-            ]
-        },
+        { label: 'JEZDCI', href: isHome ? '#jezdci' : '/#jezdci' },
         { label: 'PRAVIDLA', href: isHome ? '#pravidla' : '/#pravidla' },
+        { label: 'APLIKACE', href: isHome ? '#aplikace' : '/#aplikace' },
+    ];
+
+    const mobileNavLinks = [
+        { label: 'O VRAKFESTU', href: isHome ? '#ovrakfestu' : '/#ovrakfestu' },
+        { label: 'PROGRAM', href: isHome ? '#program' : '/#program' },
+        { label: 'KALENDÁŘ', href: isHome ? '#kalendar' : '/#kalendar' },
+        { label: 'JEZDCI', href: isHome ? '#jezdci' : '/#jezdci' },
+        { label: 'BODOVÉ POŘADÍ', href: isHome ? '#poradi' : '/#poradi' },
+        { label: 'PRAVIDLA', href: isHome ? '#pravidla' : '/#pravidla' },
+        { label: 'ČLÁNKY', href: isHome ? '#posledniclanky' : '/#posledniclanky' },
         { label: 'APLIKACE', href: isHome ? '#aplikace' : '/#aplikace' },
     ];
 
@@ -62,7 +60,7 @@ export const TechNavBar = () => {
                     {/* DESKTOP: Left Navigation */}
                     {/* DESKTOP: Left Navigation */}
                     <nav className="hidden lg:flex justify-self-start items-center gap-8 min-h-[3rem]">
-                        {navLinks.map(item => (
+                        {desktopNavLinks.map(item => (
                             <div key={item.label} className="relative group">
                                 <a
                                     href={item.href}
@@ -128,7 +126,7 @@ export const TechNavBar = () => {
 
                 {/* Mobile Menu Content */}
                 <nav className="flex-1 flex flex-col justify-start items-center gap-6 p-8 overflow-y-auto">
-                    {navLinks.map((item, i) => (
+                    {mobileNavLinks.map((item, i) => (
                         <a
                             key={item.label}
                             href={item.href}
@@ -147,11 +145,10 @@ export const TechNavBar = () => {
                         </a>
                     ))}
 
-                    {/* Divider Line */}
                     <div
                         className="w-24 h-1 bg-black/20 my-4"
                         style={{
-                            transitionDelay: `${mobileMenuOpen ? 200 + navLinks.length * 50 : 0}ms`,
+                            transitionDelay: `${mobileMenuOpen ? 200 + mobileNavLinks.length * 50 : 0}ms`,
                             opacity: mobileMenuOpen ? 1 : 0,
                             transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
                             transitionProperty: 'opacity, transform',
@@ -162,9 +159,9 @@ export const TechNavBar = () => {
 
                     {/* Expandable CTA */}
                     <div
-                        className="w-full max-w-xs space-y-4 pb-12"
+                        className="w-full max-w-xs flex flex-col gap-4 pb-12"
                         style={{
-                            transitionDelay: `${mobileMenuOpen ? 200 + (navLinks.length + 1) * 50 : 0}ms`,
+                            transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 1) * 50 : 0}ms`,
                             opacity: mobileMenuOpen ? 1 : 0,
                             transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
                             transitionProperty: 'opacity, transform',
@@ -180,21 +177,21 @@ export const TechNavBar = () => {
                             KOUPIT VSTUPENKU
                         </Button>
 
-                        <Button
-                            variant="outline"
-                            className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-lg py-4"
-                            onClick={() => setMobileMenuOpen(false)}
-                        >
-                            PŘIHLÁŠENÍ JEZDCE
-                        </Button>
+                        <a href="#registrace" className="w-full" onClick={() => setMobileMenuOpen(false)}>
+                            <Button
+                                variant="outline"
+                                className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-lg py-4"
+                            >
+                                REGISTRACE JEZDCE
+                            </Button>
+                        </a>
                     </div>
                 </nav>
 
-                {/* Footer Info */}
                 <div
-                    className="p-8 text-center font-tech text-xs text-black/60 uppercase tracking-widest pb-12"
+                    className="p-8 text-center pb-12"
                     style={{
-                        transitionDelay: `${mobileMenuOpen ? 200 + (navLinks.length + 2) * 50 : 0}ms`,
+                        transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 2) * 50 : 0}ms`,
                         opacity: mobileMenuOpen ? 1 : 0,
                         transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
                         transitionProperty: 'opacity, transform',
@@ -202,7 +199,19 @@ export const TechNavBar = () => {
                         transitionTimingFunction: 'ease-out'
                     }}
                 >
-                    <p>© 2026 VRAKFEST_SYSTEMS</p>
+                    <p className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold mb-4">SLEDUJTE NÁS NA SÍTÍCH</p>
+                    <div className="flex justify-center gap-6 mb-8">
+                        <a href="https://www.facebook.com/VRAKFEST" target="_blank" rel="noopener noreferrer" className="text-black hover:text-white transition-colors">
+                            <Facebook size={28} />
+                        </a>
+                        <a href="https://www.instagram.com/vrakfest.cz_official/" target="_blank" rel="noopener noreferrer" className="text-black hover:text-white transition-colors">
+                            <Instagram size={28} />
+                        </a>
+                        <a href="https://www.youtube.com/@vrakfesttv409" target="_blank" rel="noopener noreferrer" className="text-black hover:text-white transition-colors">
+                            <Youtube size={28} />
+                        </a>
+                    </div>
+                    <p className="font-tech text-xs text-black/60 uppercase tracking-widest leading-none">© 2026 VRAKFEST_SYSTEMS</p>
                 </div>
             </div>
         </>

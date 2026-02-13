@@ -42,5 +42,5 @@ export interface StandingsDriver {
   name: string;
   car: string;
   points: number;
-  category: 'do1.6L' | 'nad1.6L' | 'zeny';
+  category: 'do1.6L' | 'nad1.6L' | 'hobby' | 'zeny';
 }
