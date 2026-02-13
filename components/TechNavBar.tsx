@@ -122,16 +122,16 @@ export const TechNavBar = () => {
             </header>
 
             {/* FULL SCREEN MOBILE MENU OVERLAY - Slide from Top */}
-            <div className={`fixed inset-0 bg-[#F4CE14] z-[998] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-32 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`fixed inset-0 bg-[#F4CE14] z-[998] transition-transform duration-500 cubic-bezier(0.7, 0, 0.3, 1) flex flex-col pt-24 ${mobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
 
                 {/* Mobile Menu Content */}
-                <nav className="flex-1 flex flex-col justify-start items-center gap-6 p-8 overflow-y-auto">
+                <nav className="flex-1 flex flex-col justify-start items-center gap-4 p-8 overflow-y-auto">
                     {mobileNavLinks.map((item, i) => (
                         <a
                             key={item.label}
                             href={item.href}
                             onClick={() => setMobileMenuOpen(false)}
-                            className="font-bebas text-5xl text-black hover:text-white uppercase tracking-tight font-black transition-colors duration-75"
+                            className="font-bebas text-2xl text-black hover:text-white uppercase tracking-tight font-black transition-colors duration-75"
                             style={{
                                 transitionDelay: `${mobileMenuOpen ? 200 + i * 50 : 0}ms`,
                                 opacity: mobileMenuOpen ? 1 : 0,
@@ -145,21 +145,9 @@ export const TechNavBar = () => {
                         </a>
                     ))}
 
-                    <div
-                        className="w-24 h-1 bg-black/20 my-4"
-                        style={{
-                            transitionDelay: `${mobileMenuOpen ? 200 + mobileNavLinks.length * 50 : 0}ms`,
-                            opacity: mobileMenuOpen ? 1 : 0,
-                            transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(20px)',
-                            transitionProperty: 'opacity, transform',
-                            transitionDuration: '0.5s',
-                            transitionTimingFunction: 'ease-out'
-                        }}
-                    ></div>
-
                     {/* Expandable CTA */}
                     <div
-                        className="w-full max-w-xs flex flex-col gap-4 pb-12"
+                        className="w-full max-w-[240px] flex flex-col gap-4 mt-8 pb-2"
                         style={{
                             transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 1) * 50 : 0}ms`,
                             opacity: mobileMenuOpen ? 1 : 0,
@@ -171,7 +159,7 @@ export const TechNavBar = () => {
                     >
                         <Button
                             variant="primary"
-                            className="w-full bg-black text-white hover:bg-white hover:text-black border-none text-lg py-4 shadow-2xl"
+                            className="w-full bg-black text-white hover:bg-white hover:text-black border-none text-[13px] py-3.5 shadow-2xl uppercase tracking-widest"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             KOUPIT VSTUPENKU
@@ -180,7 +168,7 @@ export const TechNavBar = () => {
                         <a href="#registrace" className="w-full" onClick={() => setMobileMenuOpen(false)}>
                             <Button
                                 variant="outline"
-                                className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-lg py-4"
+                                className="w-full border-black text-black hover:bg-black hover:text-[#F4CE14] text-[13px] py-3.5 uppercase tracking-widest"
                             >
                                 REGISTRACE JEZDCE
                             </Button>
@@ -189,7 +177,7 @@ export const TechNavBar = () => {
                 </nav>
 
                 <div
-                    className="p-8 text-center pb-12"
+                    className="p-8 text-center pb-4"
                     style={{
                         transitionDelay: `${mobileMenuOpen ? 200 + (mobileNavLinks.length + 2) * 50 : 0}ms`,
                         opacity: mobileMenuOpen ? 1 : 0,
@@ -200,7 +188,7 @@ export const TechNavBar = () => {
                     }}
                 >
                     <p className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold mb-4">SLEDUJTE NÁS NA SÍTÍCH</p>
-                    <div className="flex justify-center gap-6 mb-8">
+                    <div className="flex justify-center gap-6 mb-2">
                         <a href="https://www.facebook.com/VRAKFEST" target="_blank" rel="noopener noreferrer" className="text-black hover:text-white transition-colors">
                             <Facebook size={28} />
                         </a>
@@ -211,7 +199,7 @@ export const TechNavBar = () => {
                             <Youtube size={28} />
                         </a>
                     </div>
-                    <p className="font-tech text-xs text-black/60 uppercase tracking-widest leading-none">© 2026 VRAKFEST_SYSTEMS</p>
+
                 </div>
             </div>
         </>

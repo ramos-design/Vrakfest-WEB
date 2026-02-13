@@ -94,60 +94,60 @@ const Hero = ({ activeEvent, registeredCount, ctaIndex }: { activeEvent: any, re
 
             {/* Stat Card 1 - Upcoming Event */}
             {/* Mobile borders: Right + Bottom */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-b border-[#F4CE14]/50 md:border-0">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-3 md:px-8 py-3 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-b border-[#F4CE14]/50 md:border-0">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-1.5 md:mb-4 text-[8.5px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 NADCHÁZEJÍCÍ UDÁLOST
               </p>
 
-              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 text-center whitespace-nowrap">
+              <p className="font-bebas text-3xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-1.5 text-center whitespace-nowrap">
                 {displayEvent.title}
               </p>
-              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
+              <p className="font-tech text-[8.5px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 {displayEvent.location}
               </p>
             </div>
 
             {/* Stat Card 2 - Date */}
             {/* Mobile borders: Bottom only */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-b border-[#F4CE14]/50 md:border-0">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-3 md:px-8 py-3 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-b border-[#F4CE14]/50 md:border-0">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-1.5 md:mb-4 text-[8.5px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 KDY TO BUDE?
               </p>
 
-              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+              <p className="font-bebas text-3xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-1.5 whitespace-nowrap">
                 {formatEventDate(displayEvent.date)}
               </p>
-              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
+              <p className="font-tech text-[8.5px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 ULOŽ SI TO
               </p>
             </div>
 
             {/* Stat Card 3 - Days to Start */}
             {/* Mobile borders: Right only */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-[#F4CE14]/50 md:border-0">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-3 md:px-8 py-3 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300 border-r border-[#F4CE14]/50 md:border-0">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-1.5 md:mb-4 text-[8.5px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 POČET DNÍ
               </p>
 
-              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
+              <p className="font-bebas text-3xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-1.5 whitespace-nowrap">
                 {Math.max(0, daysToStart)}
               </p>
-              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
+              <p className="font-tech text-[8.5px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 DO STARTU
               </p>
             </div>
 
             {/* Stat Card 4 - Registered Racers */}
             {/* Mobile borders: None */}
-            <div className="flex-auto px-4 md:px-8 py-4 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
-              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-2 md:mb-4 text-[10px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
+            <div className="flex-auto px-3 md:px-8 py-3 md:py-6 flex flex-col items-center group relative hover:bg-white/5 transition-colors duration-300">
+              <p className="font-tech text-gray-500 uppercase tracking-widest font-bold mb-1.5 md:mb-4 text-[8.5px] md:text-xs group-hover:text-[#F4CE14] transition-colors whitespace-nowrap">
                 PŘIHLÁŠENÝCH
               </p>
 
-              <p className="font-bebas text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-2 whitespace-nowrap">
-                {registeredCount}<span className="text-white/30 text-3xl md:text-4xl ml-2 align-top">/90</span>
+              <p className="font-bebas text-3xl md:text-5xl lg:text-6xl text-white group-hover:text-[#F4CE14] transition-colors font-semibold tracking-wider leading-none mb-1.5 whitespace-nowrap">
+                {registeredCount}<span className="text-white/30 text-2xl md:text-4xl ml-2 align-top">/90</span>
               </p>
-              <p className="font-tech text-[10px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
+              <p className="font-tech text-[8.5px] text-gray-500 tracking-[0.2em] uppercase font-bold group-hover:text-white transition-colors text-center whitespace-nowrap">
                 JEZDCŮ
               </p>
             </div>
