@@ -2491,24 +2491,44 @@ const RegistrationForm = () => {
                   <p>
                     Tvoje registrace byla přijata a právě se zpracovává. Na tvůj e-mail <span className="text-black font-bold">{formData.email}</span> jsme zaslali potvrzení s instrukcemi i k platbě v případě že jsi ještě nezaplatil. Jakmile tvoje platba bude schválená, zařadíme tě mezi jezdce do následujícího závodu.
                   </p>
+                  <div className="mt-8 p-6 bg-gray-50 border-l-4 border-gray-200">
+                    <p className="font-tech text-gray-600 leading-relaxed" style={{ fontSize: '18px' }}>
+                      Pokud ti nedorazil e-mail, zkontroluj prosím složky <strong>hromadné</strong> nebo <strong>spam</strong>. V případě, že e-mail nedorazil vůbec, napiš nám na <a href="mailto:info@vrakfest.cz" className="text-black font-bold hover:underline">info@vrakfest.cz</a>.
+                    </p>
+                  </div>
                 </div>
 
-                <div className="bg-[#F4CE14] p-8 md:p-10 space-y-8 relative overflow-hidden">
-                  <div className="space-y-4">
-                    <p className="font-bebas text-2xl md:text-3xl text-black leading-[0.9] uppercase tracking-normal">
-                      <AlertTriangle className="inline-block w-6 h-6 md:w-8 md:h-8 mr-2 -mt-1 text-black" />
-                      Startovné lze zaplatit pouze předem.
-                    </p>
+                <div className="bg-[#F4CE14] p-6 md:p-8 space-y-6 relative overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] self-start">
+                  {/* Industrial Hazard Header Decoration */}
+                  <div
+                    className="absolute top-0 left-0 w-full h-3 border-b border-black/10"
+                    style={{
+                      backgroundImage: 'repeating-linear-gradient(45deg, #000, #000 10px, transparent 10px, transparent 20px)',
+                      opacity: 0.1
+                    }}
+                  ></div>
 
-                    <p className="font-tech font-bold text-black leading-relaxed uppercase tracking-wider text-sm">
+                  <div className="space-y-6 relative z-10">
+                    <h4 className="font-bebas text-3xl md:text-4xl text-black leading-tight uppercase tracking-tight">
+                      Startovné lze zaplatit<br />pouze předem.
+                    </h4>
+
+                    <div className="w-16 h-1.5 bg-black/10"></div>
+
+                    <p className="font-tech font-bold text-black/80 leading-relaxed" style={{ fontSize: '18px' }}>
                       Počet startujících závodníků je omezený – platbou předem rezervuješ své místo v závodě.
                     </p>
                   </div>
 
-                  <div className="bg-red-600 p-4 md:p-5 shadow-sm">
-                    <p className="font-tech text-[10px] md:text-xs font-black text-white uppercase tracking-[0.2em] leading-tight text-center">
-                      Platba startovného hotově na místě nebude možná!
-                    </p>
+                  <div className="relative">
+                    {/* Skewed Red Stamp for emphasis */}
+                    <div className="bg-black p-[2px] transform -rotate-2 shadow-xl">
+                      <div className="bg-red-600 p-4 md:p-6 border border-white/20">
+                        <p className="font-tech font-black text-white leading-tight text-center uppercase tracking-widest" style={{ fontSize: '16px' }}>
+                          Platba hotově na místě nebude možná!
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2563,8 +2583,8 @@ const DriverInfoAndCTA = () => {
 
               <div className="relative z-10">
                 <h3 className="font-bebas text-4xl md:text-5xl text-white mb-6 leading-none uppercase tracking-tight">Máš na to <span className="text-[#F4CE14]">koule</span> závodit?</h3>
-                <p className="font-tech text-gray-300 text-sm md:text-base mb-8 leading-relaxed uppercase tracking-wider max-w-xl">
-                  PŘESTAŇ O TOM JEN SNÍT A UKAŽ VŠEM, CO SE V TOBĚ SKRÝVÁ. ZKROT NÁROČNOU TRAŤ, OVLÁDNI TOTÁLNÍ CHAOS A ROZDRŤ SOUPEŘE V NEKOMPROMISNÍCH SOUBOJÍCH NA KREV. TVŮJ VRAK, TVOJE ODVAHA A JEDINEČNÁ ŠANCE STÁT SE LEGENDOU DESTRUKCE, NA KTEROU SE BUDE DLOUHO VZPOMÍNAT. ZAREGISTRUJ SE PRÁVĚ TEĎ, VYBOJUJ SI SVÉ MÍSTO NA STARTOVNÍM ROŠTU A DOKAŽ VŠEM, ŽE NA TO OPRAVDU MÁŠ!
+                <p className="font-tech text-gray-300 mb-8 leading-relaxed max-w-xl" style={{ fontSize: '18px' }}>
+                  Přestaň o tom jen snít a ukaž všem, co se v tobě skrývá. Zkroť náročnou trať, ovládni totální chaos a rozdrť soupeře v nekompromisních soubojích na krev. Tvůj vrak, tvoje odvaha a jedinečná šance stát se legendou destrukce, na kterou se bude dlouho vzpomínat. Zaregistruj se právě teď, vybojuj si své místo na startovním roštu a dokaž všem, že na to opravdu máš!
                 </p>
                 <Button className="w-fit px-8 py-3 text-lg h-auto">
                   <a href="#registrace">ZAREGISTROVAT SE</a>
@@ -2669,39 +2689,13 @@ const AccreditationAndPartners = () => {
                 Chcete spojit svou značku s nejbláznivější motoristickou akcí? Ozvěte se nám a domluvíme spolupráci.
               </p>
 
-              <form className="space-y-4 relative z-10 w-full">
-                <div className="grid gap-4 w-full">
-                  <div className="space-y-2">
-                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Název Firmy</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="VAŠE FIRMA S.R.O." />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Kontaktní Jméno a Příjmení</label>
-                    <input type="text" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="JAN NOVÁK" />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Email</label>
-                      <input type="email" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="@" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Telefon</label>
-                      <input type="tel" className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold" placeholder="+420" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="font-tech text-xs text-gray-500 uppercase tracking-widest font-bold ml-1">Zpráva / Představa spolupráce</label>
-                    <textarea className="w-full bg-white/5 border border-white/10 text-white px-4 py-3 font-tech focus:border-[#F4CE14] focus:outline-none hover:bg-white/10 transition-colors placeholder:text-white/20 font-bold min-h-[120px]" placeholder="MÁME ZÁJEM O..."></textarea>
-                  </div>
+              <div className="py-12 flex flex-col items-center justify-center text-center space-y-4 border-2 border-dashed border-white/10 bg-white/5 relative z-10">
+                <div className="w-16 h-16 bg-[#F4CE14]/10 rounded-full flex items-center justify-center text-[#F4CE14] mb-2">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
                 </div>
-
-                <Button className="w-full">
-                  ODESLAT DOTAZ
-                </Button>
-              </form>
+                <h4 className="font-bebas text-2xl text-white tracking-widest uppercase">SPOLUPRÁCE 2026 JIŽ BRZY</h4>
+                <p className="font-tech text-gray-500 text-sm max-w-[200px]">Připravujeme pro vás nové možnosti partnerství. Sledujte nás, brzy odstartujeme!</p>
+              </div>
             </div>
           </div>
 
@@ -2714,63 +2708,13 @@ const AccreditationAndPartners = () => {
               Jste fotograf, kameraman nebo novinář? Získejte oficiální akreditaci na Vrakfest a přístup do media zóny.
             </p>
 
-            <form className="space-y-4 relative z-10">
-              <div className="grid gap-4">
-                <div className="space-y-2">
-                  <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Vyberte Závod</label>
-                  <div className="relative">
-                    <select className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none appearance-none cursor-pointer hover:bg-black/10 transition-colors font-bold">
-                      <option>OSTRAVA - 4.4.</option>
-                      <option>HRACHOVEC - 23.5.</option>
-                      <option>NOVÉ MÍSTO - 22.8.</option>
-                      <option>OSTRAVA - 24.10.</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black/60">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Pozice</label>
-                  <div className="relative">
-                    <select className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none appearance-none cursor-pointer hover:bg-black/10 transition-colors font-bold">
-                      <option>Fotograf</option>
-                      <option>Kameraman</option>
-                      <option>Dronař</option>
-                      <option>Bloger / Influencer</option>
-                      <option>Novinář</option>
-                      <option>Televize</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black/60">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Jméno a Příjmení</label>
-                  <input type="text" className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none hover:bg-black/10 transition-colors placeholder:text-black/40 font-bold" placeholder="JAN NOVÁK" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Email</label>
-                    <input type="email" className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none hover:bg-black/10 transition-colors placeholder:text-black/40 font-bold" placeholder="@" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="font-tech text-xs text-black/60 uppercase tracking-widest font-bold ml-1">Telefon</label>
-                    <input type="tel" className="w-full bg-black/5 border border-black/10 text-black px-4 py-3 font-tech focus:border-black focus:outline-none hover:bg-black/10 transition-colors placeholder:text-black/40 font-bold" placeholder="+420" />
-                  </div>
-                </div>
+            <div className="py-12 flex flex-col items-center justify-center text-center space-y-4 border-2 border-dashed border-black/10 bg-black/5 relative z-10">
+              <div className="w-16 h-16 bg-black/10 rounded-full flex items-center justify-center text-black mb-2">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
               </div>
-
-              <div className="h-4"></div>
-
-              <Button className="w-full bg-black text-white hover:bg-white hover:text-black border-transparent shadow-xl">
-                ODESLAT ŽÁDOST
-              </Button>
-            </form>
+              <h4 className="font-bebas text-2xl text-black tracking-widest uppercase">AKREDITACE SE CHYSTAJÍ</h4>
+              <p className="font-tech text-black/60 text-sm max-w-[200px]">Brzy otevřeme brány pro všechny fotografy a tvůrce. Máte se na co těšit!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -2912,6 +2856,50 @@ const MobileApp = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [waitingListEmail, setWaitingListEmail] = useState('');
+  const [waitingListCompany, setWaitingListCompany] = useState(''); // Honeypot
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const handleWaitingListSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!waitingListEmail) return;
+
+    // Check honeypot
+    if (waitingListCompany) {
+      console.log('Bot detected');
+      setSubmitStatus('success'); // Silent fail
+      return;
+    }
+
+    setSubmitLoading(true);
+    setSubmitStatus('idle');
+
+    try {
+      const response = await fetch('https://n8n.srv1004354.hstgr.cloud/webhook/06abc1de-afb4-434a-9071-295b7067f0f1', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + btoa('artmovski:SG6z3NqH')
+        },
+        body: JSON.stringify({
+          email: waitingListEmail,
+          company: waitingListCompany // Honeypot
+        })
+      });
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setWaitingListEmail('');
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (err) {
+      setSubmitStatus('error');
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
@@ -3014,18 +3002,48 @@ const MobileApp = () => {
 
             <div className="max-w-3xl">
               <p className="font-tech text-[#F4CE14] text-sm uppercase tracking-[0.2em] font-bold mb-4">BUĎ U TOHO JAKO PRVNÍ A PŘIDEJ SE NA WAITING LIST</p>
-              <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch pt-2">
+              <form onSubmit={handleWaitingListSubmit} className="flex flex-col md:flex-row gap-4 md:gap-6 items-stretch pt-2">
+                {/* Honeypot */}
+                <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', opacity: 0 }}>
+                  <input
+                    type="text"
+                    name="company"
+                    value={waitingListCompany}
+                    onChange={(e) => setWaitingListCompany(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 <div className="flex-[2] min-w-0 relative transform -skew-x-[15deg] bg-black border border-white/20 focus-within:border-[#F4CE14] transition-all duration-300">
                   <input
                     type="email"
+                    required
                     placeholder="TVŮJ E-MAIL"
+                    value={waitingListEmail}
+                    onChange={(e) => setWaitingListEmail(e.target.value)}
                     className="w-full bg-transparent px-6 py-4 text-white font-tech focus:outline-none transform skew-x-[15deg] placeholder:text-white/20"
                   />
                 </div>
-                <Button className="flex-1 whitespace-nowrap !px-8">
-                  PŘIDAT SE NA WAITING LIST
+                <Button
+                  type="submit"
+                  disabled={submitLoading}
+                  className="flex-1 whitespace-nowrap !px-8"
+                >
+                  {submitLoading ? 'ODESÍLÁM...' : 'PŘIDAT SE NA WAITING LIST'}
                 </Button>
-              </div>
+              </form>
+
+              {submitStatus === 'success' && (
+                <p className="mt-4 font-tech text-green-500 text-sm font-bold animate-pulse">
+                  SKVĚLÉ! BYL JSI ÚSPĚŠNĚ PŘIDÁN NA WAITING LIST.
+                </p>
+              )}
+              {submitStatus === 'error' && (
+                <p className="mt-4 font-tech text-red-500 text-sm font-bold">
+                  CHYBA: NĚCO SE NEPODEBLO. ZKUS TO PROSÍM ZNOVU.
+                </p>
+              )}
             </div>
           </div>
         </div>
