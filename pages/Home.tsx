@@ -867,7 +867,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">RODINA 2+1</span>
                       </div>
-                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.family21} KČ</span>
+                      <span className="font-bebas text-[40px] md:text-6xl text-black tracking-tighter">{feeCounts.family21} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+2 */}
@@ -876,7 +876,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-4xl md:text-5xl uppercase tracking-tight leading-none">RODINA 2+2</span>
                       </div>
-                      <span className="font-bebas text-6xl text-black tracking-tighter">{feeCounts.family22} KČ</span>
+                      <span className="font-bebas text-[40px] md:text-6xl text-black tracking-tighter">{feeCounts.family22} KČ</span>
                     </div>
                   </div>
                 </div>
@@ -887,7 +887,7 @@ const Program = () => {
                     <span className="font-tech text-gray-500 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                     <span className="font-bebas text-white text-4xl md:text-5xl uppercase tracking-tight leading-none">DĚTI DO 6 LET</span>
                   </div>
-                  <span className="font-bebas text-6xl text-[#F4CE14] tracking-tighter z-10">ZDARMA</span>
+                  <span className="font-bebas text-[40px] md:text-6xl text-[#F4CE14] tracking-tighter z-10">ZDARMA</span>
                 </div>
               </div>
             </div>
@@ -901,7 +901,7 @@ const Program = () => {
               <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
                 <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-6xl text-[#F4CE14] tracking-tighter">{feeCounts.registration} <span className="text-3xl">KČ</span></span>
+                  <span className="font-bebas text-[40px] md:text-6xl text-[#F4CE14] tracking-tighter">{feeCounts.registration} <span className="text-2xl md:text-3xl">KČ</span></span>
                   <span className="font-tech text-white text-xl uppercase font-bold ml-2">ZA ZÁVODNÍKA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm italic border-t border-white/10 pt-4">
@@ -920,7 +920,7 @@ const Program = () => {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
                 <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
                 <div className="flex items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-6xl text-white tracking-tighter">10 000 <span className="text-3xl font-tech">KČ</span></span>
+                  <span className="font-bebas text-[40px] md:text-6xl text-white tracking-tighter">10 000 <span className="text-2xl md:text-3xl font-tech">KČ</span></span>
                   <span className="font-tech text-[#F4CE14] text-xl uppercase font-bold ml-2">VÝHRA</span>
                 </div>
                 <p className="font-tech text-gray-400 text-sm border-t border-white/10 pt-4">
@@ -2737,7 +2737,7 @@ const LatestArticlesAndPress = () => {
           {/* Left: Articles */}
           <div className="bg-white/5 border border-white/10 p-8 shadow-2xl relative overflow-hidden">
             <div className="flex items-center gap-4 mb-8">
-              <h3 className="font-bebas text-3xl text-white uppercase tracking-tight font-bold leading-none">POSLEDNÍ ČLÁNKY</h3>
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-white uppercase tracking-tight font-bold leading-none">POSLEDNÍ ČLÁNKY</h3>
             </div>
             <div className="space-y-6">
               {articles.map((article, i) => (
@@ -2765,7 +2765,7 @@ const LatestArticlesAndPress = () => {
           {/* Right: Media Logos */}
           <div>
             <div className="flex items-center gap-4 mb-8">
-              <h3 className="font-bebas text-3xl text-[#F4CE14] uppercase tracking-tight font-bold leading-none">NAPSALI O NÁS</h3>
+              <h3 style={{ fontSize: 'var(--fs-h3)' }} className="font-bebas text-[#F4CE14] uppercase tracking-tight font-bold leading-none">NAPSALI O NÁS</h3>
             </div>
             <p className="font-tech text-gray-400 mb-8 font-medium">Vrakfest se pravidelně objevuje v médiích.</p>
 
