@@ -51,15 +51,15 @@ h6 {
 
 /* Dynamic Font Sizes controlled by ThemeController/DesignSystem */
 h1 {
-    font-size: var(--fs-h1, 6rem) !important;
+    font-size: var(--fs-h1, 6rem);
 }
 
 h2 {
-    font-size: var(--fs-h2, 4.5rem) !important;
+    font-size: var(--fs-h2, 4.5rem);
 }
 
 h3 {
-    font-size: var(--fs-h3, 3rem) !important;
+    font-size: var(--fs-h3, 3rem);
 }
 
 /* Paragraphs and small text generally follow utility classes, 
@@ -801,8 +801,15 @@ ul {
 
 /* ANIMATIONS */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-fadeIn {
@@ -810,9 +817,19 @@ ul {
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 .animate-shake {
