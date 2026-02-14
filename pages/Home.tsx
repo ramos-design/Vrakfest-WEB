@@ -2735,27 +2735,16 @@ const SponsorBannerSlider = () => {
     {
       title: "VRAKOVIŠTĚ SILVIE OSTRAVA",
       subtitle: "EKOLOGICKÁ LIKVIDACE AUTOVRAKŮ PŘÍMO NA ZÁVODECH. O VÁŠ VRAK SE PO BOJI PROFESIONÁLNĚ POSTARÁME.",
-<<<<<<< HEAD
-      bgImage: "/media/DSC_0655.jpg",
+      bgImage: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0655.jpg",
       tag: "PARTNER VRAKFESTU",
       titleColor: "#FF69B4"
     },
     {
       title: "YOMAX",
       subtitle: "PROFESIONÁLNÍ ZPRACOVÁNÍ PLECHU A KOMAXIT. PRO VRAKFEST NAVRHUJEME A VYRÁBÍME ORIGINÁLNÍ POHÁRY, KTERÉ JSOU SYMBOLEM TVRDĚ VYBOJOVANÉHO VÍTĚZSTVÍ.",
-      bgImage: "/media/VFzavodník-felicie.jpg",
+      bgImage: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VFzavodník-felicie.jpg",
       tag: "PARTNER VRAKFESTU",
       titleColor: "#F4CE14"
-=======
-      bgImage: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/DSC_0655.jpg",
-      tag: "PARTNER VRAKFESTU"
-    },
-    {
-      title: "YOMAX UNIKÁTNÍ POHÁRY",
-      subtitle: "RUČNĚ VYRÁBĚNÉ TROFEJE PRO VÍTĚZE VRAKFESTU. KAŽDÝ POHÁR JE SYMBOLEM ODVAHY A TVRDÉHO BOJE NA NAŠÍ TRATI.",
-      bgImage: "https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VFzavodník-felicie.jpg",
-      tag: "PARTNER VRAKFESTU"
->>>>>>> second/main
     }
   ];
 
