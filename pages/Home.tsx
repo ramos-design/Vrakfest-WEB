@@ -544,11 +544,8 @@ const SponsorsTicker = () => {
           PARTNEŘI AKCE
         </h2>
         <p className="font-tech text-gray-400 tracking-widest uppercase text-sm md:text-base">
-          CHCEŠ SE STÁT TAKY PARTNEREM? <a href="#registrace-partnera" className="block md:inline-block text-[#F4CE14] hover:text-white transition-colors underline decoration-2 underline-offset-4 mt-2 md:mt-0">TAK KLIKNI ZDE</a>
+          CHCEŠ SE STÁT TAKY PARTNEREM? <a href="#registrace-partnera" className="block md:inline-block text-[#F4CE14] hover:text-white transition-colors mt-2 md:mt-0">TAK KLIKNI ZDE</a>
         </p>
-        <div className="w-24 h-1 bg-[#F4CE14] mx-auto mt-4 relative">
-          <div className="absolute top-0 right-0 w-4 h-full bg-white animate-pulse"></div>
-        </div>
       </div>
 
       <div className="bg-[#F4CE14] py-8 overflow-hidden whitespace-nowrap shadow-[0_0_60px_rgba(244,206,20,0.3)] z-20 relative transform -skew-y-2 mb-8 group">
@@ -793,7 +790,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">DOSPĚLÉ</span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.adult} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter whitespace-nowrap">{feeCounts.adult} KČ</span>
                     </div>
 
                     {/* Child Ticket */}
@@ -802,7 +799,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">DĚTI <span className="text-sm md:text-lg opacity-60 align-top ml-1 font-tech tracking-normal">(6-15 LET)</span></span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.child} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter whitespace-nowrap">{feeCounts.child} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+1 */}
@@ -811,7 +808,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">RODINA 2+1</span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.family21} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter whitespace-nowrap">{feeCounts.family21} KČ</span>
                     </div>
 
                     {/* Family Ticket 2+2 */}
@@ -820,7 +817,7 @@ const Program = () => {
                         <span className="font-tech text-black/60 text-sm uppercase tracking-[0.2em] font-bold mb-1">ZVÝHODNĚNÉ</span>
                         <span className="font-bebas text-black text-[28px] md:text-5xl uppercase tracking-tight leading-none">RODINA 2+2</span>
                       </div>
-                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter font-bold whitespace-nowrap">{feeCounts.family22} KČ</span>
+                      <span className="font-bebas text-[36px] md:text-6xl text-black tracking-tighter whitespace-nowrap">{feeCounts.family22} KČ</span>
                     </div>
                   </div>
                 </div>
@@ -831,7 +828,7 @@ const Program = () => {
                     <span className="font-tech text-white/40 text-sm uppercase tracking-[0.2em] font-bold mb-1">VSTUP PRO</span>
                     <span className="font-bebas text-white text-[28px] md:text-5xl uppercase tracking-tight leading-none whitespace-nowrap">DĚTI DO 6 LET</span>
                   </div>
-                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 font-bold whitespace-nowrap">ZDARMA</span>
+                  <span className="font-bebas text-[32px] md:text-6xl text-[#F4CE14] tracking-tighter z-10 whitespace-nowrap">ZDARMA</span>
                 </div>
               </div>
             </div>
@@ -845,7 +842,7 @@ const Program = () => {
               <div className="bg-white/5 border border-white/10 p-8 hover:border-[#F4CE14]/30 transition-colors shadow-2xl">
                 <span className="block font-tech text-gray-400 text-sm uppercase tracking-widest mb-1 font-bold">REGISTRAČNÍ POPLATEK</span>
                 <div className="flex flex-row items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[36px] md:text-6xl text-[#F4CE14] tracking-tighter font-bold whitespace-nowrap">
+                  <span className="font-bebas text-[36px] md:text-6xl text-[#F4CE14] tracking-tighter whitespace-nowrap">
                     {feeCounts.registration} <span className="text-xl md:text-3xl">KČ</span>
                   </span>
                   <span className="font-tech text-white text-[12px] md:text-xl uppercase font-bold ml-2 opacity-80">ZA ZÁVODNÍKA</span>
@@ -866,7 +863,7 @@ const Program = () => {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#F4CE14]/10 blur-[50px] rounded-full -translate-y-1/2 translate-x-1/2 group-hover:bg-[#F4CE14]/20 transition-colors"></div>
                 <span className="block font-tech text-[#F4CE14] text-sm uppercase tracking-widest mb-1 font-bold">POSLEDNÍ POJÍZDNÝ VRAK</span>
                 <div className="flex flex-row items-baseline gap-2 mb-4">
-                  <span className="font-bebas text-[36px] md:text-6xl text-white tracking-tighter font-bold whitespace-nowrap">
+                  <span className="font-bebas text-[36px] md:text-6xl text-white tracking-tighter whitespace-nowrap">
                     10 000 <span className="text-xl md:text-3xl font-tech">KČ</span>
                   </span>
                   <span className="font-tech text-[#F4CE14] text-[12px] md:text-xl uppercase font-bold ml-2">VÝHRA</span>
@@ -2531,8 +2528,8 @@ const DriverInfoAndCTA = () => {
 
               <div className="relative z-10">
                 <h3 className="font-bebas text-4xl md:text-5xl text-white mb-6 leading-none uppercase tracking-tight">Máš na to <span className="text-[#F4CE14]">koule</span> závodit?</h3>
-                <p className="font-tech text-gray-300 mb-8 leading-relaxed max-w-xl" style={{ fontSize: '18px' }}>
-                  Přestaň o tom jen snít a ukaž všem, co se v tobě skrývá. Zkroť náročnou trať, ovládni totální chaos a rozdrť soupeře v nekompromisních soubojích na krev. Tvůj vrak, tvoje odvaha a jedinečná šance stát se legendou destrukce, na kterou se bude dlouho vzpomínat. Zaregistruj se právě teď, vybojuj si své místo na startovním roštu a dokaž všem, že na to opravdu máš!
+                <p className="font-tech text-gray-300 text-lg mb-8 leading-relaxed tracking-wider max-w-xl">
+                  Přestaň jen snít a ukaž, co je v tobě. Zkrot trať, ovládni totální chaos a rozdrť soupeře v nekompromisních soubojích. Tvůj vrak, tvoje odvaha – tvá šance stát se legendou Vrakfestu. Registruj se právě teď a vybojuj si své místo na startu!
                 </p>
                 <Button className="w-fit px-8 py-3 text-lg h-auto">
                   <a href="#registrace">ZAREGISTROVAT SE</a>
@@ -2586,7 +2583,7 @@ const DriverInfoAndCTA = () => {
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 };
 
@@ -2743,13 +2740,15 @@ const SponsorBannerSlider = () => {
       title: "VRAKOVIŠTĚ SILVIE OSTRAVA",
       subtitle: "EKOLOGICKÁ LIKVIDACE AUTOVRAKŮ PŘÍMO NA ZÁVODECH. O VÁŠ VRAK SE PO BOJI PROFESIONÁLNĚ POSTARÁME.",
       bgImage: "/media/DSC_0655.jpg",
-      tag: "PARTNER VRAKFESTU"
+      tag: "PARTNER VRAKFESTU",
+      titleColor: "#FF69B4"
     },
     {
-      title: "YOMAX UNIKÁTNÍ POHÁRY",
-      subtitle: "RUČNĚ VYRÁBĚNÉ TROFEJE PRO VÍTĚZE VRAKFESTU. KAŽDÝ POHÁR JE SYMBOLEM ODVAHY A TVRDÉHO BOJE NA NAŠÍ TRATI.",
+      title: "YOMAX",
+      subtitle: "PROFESIONÁLNÍ ZPRACOVÁNÍ PLECHU A KOMAXIT. PRO VRAKFEST NAVRHUJEME A VYRÁBÍME ORIGINÁLNÍ POHÁRY, KTERÉ JSOU SYMBOLEM TVRDĚ VYBOJOVANÉHO VÍTĚZSTVÍ.",
       bgImage: "/media/VFzavodník-felicie.jpg",
-      tag: "PARTNER VRAKFESTU"
+      tag: "PARTNER VRAKFESTU",
+      titleColor: "#F4CE14"
     }
   ];
 
@@ -2758,7 +2757,7 @@ const SponsorBannerSlider = () => {
       setCurrentSlide((prev) => (prev + 1) % banners.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [banners.length]);
 
   return (
     <div className="relative h-[400px] overflow-hidden border border-white/10 group cursor-pointer shadow-2xl">
@@ -2776,7 +2775,12 @@ const SponsorBannerSlider = () => {
             <div className="mb-6 flex">
               <span className="font-tech bg-[#F4CE14] text-black text-[10px] md:text-xs tracking-[0.2em] font-black px-3 py-1 uppercase">{banner.tag}</span>
             </div>
-            <h4 className="font-bebas text-4xl md:text-6xl text-white mb-4 tracking-wide leading-tight group-hover:text-[#F4CE14] transition-colors">{banner.title}</h4>
+            <h4
+              style={{ color: banner.titleColor || 'white' }}
+              className={`font-bebas text-4xl md:text-6xl mb-4 tracking-wide leading-tight transition-colors ${!banner.titleColor ? 'group-hover:text-[#F4CE14]' : ''}`}
+            >
+              {banner.title}
+            </h4>
             <p className="font-tech text-gray-200 text-sm md:text-lg tracking-wider max-w-md leading-relaxed">{banner.subtitle}</p>
           </div>
         </div>
