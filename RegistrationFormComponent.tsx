@@ -322,7 +322,7 @@ export const RegistrationForm = () => {
                                     <div className="w-full md:w-auto flex flex-col items-center">
                                         <div className="bg-white p-4 shadow-xl border-2 border-gray-100 group-hover:border-[#F4CE14] transition-colors duration-500 relative">
                                             <img
-                                                src="/media/VF_Ostrava_442026.png"
+                                                src="https://kneyhirbfnbukjyadogn.supabase.co/storage/v1/object/public/media/VF_Ostrava_442026.png"
                                                 alt="QR Platba"
                                                 className="w-40 h-40 md:w-48 md:h-48"
                                             />
