@@ -1273,6 +1273,20 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
       .filter(driver => driver.category === activeCategory)
       .sort((a, b) => b.points - a.points);
 
+  const categories: Array<'do1.6L' | 'nad1.6L' | 'zeny' | 'hobby'> = ['do1.6L', 'nad1.6L', 'zeny', 'hobby'];
+
+  const nextCategory = () => {
+    const currentIndex = categories.indexOf(activeCategory);
+    const nextIndex = (currentIndex + 1) % categories.length;
+    setActiveCategory(categories[nextIndex]);
+  };
+
+  const prevCategory = () => {
+    const currentIndex = categories.indexOf(activeCategory);
+    const prevIndex = (currentIndex - 1 + categories.length) % categories.length;
+    setActiveCategory(categories[prevIndex]);
+  };
+
   return (
     <section id="poradi" className="py-32 bg-[#0a0a0a] relative">
       <div className="absolute left-0 top-0 h-full w-px bg-white/5"></div>
@@ -1305,19 +1319,43 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
           </div>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex flex-row justify-center gap-2 md:gap-6 mb-12 md:mb-16 w-full">
-          {(Object.keys(categoryLabels) as Array<keyof typeof categoryLabels>).map((category) => (
+        {/* Category Navigation - Mobile Slider */}
+        <div className="flex md:hidden items-center justify-between gap-4 mb-12 w-full px-2 max-w-sm mx-auto">
+          <button
+            onClick={prevCategory}
+            className="w-10 h-10 flex items-center justify-center border border-[#F4CE14]/30 rounded-full text-[#F4CE14] active:scale-90 transition-transform"
+          >
+            <ArrowLeft size={20} />
+          </button>
+
+          <div className="relative flex-1 py-4 text-center overflow-hidden h-14 flex items-center justify-center">
+            <div className="absolute inset-0 transform -skew-x-[15deg] border-2 bg-[#F4CE14] border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.4)]"></div>
+            <span key={activeCategory} className="relative font-tech font-black text-xs text-black uppercase tracking-widest animate-fadeIn scale-110">
+              {categoryLabels[activeCategory]}
+            </span>
+          </div>
+
+          <button
+            onClick={nextCategory}
+            className="w-10 h-10 flex items-center justify-center border border-[#F4CE14]/30 rounded-full text-[#F4CE14] active:scale-90 transition-transform"
+          >
+            <ArrowRight size={20} />
+          </button>
+        </div>
+
+        {/* Category Tabs - Desktop Only */}
+        <div className="hidden md:flex flex-row justify-center gap-6 mb-16 w-full">
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
-              className={`relative flex-1 px-2 py-4 md:px-8 md:py-3 transition-all duration-300 group ${activeCategory === category ? 'z-10' : 'z-0'}`}
+              className={`relative flex-1 px-8 py-3 transition-all duration-300 group ${activeCategory === category ? 'z-10' : 'z-0'}`}
             >
               <div className={`absolute inset-0 transform -skew-x-[15deg] border-2 transition-all duration-300 ${activeCategory === category
                 ? 'bg-[#F4CE14] border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.4)]'
                 : 'bg-transparent border-white/20 group-hover:border-[#F4CE14]/50'
                 }`}></div>
-              <span className={`relative font-tech font-bold text-sm md:text-[20px] uppercase tracking-wider transition-colors duration-300 whitespace-nowrap ${activeCategory === category ? 'text-black' : 'text-gray-400 group-hover:text-white'}`}>
+              <span className={`relative font-tech font-bold text-[20px] uppercase tracking-wider transition-colors duration-300 whitespace-nowrap ${activeCategory === category ? 'text-black' : 'text-gray-400 group-hover:text-white'}`}>
                 {categoryLabels[category]}
               </span>
             </button>
@@ -1816,6 +1854,7 @@ const RegistrationForm = () => {
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [validationError, setValidationError] = useState('');
+  const [photoError, setPhotoError] = useState('');
 
   // Debounced start number check
   useEffect(() => {
@@ -1872,9 +1911,10 @@ const RegistrationForm = () => {
     }
     if (currentStep === 4) {
       if (!formData.photo || !formData.password || !formData.consentGdpr || !formData.consentRules || !formData.consentAge) {
-        setValidationError('Před dokončením musíte nahrát fotku, zvolit heslo a souhlasit se všemi podmínkami.');
+        setValidationError('Před dokončením musíte nahrát profilovou fotografii, zvolit heslo a souhlasit se všemi podmínkami.');
         return false;
       }
+      if (photoError) return false;
     }
     return true;
   };
@@ -1896,8 +1936,18 @@ const RegistrationForm = () => {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPhotoError('');
     if (e.target.files && e.target.files[0]) {
-      setFormData(prev => ({ ...prev, photo: e.target.files![0] }));
+      const file = e.target.files[0];
+      const maxSize = 5 * 1024 * 1024; // 5MB
+
+      if (file.size > maxSize) {
+        setPhotoError('Soubor je příliš velký! Vyberte prosím fotografii menší než 5MB.');
+        setFormData(prev => ({ ...prev, photo: null }));
+        return;
+      }
+
+      setFormData(prev => ({ ...prev, photo: file }));
     }
   };
 
@@ -2323,6 +2373,11 @@ const RegistrationForm = () => {
                         </div>
                       )}
                     </label>
+                    {photoError && (
+                      <p className="text-red-500 text-[10px] font-bold mt-2 uppercase animate-pulse leading-tight">
+                        {photoError}
+                      </p>
+                    )}
                   </div>
 
                   <div className="contents md:flex md:flex-col md:gap-4">
