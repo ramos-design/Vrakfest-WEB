@@ -1397,7 +1397,7 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
 
                   {/* Driver Name */}
                   <div className="flex items-center overflow-hidden">
-                    <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>
+                    <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight whitespace-nowrap ${index === 0 ? 'text-white' : 'text-gray-300'} md:truncate animate-mobile-name`}>
                       {driver.name}
                     </span>
                   </div>
@@ -3420,8 +3420,19 @@ export const Home = () => {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
+        @keyframes pingpong {
+          0%, 20% { transform: translateX(0); }
+          80%, 100% { transform: translateX(-40%); }
+        }
         .animate-marquee {
           animation: marquee 40s linear infinite;
+        }
+        @media (max-width: 768px) {
+          .animate-mobile-name {
+            display: inline-block;
+            animation: pingpong 6s ease-in-out infinite alternate;
+            padding-right: 20px;
+          }
         }
         .fade-mask {
           mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
