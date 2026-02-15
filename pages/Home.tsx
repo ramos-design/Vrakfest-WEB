@@ -3016,6 +3016,147 @@ const MobileApp = () => {
 
 
 
+
+// --- Structured Data for SEO ---
+const FullStructuredData = () => {
+  const baseUrl = "https://vrakfest.cz";
+
+  // WebSite, Organization, WebPage, and Breadcrumb
+  const mainSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${baseUrl}/#organization`,
+        "name": "VrakFest",
+        "url": baseUrl,
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${baseUrl}/logo.png`,
+          "width": "600",
+          "height": "60"
+        },
+        "sameAs": [
+          "https://www.facebook.com/vrakfest",
+          "https://www.instagram.com/vrakfest",
+          "https://www.youtube.com/@vrakfest"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${baseUrl}/#website`,
+        "url": baseUrl,
+        "name": "VrakFest 2026",
+        "description": "Oficiální web největších závodů vraků a demolition derby v České republice.",
+        "publisher": { "@id": `${baseUrl}/#organization` },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": `${baseUrl}/?s={search_term_string}`
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${baseUrl}/#webpage`,
+        "url": baseUrl,
+        "name": "VrakFest 2026 - Závody vraků a Demolition Derby",
+        "description": "Zažij totální adrenalin. Závody vraků, nekompromisní souboje a demoliční derby. Registruj se jako jezdec nebo přijď jako divák!",
+        "isPartOf": { "@id": `${baseUrl}/#website` },
+        "about": { "@id": `${baseUrl}/#organization` },
+        "breadcrumb": { "@id": `${baseUrl}/#breadcrumb` }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${baseUrl}/#breadcrumb`,
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Domů", "item": baseUrl },
+          { "@type": "ListItem", "position": 2, "name": "O Vrakfestu", "item": `${baseUrl}/#ovrakfestu` },
+          { "@type": "ListItem", "position": 3, "name": "Program a Vstupné", "item": `${baseUrl}/#program` },
+          { "@type": "ListItem", "position": 4, "name": "Registrace", "item": `${baseUrl}/#registrace` }
+        ]
+      }
+    ]
+  };
+
+  // Events List
+  const eventsSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Závody VrakFest 2026",
+    "itemListElement": EVENTS.map((event, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Event",
+        "name": `VrakFest 2026 - ${event.title}`,
+        "startDate": event.date.split('.').reverse().join('-'),
+        "location": {
+          "@type": "Place",
+          "name": event.location,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": event.title,
+            "addressCountry": "CZ"
+          }
+        },
+        "image": `${baseUrl}${event.image}`,
+        "description": "Největší demoliční derby a závody vraků v ČR.",
+        "offers": {
+          "@type": "Offer",
+          "price": "300",
+          "priceCurrency": "CZK",
+          "availability": "https://schema.org/InStock",
+          "url": `${baseUrl}/#program`
+        },
+        "organizer": { "@id": `${baseUrl}/#organization` }
+      }
+    }))
+  };
+
+  // Persons (Drivers)
+  const personsSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Jezdci VrakFest 2026",
+    "itemListElement": DRIVERS.map((driver, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Person",
+        "name": driver.name,
+        "jobTitle": "Závodník Vrakfestu",
+        "image": `${baseUrl}${driver.image}`,
+        "description": `Závodník Vrakfestu v kategorii ${driver.category} s vozem ${driver.car}.`,
+        "performerIn": { "@id": `${baseUrl}/#organization` }
+      }
+    }))
+  };
+
+  // Article (Main Feature)
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Vrakfest 2026: Víc než jen závody, je to totální destrukce!",
+    "image": `${baseUrl}/media/DSC_7229.jpg`,
+    "author": { "@type": "Organization", "name": "VrakFest Team" },
+    "publisher": { "@id": `${baseUrl}/#organization` },
+    "datePublished": "2026-02-01",
+    "description": "Připravte se na největší motoristickou show roku. Letošní ročník slibuje rekordní počet účastníků a zbrusu novou trať."
+  };
+
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(mainSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personsSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+    </>
+  );
+};
+
 export const Home = () => {
   const [liveStandings, setLiveStandings] = useState<any[]>([]);
   const [liveEvents, setLiveEvents] = useState<any[]>([]);
@@ -3139,7 +3280,8 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#111] text-white selection:bg-[#F4CE14] selection:text-black">
+    <div className="bg-black min-h-screen text-white selection:bg-[#F4CE14] selection:text-black">
+      <FullStructuredData />
       <main>
         <Hero activeEvent={liveEvents[0]} registeredCount={registeredCount} ctaIndex={ctaIndex} />
         <About ctaIndex={ctaIndex} />
@@ -3217,6 +3359,6 @@ export const Home = () => {
           -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
         }
       `}</style>
-    </div>
+    </div >
   );
-}
+};
