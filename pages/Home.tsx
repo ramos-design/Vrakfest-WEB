@@ -1246,6 +1246,48 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
   );
 };
 
+// --- Standings Helper ---
+const ScrollableName = ({ name, isTop }: { name: string, isTop: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef<HTMLSpanElement>(null);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [scrollDistance, setScrollDistance] = useState(0);
+
+  useEffect(() => {
+    const checkOverflow = () => {
+      if (containerRef.current && textRef.current) {
+        const containerWidth = containerRef.current.clientWidth;
+        const textWidth = textRef.current.scrollWidth;
+        if (textWidth > containerWidth) {
+          setShouldAnimate(true);
+          setScrollDistance(textWidth - containerWidth);
+        } else {
+          setShouldAnimate(false);
+        }
+      }
+    };
+
+    checkOverflow();
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [name]);
+
+  return (
+    <div ref={containerRef} className="flex-1 overflow-hidden">
+      <span
+        ref={textRef}
+        style={shouldAnimate ? {
+          '--scroll-dist': `-${scrollDistance + 10}px`,
+          animation: 'marquee-instant 6s linear infinite'
+        } as React.CSSProperties : {}}
+        className={`font-bebas text-lg md:text-2xl uppercase tracking-tight whitespace-nowrap inline-block ${isTop ? 'text-white' : 'text-gray-300'}`}
+      >
+        {name}
+      </span>
+    </div>
+  );
+};
+
 const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidDrivers: any[] }) => {
   const [activeCategory, setActiveCategory] = useState<'do1.6L' | 'nad1.6L' | 'hobby' | 'zeny'>('do1.6L');
   const [selectedYear, setSelectedYear] = useState<2025 | 2026>(2025);
@@ -1396,11 +1438,7 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
                   </div>
 
                   {/* Driver Name */}
-                  <div className="flex items-center overflow-hidden">
-                    <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight whitespace-nowrap ${index === 0 ? 'text-white' : 'text-gray-300'} md:truncate animate-mobile-name`}>
-                      {driver.name}
-                    </span>
-                  </div>
+                  <ScrollableName name={driver.name} isTop={index === 0} />
 
                   {/* Car */}
                   <div className="flex items-center">
@@ -3423,6 +3461,11 @@ export const Home = () => {
         @keyframes pingpong {
           0%, 20% { transform: translateX(0); }
           80%, 100% { transform: translateX(-40%); }
+        }
+        @keyframes marquee-instant {
+          0%, 20% { transform: translateX(0); }
+          70%, 90% { transform: translateX(var(--scroll-dist)); }
+          91%, 100% { transform: translateX(0); }
         }
         .animate-marquee {
           animation: marquee 40s linear infinite;
