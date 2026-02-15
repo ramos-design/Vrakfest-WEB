@@ -1246,48 +1246,6 @@ const DriverRoster = ({ registeredCount, paidDrivers, liveStandings }: { registe
   );
 };
 
-// --- Standings Helper ---
-const ScrollableName = ({ name, isTop }: { name: string, isTop: boolean }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
-  const [shouldAnimate, setShouldAnimate] = useState(false);
-  const [scrollDistance, setScrollDistance] = useState(0);
-
-  useEffect(() => {
-    const checkOverflow = () => {
-      if (containerRef.current && textRef.current) {
-        const containerWidth = containerRef.current.clientWidth;
-        const textWidth = textRef.current.scrollWidth;
-        if (textWidth > containerWidth) {
-          setShouldAnimate(true);
-          setScrollDistance(textWidth - containerWidth);
-        } else {
-          setShouldAnimate(false);
-        }
-      }
-    };
-
-    checkOverflow();
-    window.addEventListener('resize', checkOverflow);
-    return () => window.removeEventListener('resize', checkOverflow);
-  }, [name]);
-
-  return (
-    <div ref={containerRef} className="flex-1 overflow-hidden">
-      <span
-        ref={textRef}
-        style={shouldAnimate ? {
-          '--scroll-dist': `-${scrollDistance + 10}px`,
-          animation: 'marquee-instant 6s linear infinite'
-        } as React.CSSProperties : {}}
-        className={`font-bebas text-lg md:text-2xl uppercase tracking-tight whitespace-nowrap inline-block ${isTop ? 'text-white' : 'text-gray-300'}`}
-      >
-        {name}
-      </span>
-    </div>
-  );
-};
-
 const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidDrivers: any[] }) => {
   const [activeCategory, setActiveCategory] = useState<'do1.6L' | 'nad1.6L' | 'hobby' | 'zeny'>('do1.6L');
   const [selectedYear, setSelectedYear] = useState<2025 | 2026>(2025);
@@ -1408,11 +1366,11 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
         {/* Standings Table */}
         <div className="max-w-7xl mx-auto">
           {/* Table Header */}
-          <div className="grid grid-cols-[50px_1.5fr_1.5fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-2 md:px-8 py-4 bg-black/60 border-b-2 border-[#F4CE14] mb-2">
+          <div className="grid grid-cols-[50px_1fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-4 md:px-8 py-4 bg-black/60 border-b-2 border-[#F4CE14] mb-2">
             <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left">ST.Č</div>
             <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left">JEZDEC</div>
-            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left">AUTO</div>
-            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left md:text-right">BODY</div>
+            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-left hidden md:block">AUTO</div>
+            <div className="font-tech text-[10px] md:text-xs text-[#F4CE14] uppercase tracking-[0.1em] md:tracking-[0.3em] font-bold text-right">BODY</div>
           </div>
 
           {/* Scrollable Table Rows - Max 10 visible */}
@@ -1421,7 +1379,7 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
               filteredDrivers.map((driver, index) => (
                 <div
                   key={`${driver.startNumber}-${index}`}
-                  className={`grid grid-cols-[50px_1.5fr_1.5fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-2 md:px-8 py-3 md:py-6 transition-all duration-300 border mb-2 md:mb-0 md:border-2 ${index === 0
+                  className={`grid grid-cols-[50px_1fr_50px] md:grid-cols-[120px_2fr_2fr_140px] gap-2 md:gap-12 px-4 md:px-8 py-3 md:py-6 transition-all duration-300 border mb-2 md:mb-0 md:border-2 ${index === 0
                     ? 'bg-[#F4CE14]/10 border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.2)]'
                     : index === 1
                       ? 'bg-white/5 border-white/20'
@@ -1438,18 +1396,22 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
                   </div>
 
                   {/* Driver Name */}
-                  <ScrollableName name={driver.name} isTop={index === 0} />
+                  <div className="flex items-center overflow-hidden">
+                    <span className={`font-bebas text-lg md:text-2xl uppercase tracking-tight truncate ${index === 0 ? 'text-white' : 'text-gray-300'}`}>
+                      {driver.name}
+                    </span>
+                  </div>
 
-                  {/* Car */}
-                  <div className="flex items-center">
-                    <span className="font-tech text-[10px] md:text-sm text-gray-400 uppercase tracking-wider">
+                  {/* Car - Hidden on mobile */}
+                  <div className="hidden md:flex items-center">
+                    <span className="font-tech text-sm text-gray-400 uppercase tracking-wider">
                       {driver.car}
                     </span>
                   </div>
 
                   {/* Points */}
-                  <div className="flex items-center justify-center md:justify-end">
-                    <span className={`font-bebas text-lg md:text-4xl text-center md:text-right w-full ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
+                  <div className="flex items-center justify-end">
+                    <span className={`font-bebas text-lg md:text-4xl text-right w-full ${index === 0 ? 'text-[#F4CE14]' : 'text-white'}`}>
                       {driver.points}
                     </span>
                   </div>
@@ -3458,24 +3420,8 @@ export const Home = () => {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        @keyframes pingpong {
-          0%, 20% { transform: translateX(0); }
-          80%, 100% { transform: translateX(-40%); }
-        }
-        @keyframes marquee-instant {
-          0%, 20% { transform: translateX(0); }
-          70%, 90% { transform: translateX(var(--scroll-dist)); }
-          91%, 100% { transform: translateX(0); }
-        }
         .animate-marquee {
           animation: marquee 40s linear infinite;
-        }
-        @media (max-width: 768px) {
-          .animate-mobile-name {
-            display: inline-block;
-            animation: pingpong 6s ease-in-out infinite alternate;
-            padding-right: 20px;
-          }
         }
         .fade-mask {
           mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
