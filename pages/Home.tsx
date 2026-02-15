@@ -1320,24 +1320,24 @@ const Standings = ({ liveStandings, paidDrivers }: { liveStandings: any[], paidD
         </div>
 
         {/* Category Navigation - Mobile Slider */}
-        <div className="flex md:hidden items-center justify-between gap-4 mb-12 w-full px-2 max-w-sm mx-auto">
+        <div className="flex md:hidden items-center justify-between gap-4 mb-12 w-full px-4 max-w-sm mx-auto">
           <button
             onClick={prevCategory}
-            className="w-10 h-10 flex items-center justify-center border border-[#F4CE14]/30 rounded-full text-[#F4CE14] active:scale-90 transition-transform"
+            className="w-10 h-10 flex items-center justify-center border border-[#F4CE14]/30 rounded-full text-[#F4CE14] active:scale-90 transition-transform shrink-0"
           >
             <ArrowLeft size={20} />
           </button>
 
-          <div className="relative flex-1 py-4 text-center overflow-hidden h-14 flex items-center justify-center">
+          <div className="relative flex-1 py-4 text-center h-14 flex items-center justify-center mx-4">
             <div className="absolute inset-0 transform -skew-x-[15deg] border-2 bg-[#F4CE14] border-[#F4CE14] shadow-[0_0_20px_rgba(244,206,20,0.4)]"></div>
-            <span key={activeCategory} className="relative font-tech font-black text-xs text-black uppercase tracking-widest animate-fadeIn scale-110">
+            <span key={activeCategory} className="relative font-tech font-black text-sm text-black uppercase tracking-[0.2em] animate-fadeIn">
               {categoryLabels[activeCategory]}
             </span>
           </div>
 
           <button
             onClick={nextCategory}
-            className="w-10 h-10 flex items-center justify-center border border-[#F4CE14]/30 rounded-full text-[#F4CE14] active:scale-90 transition-transform"
+            className="w-10 h-10 flex items-center justify-center border border-[#F4CE14]/30 rounded-full text-[#F4CE14] active:scale-90 transition-transform shrink-0"
           >
             <ArrowRight size={20} />
           </button>
